@@ -1,0 +1,6 @@
+node_modules
+eslint.config.mjs
+.vscode/extensions.json
+angular.json
+tsconfig.app.json
+tsconfig.spec.json
