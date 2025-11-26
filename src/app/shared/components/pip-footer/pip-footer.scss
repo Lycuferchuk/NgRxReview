@@ -1,0 +1,28 @@
+.footer {
+  border-top: 4px solid #00ff00; /* яскраво-зелена рамка */
+  margin-top: 3rem; /* mt-12 */
+  box-shadow: 0 0 20px #00ff00; /* світіння */
+}
+
+.footer-container { /* max-w-7xl */
+  margin: 0;
+  padding: 1.5rem 1rem; /* py-6 px-4 */
+}
+
+.footer-text {
+  text-align: center;
+  font-family: 'Courier New', monospace; /* font-mono */
+  color: #8FF100; /* Pip-Boy green */
+}
+
+.footer-text .divider {
+  font-size: 0.875rem; /* text-sm */
+  margin-bottom: 0.5rem; /* mb-2 */
+}
+
+.footer-text .copyright,
+.footer-text .vault {
+  font-size: 0.75rem; /* text-xs */
+  color: rgba(143, 241, 0, 0.6); /* Pip-Boy green з прозорістю */
+  margin-top: 0.25rem; /* mt-1 */
+}
