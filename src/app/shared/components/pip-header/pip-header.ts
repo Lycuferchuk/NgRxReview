@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './pip-header.scss',
 })
 export class PipHeader {
+  constructor() {
+  }
 
+  public toCart(): void {
+
+  }
 }
