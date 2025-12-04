@@ -1,0 +1,20 @@
+.product-card {
+  max-width: 300px;
+  margin: 1rem;
+
+  &__main-image {
+    object-fit: cover;
+    height: 200px;
+  }
+
+  &__price-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  &__star {
+    color: gold;
+  }
+}

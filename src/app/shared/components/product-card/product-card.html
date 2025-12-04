@@ -1,1 +1,31 @@
-<p>product-card works!</p>
+<mat-card class="product-card">
+  <mat-card-header>
+    <div mat-card-avatar class="product-card__image">
+      <img [src]="product.imageUrl" [alt]="product.name">
+    </div>
+    <mat-card-title class="product-card__title">{{ product.name }}</mat-card-title>
+    <mat-card-subtitle class="product-card__brand-type">
+      {{ product.brand }} • {{ product.type }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <img mat-card-image class="product-card__main-image" [src]="product.imageUrl" [alt]="product.name">
+
+  <mat-card-content>
+    <p class="product-card__description">{{ product.description }}</p>
+    <div class="product-card__price-rating">
+      <span class="product-card__price">{{ product.price | currency:'UAH' }}</span>
+      <mat-icon *ngFor="let _ of stars" class="product-card__star">star</mat-icon>
+    </div>
+    <p class="product-card__stock" *ngIf="product.stock === 0">Немає в наявності</p>
+  </mat-card-content>
+
+  <mat-card-actions class="product-card__actions">
+    <button mat-raised-button color="primary" (click)="addToCart(product)" [disabled]="product.stock === 0">
+      Додати в кошик
+    </button>
+    <button mat-icon-button aria-label="Подивитися деталі">
+      <mat-icon>info</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

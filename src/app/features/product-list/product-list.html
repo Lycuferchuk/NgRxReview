@@ -3,4 +3,21 @@
     <app-pip-navigation-bar></app-pip-navigation-bar>
   </ng-container>
 </app-pip-header>
-<div class="main-content"></div>
+
+<div class="product-list">
+  <div class="product-list__category">
+    <!-- тут можна тип продукту або категорію -->
+  </div>
+
+  <div class="product-list__content">
+    <div class="product-list__filters">
+      <app-filter></app-filter>
+    </div>
+
+    <div class="product-list__list">
+      @for (product of products; track product.id) {
+        <app-product-card [product]="product"></app-product-card>
+      }
+    </div>
+  </div>
+</div>

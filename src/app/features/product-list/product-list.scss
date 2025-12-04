@@ -1,0 +1,16 @@
+.product-list {
+
+  &__content{
+    display: flex;
+  }
+
+  &__filters {
+    flex: 1;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
