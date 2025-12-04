@@ -1,26 +1,23 @@
-<header class="pip-header">
-  <div class="pip-header-container">
-    <div class="logo-section">
-      <div class="logo-box">
-        <span>PB</span>
-      </div>
-      <div class="logo-text">
-        <div class="title">PIP-BOY 3000</div>
-        <div class="subtitle">WASTELAND MARKET v2.77</div>
-      </div>
-    </div>
+<header class="header">
+  <div class="header__container">
+    <div (click)="toHome()" class="header__logo">TechStore</div>
 
-    <div class="info-section">
-      <div class="info-item">
-        <span class="label">DATE:</span> NOV.26.2287
-      </div>
-      <div class="info-item">
-        <span class="label">TIME:</span> 14:23:45
-      </div>
-      <button class="cart-button">
-        <span class="cart-text">[CART]</span>
-        <span class="cart-count">3</span>
+    <div class="header__search">
+      <mat-icon class="header__search-icon">search</mat-icon>
+      <input
+        type="text"
+        placeholder="Search products..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+      />
+      <button mat-icon-button (click)="onSearch()">
+        <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
+
+    <button mat-flat-button class="header__cart-btn" (click)="toCart()">
+      <mat-icon>shopping_cart</mat-icon>
+      <span>Cart</span>
+    </button>
   </div>
 </header>

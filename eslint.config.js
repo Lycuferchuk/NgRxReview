@@ -6,17 +6,18 @@ const angular = require("angular-eslint");
 module.exports = tseslint.config(
   {
     files: ["**/*.ts"],
+    languageOptions: {
+      parser: tseslint.parser,
+    },
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
-      ...angular.configs.tsRecommended,
-      "plugin:@angular-eslint/recommended",
-      "plugin:@angular-eslint/template/recommended",
-      "plugin:prettier/recommended"
+      ...angular.configs.tsRecommended
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      '@angular-eslint/prefer-inject': 'off',
       "prettier/prettier": "error",
       "@angular-eslint/directive-selector": [
         "error",
@@ -35,7 +36,9 @@ module.exports = tseslint.config(
         },
       ],
     },
-    "plugins": ["prettier"],
+    plugins: {
+      prettier: require("eslint-plugin-prettier"),
+    },
   },
   {
     files: ["**/*.html"],
