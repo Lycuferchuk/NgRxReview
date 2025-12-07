@@ -25,23 +25,67 @@
   --cart-count-gradient-end: #a78bfa;
 
   --placeholder-color: rgba(255, 255, 255, 0.4);
+
+  /* ---------- Base ---------- */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ---------- Grayscale ---------- */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* ---------- Semantic ---------- */
+  --color-success: #10b981;
+  --rating-color: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* ---------- Product Card ---------- */
+  --product-bg: #111827;             /* dark background */
+  --product-border: rgba(255, 255, 255, 0.08);
+  --product-shadow: rgba(0, 0, 0, 0.4);
+  --product-text: #f3f4f6;           /* soft white */
+  --product-subtext: #9ca3af;
+
+  /* ---------- Glows / Accents ---------- */
+  --glow-cyan: #00eaff;
+  --glow-purple: #ad00ff;
+  --glow-pink: #ff008c;
+  --glow-cyan-weak: rgba(0, 234, 255, 0.12);
+  --glow-purple-weak: rgba(173, 0, 255, 0.12);
+  --glow-pink-weak: rgba(255, 0, 140, 0.12);
+
+
+  /* ---------- Button Colors ---------- */
+  --btn-primary: #3b82f6;
+  --btn-primary-hover: #2563eb;
+
+  /* ---------- Price Colors ---------- */
+  --price-old: #9ca3af;
+  --price-new: #10b981;
+  --price-discount: #f43f5e;
+
+  /* ---------- Badges ---------- */
+  --badge-new-bg: #3b82f6;
+  --badge-sale-bg: #ef4444;
+  --badge-stock-bg: #10b981;
+
+  /* ---------- Shadows / Effects ---------- */
+  --shadow-soft: rgba(0, 0, 0, 0.25);
+  --shadow-strong: rgba(0, 0, 0, 0.6);
+
+  --color-white-60: rgba(255,255,255,0.6);
+  --filter-bg: rgba(255,255,255,0.05);
+  --filter-border: rgba(255,255,255,0.1);
+  --accent-cyan: #00eaff;
+  --accent-purple: #ad00ff;
+  --accent-pink: #ff008c;
 }
-
-
-//     &::placeholder {
-//       color: rgba(255, 255, 255, 0.4); /* placeholder-white/40 */
-//     }
-//
-//     &:focus {
-//       outline: none;
-//       border-color: rgba(34, 211, 238, 0.5); /* cyan-400/50 */
-//       background: rgba(255, 255, 255, 0.1); /* bg-white/10 */
-//     }
-//   }
-//.searchbar-wrapper:focus-within .searchbar-glow {
-//  background: linear-gradient(to right,
-//    rgba(34, 211, 238, 0.1) 0%,    /* cyan-400/10 */
-//    rgba(192, 132, 252, 0.1) 50%,  /* purple-400/10 */
-//    rgba(244, 114, 182, 0.1) 100%  /* pink-400/10 */
-//  );
-//}

@@ -1,7 +1,7 @@
 export interface Filters {
-  type: string;
-  brand: string;
-  price: number;
-  rating: number | '';
+  brands: string[];
+  priceRange: number[];
+  minRating: number;
   inStock: boolean;
+  categories: string[];
 }

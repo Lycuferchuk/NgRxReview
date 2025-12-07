@@ -1,9 +1,9 @@
 .product-list {
-  margin: 64px 12px 12px 12px;
+  margin: 100px 12px 12px 12px;
 
   &__content{
     display: flex;
-    gap: 24px;
+    gap: 16px;
   }
 
   &__filters {
@@ -13,6 +13,8 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: 16px;
   }
 }

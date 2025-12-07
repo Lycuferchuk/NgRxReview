@@ -42,9 +42,9 @@
     "price": 1500,
     "brand": "Lenovo",
     "type": "Laptop",
-    "imageUrl": "assets/images/lenovoX1.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Intel i7", "16GB RAM", "512GB SSD"],
-    "stock": 7,
+    "stock": 0,
     "rating": 4.7
   },
   {
@@ -54,7 +54,7 @@
     "price": 1400,
     "brand": "Dell",
     "type": "Laptop",
-    "imageUrl": "assets/images/dellxps13.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Intel i5", "16GB RAM", "512GB SSD"],
     "stock": 5,
     "rating": 4.5
@@ -66,7 +66,7 @@
     "price": 1300,
     "brand": "Apple",
     "type": "Laptop",
-    "imageUrl": "assets/images/macbookairm2.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["M2 chip", "8GB RAM", "256GB SSD"],
     "stock": 8,
     "rating": 4.9
@@ -78,7 +78,7 @@
     "price": 350,
     "brand": "Sony",
     "type": "Headphones",
-    "imageUrl": "assets/images/sonywh1000xm5.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Noise Cancelling", "30h Battery", "Bluetooth 5.2"],
     "stock": 20,
     "rating": 4.9
@@ -90,7 +90,7 @@
     "price": 330,
     "brand": "Bose",
     "type": "Headphones",
-    "imageUrl": "assets/images/boseqc45.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Noise Cancelling", "24h Battery", "Bluetooth 5.1"],
     "stock": 18,
     "rating": 4.8
@@ -102,7 +102,7 @@
     "price": 250,
     "brand": "Apple",
     "type": "Headphones",
-    "imageUrl": "assets/images/airpodspro2.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Noise Cancelling", "24h Battery", "Bluetooth 5.3"],
     "stock": 25,
     "rating": 4.7
@@ -114,7 +114,7 @@
     "price": 150,
     "brand": "Samsung",
     "type": "Headphones",
-    "imageUrl": "assets/images/galaxybuds3.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Noise Cancelling", "20h Battery", "Bluetooth 5.2"],
     "stock": 22,
     "rating": 4.4
@@ -126,7 +126,7 @@
     "price": 1600,
     "brand": "Asus",
     "type": "Laptop",
-    "imageUrl": "assets/images/rogzephyrusg14.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["AMD Ryzen 9", "16GB RAM", "1TB SSD", "RTX 4060"],
     "stock": 6,
     "rating": 4.8
@@ -138,7 +138,7 @@
     "price": 1450,
     "brand": "HP",
     "type": "Laptop",
-    "imageUrl": "assets/images/hpspectrex360.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Intel i7", "16GB RAM", "512GB SSD", "Touchscreen"],
     "stock": 7,
     "rating": 4.6
@@ -150,7 +150,7 @@
     "price": 900,
     "brand": "Google",
     "type": "Smartphone",
-    "imageUrl": "assets/images/pixel8.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["6.3 inch display", "50MP camera", "128GB storage"],
     "stock": 14,
     "rating": 4.5
@@ -162,7 +162,7 @@
     "price": 800,
     "brand": "OnePlus",
     "type": "Smartphone",
-    "imageUrl": "assets/images/oneplus12.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["6.7 inch display", "48MP camera", "256GB storage"],
     "stock": 16,
     "rating": 4.4
@@ -174,7 +174,7 @@
     "price": 300,
     "brand": "Xiaomi",
     "type": "Smartphone",
-    "imageUrl": "assets/images/redminote13.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["6.6 inch display", "50MP camera", "128GB storage"],
     "stock": 30,
     "rating": 4.2
@@ -186,7 +186,7 @@
     "price": 1800,
     "brand": "Dell",
     "type": "Laptop",
-    "imageUrl": "assets/images/alienwarem15.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Intel i9", "32GB RAM", "1TB SSD", "RTX 4070"],
     "stock": 4,
     "rating": 4.9
@@ -198,7 +198,7 @@
     "price": 950,
     "brand": "Sony",
     "type": "Smartphone",
-    "imageUrl": "assets/images/xperia1v.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["6.5 inch display", "48MP camera", "256GB storage"],
     "stock": 10,
     "rating": 4.5
@@ -210,7 +210,7 @@
     "price": 1100,
     "brand": "Apple",
     "type": "Tablet",
-    "imageUrl": "assets/images/ipadpro12.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["12.9 inch display", "M2 chip", "256GB storage"],
     "stock": 12,
     "rating": 4.9
@@ -222,7 +222,7 @@
     "price": 950,
     "brand": "Samsung",
     "type": "Tablet",
-    "imageUrl": "assets/images/galaxytabs9.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["11 inch display", "Snapdragon 8 Gen2", "256GB storage"],
     "stock": 9,
     "rating": 4.6
@@ -234,7 +234,7 @@
     "price": 180,
     "brand": "Bose",
     "type": "Headphones",
-    "imageUrl": "assets/images/bosesport.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["Water Resistant", "6h Battery", "Bluetooth 5.2"],
     "stock": 25,
     "rating": 4.3

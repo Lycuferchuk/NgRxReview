@@ -1,31 +1,90 @@
-<mat-card class="product-card">
-  <mat-card-header>
-    <div mat-card-avatar class="product-card__image">
-      <img [src]="product.imageUrl" [alt]="product.name">
+<mat-card
+  class="product-card"
+  (mouseenter)="isHovered.set(true)"
+  (mouseleave)="isHovered.set(false)"
+>
+  <div class="product-card__glow"></div>
+  <mat-card-header class="product-card__header">
+    <div class="product-card__badges">
+      @if (isNew) {
+        <div class="product-card__badge product-card__badge-new">
+          <mat-icon>auto_awesome</mat-icon>
+          <span>NEW</span>
+        </div>
+      }
+      @if (product.discount) {
+        <div class=" product-card__badge product-card__badge-discount">
+          <mat-icon>bolt</mat-icon>
+          <span>-{{ product.discount }}%</span>
+        </div>
+      }
     </div>
-    <mat-card-title (click)="navigateToDetails(product)" class="product-card__title">{{ product.name }}</mat-card-title>
-    <mat-card-subtitle class="product-card__brand-type">
-      {{ product.brand }} • {{ product.type }}
-    </mat-card-subtitle>
+    <div class="product-card__rating">
+      <mat-icon>star</mat-icon>
+      <span>{{ product.rating }}</span>
+    </div>
   </mat-card-header>
 
-  <img mat-card-image class="product-card__main-image" [src]="product.imageUrl" [alt]="product.name">
+  <mat-card-content class="product-card__content">
+    <div class="product-card__image-wrap">
+      <img
+        class="product-card__image"
+        [src]="product.imageUrl"
+        [alt]="product.name"
+        [class.product-card__image--hover]="isHovered()"
+      />
 
-  <mat-card-content>
-    <p class="product-card__description">{{ product.description }}</p>
-    <div class="product-card__price-rating">
-      <span class="product-card__price">{{ product.price | currency:'UAH' }}</span>
-      <mat-icon *ngFor="let _ of stars" class="product-card__star">star</mat-icon>
+      @if (product.stock) {
+        <div
+          class="product-card__quick"
+          [class.product-card__quick--visible]="isHovered()"
+        >
+          <button
+            mat-flat-button
+            color="primary"
+            class="product-card__quick-btn"
+            (click)="handleAdd()"
+            [disabled]="!product.stock"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+            Додати в кошик
+          </button>
+        </div>
+      }
+
+      @if (!product.stock) {
+        <div class="product-card__empty-stock">
+          <div class="product-card__empty-stock-inner">Немає в наявності</div>
+        </div>
+      }
     </div>
-    <p class="product-card__stock" *ngIf="product.stock === 0">Немає в наявності</p>
-  </mat-card-content>
 
-  <mat-card-actions class="product-card__actions">
-    <button mat-raised-button color="primary" (click)="addToCart(product)" [disabled]="product.stock === 0">
-      Додати в кошик
-    </button>
-    <button mat-icon-button aria-label="Подивитися деталі">
-      <mat-icon>info</mat-icon>
-    </button>
-  </mat-card-actions>
+    <div class="product-card__meta">
+      <h3 class="product-card__title" [class.product-card__title--hover]="isHovered()">
+        {{ product.name }}
+      </h3>
+      <p class="product-card__brand">{{ product.brand }}</p>
+
+      <div class="product-card__controls">
+        <div class="product-card__prices">
+          @if (product.discount) {
+            <span class="product-card__price-old">{{ product.price | currency }}</span>
+            <span class="product-card__price-new">{{ product.discount | currency }}</span>
+          } @else {
+            <span class="product-card__price">{{ product.price | currency }}</span>
+          }
+        </div>
+
+        <button
+          mat-icon-button
+          aria-label="Add to cart"
+          (click)="handleAdd()"
+          [disabled]="!product.stock"
+          class="product-card__cart-btn"
+        >
+          <mat-icon>shopping_cart</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
 </mat-card>

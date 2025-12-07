@@ -1,25 +1,50 @@
-.filters {
-  width: 100%;
-  max-width: 300px;
+.filter-panel {
+  background: var(--filter-bg);
+  border: 1px solid var(--filter-border);
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--text-color-primary);
+  width: 300px;
 
-  &__card {
-    padding: 1rem;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    background: linear-gradient(90deg,
+        var(--logo-gradient-start),
+        var(--logo-gradient-middle),
+        var(--logo-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  &__sections {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 8px;
   }
 
-  &__field {
-    width: 100%;
-  }
-
-  &__price {
+  &__section-content {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
   }
 
-  &__price-value {
-    font-weight: bold;
+  &__checkbox,
+  &__radio {
+    color: var(--color-white-60);
+  }
+
+  &__price-range {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 }

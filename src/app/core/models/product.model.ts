@@ -6,7 +6,10 @@ export interface Product {
   brand: string;
   type: string;
   imageUrl: string;
-  features?: string[];
   stock: number;
+  publishDate?: string;
+  category?: string;
+  discount?: number;
+  features?: string[];
   rating?: number;
 }

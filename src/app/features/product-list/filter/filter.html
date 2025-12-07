@@ -1,47 +1,86 @@
-<div class="filters">
-  <mat-card class="filters__card">
+<mat-card class="filter-panel">
+  <div class="filter-panel__header">
+    <h2 class="filter-panel__title">Фільтри</h2>
+<!--    @if (activeFiltersCount() > 0) {-->
+<!--      <button mat-button color="warn" (click)="clearFilters()">-->
+<!--        Очистити ({{ activeFiltersCount() }})-->
+<!--      </button>-->
+<!--    }-->
+  </div>
 
-    <mat-form-field class="filters__field" appearance="outline">
-      <mat-label>Тип товару</mat-label>
-      <mat-select [(value)]="filters.type" (selectionChange)="applyFilters()">
-        <mat-option value="">Всі</mat-option>
-        <mat-option *ngFor="let t of types" [value]="t">{{ t }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="filter-panel__sections">
+    <mat-accordion class="filter-panel__accordion" multi>
+      <mat-expansion-panel expanded class="filter-panel__expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Категорії</mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <mat-form-field class="filters__field" appearance="outline">
-      <mat-label>Бренд</mat-label>
-      <mat-select [(value)]="filters.brand" (selectionChange)="applyFilters()">
-        <mat-option value="">Всі бренди</mat-option>
-        <mat-option *ngFor="let b of brands" [value]="b">{{ b }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+        <div class="filter-panel__section-content">
+          @for (category of filters.categories; track category) {
+            <mat-checkbox>
+              {{ category}}
+            </mat-checkbox>
+          }
+        </div>
+      </mat-expansion-panel>
 
-    <div class="filters__price">
-      <mat-label>Ціна</mat-label>
-      <mat-slider
-        min="0"
-        [max]="maxPrice"
-        step="100"
-        thumbLabel
-        (input)="onPriceChange($event)">
-      </mat-slider>
-      <span class="filters__price-value">{{ filters.price }} грн</span>
+      <mat-expansion-panel expanded class="filter-panel__expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Бренд</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filter-panel__section-content">
+          @for (brand of filters.brands; track brand) {
+            <mat-checkbox>
+              {{ brand }}
+            </mat-checkbox>
+          }
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel expanded class="filter-panel__expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Ціна</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filter-panel__section-content">
+          <div class="filter-panel__price-inputs">
+            <form>
+              <mat-form-field>
+                <input matInput type="numbers">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="numbers">
+              </mat-form-field>
+            </form>
+          </div>
+
+          <mat-slider min="{{ filters.priceRange[0] }}" max="{{ filters.priceRange[1] }}">
+            <input matSliderStartThumb>
+            <input matSliderEndThumb>
+          </mat-slider>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel expanded class="filter-panel__expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Рейтинг</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-radio-group
+          aria-labelledby="example-radio-group-label"
+          class="filter-panel__radio-group">
+          @for (rating of [5, 4, 3, 2, 1, 0]; track rating) {
+            <mat-radio-button class="filter-panel__radio-button" [value]="rating">{{rating}}</mat-radio-button>
+          }
+        </mat-radio-group>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+    <div class="filter-panel__section">
+      <mat-checkbox [(ngModel)]="filters.inStock" class="filter-panel__checkbox">
+        Тільки в наявності
+      </mat-checkbox>
     </div>
-
-    <mat-form-field class="filters__field" appearance="outline">
-      <mat-label>Рейтинг</mat-label>
-      <mat-select [(value)]="filters.rating" (selectionChange)="applyFilters()">
-        <mat-option value="">Будь-який</mat-option>
-        <mat-option *ngFor="let r of [5,4,3,2,1]" [value]="r">
-          {{ r }}★ і вище
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-checkbox [(ngModel)]="filters.inStock" (change)="applyFilters()">
-      Тільки в наявності
-    </mat-checkbox>
-
-  </mat-card>
-</div>
+  </div>
+</mat-card>

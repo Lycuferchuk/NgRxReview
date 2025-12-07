@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { PipHeader } from '../../shared/components/pip-header/pip-header';
-import { PipNavigationBar } from '../../shared/components/pip-navigation-bar/pip-navigation-bar';
 import { Product } from '../../core/models/product.model';
 import { DataService } from '../../core/services/data.service';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
-import { Filter } from './filter/filter';
+import { FilterPanelComponent } from './filter/filter';
 
 @Component({
   selector: 'app-product-list',
-  imports: [PipHeader, PipNavigationBar, Filter, ProductCardComponent],
+  imports: [PipHeader, ProductCardComponent, FilterPanelComponent],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })

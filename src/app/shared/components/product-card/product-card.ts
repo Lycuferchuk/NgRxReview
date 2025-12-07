@@ -1,13 +1,5 @@
-import { Component, Input } from '@angular/core';
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-  MatCardHeader,
-  MatCardImage,
-  MatCardSubtitle,
-  MatCardTitle,
-} from '@angular/material/card';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { Product } from '../../../core/models/product.model';
@@ -20,35 +12,30 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatCardHeader,
     MatCard,
     MatCardContent,
-    MatCardActions,
-    MatCardTitle,
-    MatCardSubtitle,
     MatIcon,
     MatButton,
     MatIconButton,
-    MatCardImage,
     CurrencyPipe,
   ],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss',
 })
 export class ProductCardComponent {
-  @Input() product!: Product;
+  @Input() public product: Product = {} as Product;
+  @Input() index = 1;
+  @Output() addToCart = new EventEmitter<void>();
 
-  get stars(): number[] {
-    return Array(Math.round(this.product.rating ?? 0)).fill(0);
-  }
+  public isHovered = signal<boolean>(false);
+  public isNew = true;
 
   constructor(
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
   ) {}
 
-  public addToCart(product: Product): void {
-    if (product.stock > 0) {
-      console.log('Додати в кошик:', product);
-    } else {
-      console.warn('Товар відсутній на складі');
+  public handleAdd(): void {
+    if (this.product.stock) {
+      this.addToCart.emit();
     }
   }
 
