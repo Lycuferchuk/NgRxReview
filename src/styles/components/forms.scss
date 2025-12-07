@@ -1,0 +1,22 @@
+mat-form-field {
+  &.nxs-search-form-field {
+    border-radius: 1rem;
+    background: linear-gradient(
+        to right,
+        var(--search-bg-gradient-start),
+        var(--search-bg-gradient-middle),
+        var(--search-bg-gradient-end)
+    );
+
+    .mat-mdc-form-field-infix {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background-color: transparent;
+
+    }
+  }
+}

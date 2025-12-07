@@ -1,6 +1,5 @@
 .product-card {
   max-width: 300px;
-  margin: 1rem;
 
   &__main-image {
     object-fit: cover;
@@ -16,5 +15,9 @@
 
   &__star {
     color: gold;
+  }
+
+  &__title {
+    cursor: pointer;
   }
 }

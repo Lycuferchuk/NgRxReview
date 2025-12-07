@@ -6,7 +6,7 @@
     "price": 1200,
     "brand": "Apple",
     "type": "Smartphone",
-    "imageUrl": "assets/images/iphone15pro.jpg",
+    "imageUrl": "assets/images/iphone-15-pro-blk-01-1600x1600.webp",
     "features": ["6.1 inch display", "48MP camera", "128GB storage"],
     "stock": 10,
     "rating": 4.8
@@ -18,7 +18,7 @@
     "price": 999,
     "brand": "Samsung",
     "type": "Smartphone",
-    "imageUrl": "assets/images/galaxys23.jpg",
+    "imageUrl": "assets/images/samsung-s23ultra-blk-01-1600x1600.webp",
     "features": ["6.2 inch display", "50MP camera", "256GB storage"],
     "stock": 15,
     "rating": 4.6
@@ -30,7 +30,7 @@
     "price": 850,
     "brand": "Xiaomi",
     "type": "Smartphone",
-    "imageUrl": "assets/images/xiaomi14pro.jpg",
+    "imageUrl": "assets/images/redmi-note-14-pro-prp-01-1600x1600.webp",
     "features": ["6.73 inch display", "200MP camera", "256GB storage"],
     "stock": 12,
     "rating": 4.5
@@ -42,7 +42,7 @@
     "price": 1500,
     "brand": "Lenovo",
     "type": "Laptop",
-    "imageUrl": "assets/images/thinkpadx1.jpg",
+    "imageUrl": "assets/images/lenovoX1.jpg",
     "features": ["Intel i7", "16GB RAM", "512GB SSD"],
     "stock": 7,
     "rating": 4.7

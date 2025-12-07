@@ -1,1 +1,69 @@
-<p>product-details works!</p>
+<app-pip-header></app-pip-header>
+
+<div class="product-details">
+  @if (!isLoading && product) {
+    <mat-card class="product-details__card">
+      <div class="product-details__header">
+        <img
+          mat-card-image
+          [src]="product.imageUrl"
+          alt="{{ product.name }}"
+          class="product-details__image"
+        />
+
+        <div class="product-details__info">
+          <h1>{{ product.name }}</h1>
+          <p class="product-details__brand">Бренд: {{ product.brand }}</p>
+          <p class="product-details__type">Тип: {{ product.type }}</p>
+
+          <div class="product-details__price-rating">
+            <span class="product-details__price">
+              {{ product.price | currency }}
+            </span>
+
+            @if (product.rating) {
+              <span class="product-details__rating">
+                ⭐ {{ product.rating }}/5
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="product-details__body">
+        <h2>Опис</h2>
+        <p>{{ product.description }}</p>
+
+        @if (product.features?.length) {
+          <h3>Особливості:</h3>
+          <ul>
+            @for (feature of product.features; track feature) {
+              <li>{{ feature }}</li>
+            }
+          </ul>
+        }
+
+        <p class="product-details__stock">
+          Наявність:
+          <strong [ngClass]="product.stock > 0 ? 'in-stock' : 'out-stock'">
+            {{ product.stock > 0 ? 'Є в наявності' : 'Немає' }}
+          </strong>
+        </p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="product-details__actions">
+        <button mat-flat-button color="primary">
+          Додати в кошик
+        </button>
+      </div>
+    </mat-card>
+  }
+
+  @if (isLoading) {
+    <mat-spinner></mat-spinner>
+  }
+</div>

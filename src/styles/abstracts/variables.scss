@@ -1,0 +1,28 @@
+:root {
+  --background-body-color: #09090b;
+
+  --text-color-primary: #fafafa;
+
+  --header-bg-start: rgba(0, 0, 0, 0.6);
+  --header-bg-middle: rgba(15, 23, 42, 0.4);
+  --header-bg-end: rgba(0, 0, 0, 0.6);
+
+  --logo-glow-color: #06b6d4;
+  --logo-gradient-start: #06b6d4;
+  --logo-gradient-middle: #a78bfa;
+  --logo-gradient-end: #ec4899;
+
+  --search-bg-gradient-start: rgba(6, 182, 212, 0);
+  --search-bg-gradient-middle: rgba(167, 139, 250, 0);
+  --search-bg-gradient-end: rgba(236, 72, 153, 0);
+  --search-bg-gradient-focus-start: rgba(6, 182, 212, 0.1);
+  --search-bg-gradient-focus-middle: rgba(167, 139, 250, 0.1);
+  --search-bg-gradient-focus-end: rgba(236, 72, 153, 0.1);
+
+  --cart-icon-color: rgba(255, 255, 255, 0.6);
+  --cart-icon-hover-color: #06b6d4;
+  --cart-count-gradient-start: #ec4899;
+  --cart-count-gradient-end: #a78bfa;
+
+  --placeholder-color: rgba(255, 255, 255, 0.4);
+}

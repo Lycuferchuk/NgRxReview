@@ -3,7 +3,7 @@
     <div mat-card-avatar class="product-card__image">
       <img [src]="product.imageUrl" [alt]="product.name">
     </div>
-    <mat-card-title class="product-card__title">{{ product.name }}</mat-card-title>
+    <mat-card-title (click)="navigateToDetails(product)" class="product-card__title">{{ product.name }}</mat-card-title>
     <mat-card-subtitle class="product-card__brand-type">
       {{ product.brand }} • {{ product.type }}
     </mat-card-subtitle>
