@@ -58,7 +58,35 @@
     cursor: pointer;
   }
 
-  &__search-wrapper {}
+  &__search-wrapper {
+    display: flex;
+    align-items: center;
+    width: 40rem;
+    padding-left: 12px;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color-primary);
+    &:focus-within {
+      background: linear-gradient(
+          to right,
+          var(--search-bg-gradient-focus-start) 0%,
+          var(--search-bg-gradient-focus-middle) 50%,
+          var(--search-bg-gradient-focus-end) 100%
+      );
+      outline: 1px solid var(--cart-icon-hover-color);
+      transition: outline 0.2s ease;
+
+      mat-icon {
+        color: var(--cart-icon-hover-color);
+        transition: outline 0.2s ease;
+      }
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
 
   &__search-icon {
     color: var(--placeholder-color);
