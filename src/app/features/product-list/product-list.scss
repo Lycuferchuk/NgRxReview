@@ -3,11 +3,12 @@
 
   &__content{
     display: flex;
-    gap: 16px;
+    gap: 8px;
   }
 
   &__filters {
     flex: 1;
+    margin-left: 8px;
   }
 
   &__list {

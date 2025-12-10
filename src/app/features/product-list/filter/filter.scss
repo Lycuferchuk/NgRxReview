@@ -1,3 +1,11 @@
+html {
+  --mat-expansion-header-text-color: white;
+  --mat-expansion-container-text-color: white;
+
+  mat-expansion-panel {
+    box-shadow: none;
+  }
+}
 .filter-panel {
   background: var(--filter-bg);
   border: 1px solid var(--filter-border);
@@ -42,9 +50,14 @@
     color: var(--color-white-60);
   }
 
-  &__price-range {
+  &__form-inputs {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__expansion-panel {
+    background: transparent;
   }
 }

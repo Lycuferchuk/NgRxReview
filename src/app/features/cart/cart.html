@@ -6,38 +6,37 @@
   @if (items.length) {
     <div class="cart-page__content">
       <div class="cart-page__items">
-        @for (item of items; track item.id) {
+        @for (item of items; track item.product.id) {
           <mat-card class="cart-item">
-            <img
-              class="cart-item__image"
-              [src]="item.imageUrl"
-              alt="{{ item.name }}"
-            />
+            <div class="cart-item__image-wrap">
+              <img
+                class="cart-item__image"
+                [src]="item.product.imageUrl"
+                alt="{{ item.product.name }}"
+              />
+            </div>
 
             <div class="cart-item__info">
-              <h2>{{ item.name }}</h2>
-              <p class="cart-item__type">Тип: {{ item.type }}</p>
-              <p class="cart-item__brand">Бренд: {{ item.brand }}</p>
+              <div class="item-name">
+                <h2>{{ item.product.name }}</h2>
+                <p class="cart-item__type">Тип: {{ item.product.type }}</p>
+                <p class="cart-item__brand">Бренд: {{ item.product.brand }}</p>
+              </div>
 
               <div class="cart-item__price-block">
                 <span class="cart-item__price">
-                  {{ item.price | currency }}
+                  {{ item.product.price | currency }}
                 </span>
 
-                @if (item.rating) {
-                  <span class="cart-item__rating">
-                    ⭐ {{ item.rating }}/5
-                  </span>
-                }
-              </div>
-
-              <button
+                <button
                 mat-flat-button
                 color="warn"
-                (click)="removeFromCart(item.id)"
+                (click)="removeFromCart(item.product.id)"
               >
                 Видалити
               </button>
+              </div>
+
             </div>
           </mat-card>
         }
@@ -48,7 +47,7 @@
           <h2>Разом:</h2>
           <p class="summary__price">{{ totalPrice | currency }}</p>
 
-          <button mat-flat-button color="primary" class="summary__checkout">
+          <button (click)="orderCart()" mat-flat-button color="primary" class="summary__checkout">
             Оформити замовлення
           </button>
         </mat-card>
