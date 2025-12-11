@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PipHeader } from '../../shared/components/pip-header/pip-header';
+import { NxsHeader } from '../../shared/components/nxs-header/nxs-header.component';
 import { Product } from '../../core/models/product.model';
 import { DataService } from '../../core/services/data.service';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
@@ -7,7 +7,7 @@ import { FilterPanelComponent } from './filter/filter';
 
 @Component({
   selector: 'app-product-list',
-  imports: [PipHeader, ProductCardComponent, FilterPanelComponent],
+  imports: [NxsHeader, ProductCardComponent, FilterPanelComponent],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })

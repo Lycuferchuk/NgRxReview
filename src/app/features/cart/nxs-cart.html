@@ -1,0 +1,84 @@
+<app-nxs-header></app-nxs-header>
+
+<div class="cart-page">
+  @if (items.length) {
+    <h1 class="cart-page__title">Ваш кошик</h1>
+    <div class="cart-page__content">
+      <div class="cart-page__products-list">
+        @for (item of items; track item.product.id) {
+
+          <mat-card animate.leave="fade-out" class="cart-page__product">
+            <div class="product__glow"></div>
+            <div class="cart-page__image-wrap">
+              <img
+                class="cart-page__image"
+                [src]="item.product.imageUrl"
+                alt="{{ item.product.name }}"
+              />
+            </div>
+
+            <div class="cart-page__product-info">
+              <div class="cart-page__product-name">
+                <h2>{{ item.product.name }}</h2>
+                <p class="cart-page__product-type">Тип: {{ item.product.type }}</p>
+                <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
+              </div>
+
+              <div class="cart-page__action-block">
+                <div class="cart-page__quantity-input">
+                  <button class="nexus-icon-button" mat-icon-button color="primary" (click)="decreaseQuantity(item)">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+
+                  <mat-form-field appearance="fill" class="nexus-counter-input qty-input-field">
+                    <input matInput type="number" [(ngModel)]="item.quantity" (blur)="validateQuantity(item)">
+                  </mat-form-field>
+
+                  <button class="nexus-icon-button" mat-icon-button color="primary" (click)="increaseQuantity(item)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+
+
+                <div class="cart-page__price-block">
+                  <span class="cart-page__price">
+                    {{ item.totalPrice | currency }}
+                  </span>
+
+                  <button
+                    mat-flat-button
+                    class="nexus-button"
+                    color="warn"
+                    (click)="removeFromCart(item.product.id)"
+                  >
+                    Видалити
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        }
+      </div>
+
+      <div class="cart-page__summary">
+        <mat-card class="cart-page__summary-card">
+          <div class="summary-card__glow"></div>
+          <h2>Разом:</h2>
+          <p class="cart-page__summary-price">{{ totalPrice | currency }}</p>
+
+          <button (click)="orderCart()" mat-flat-button color="primary" class="nexus-button cart-page__summary-checkout">
+            Оформити замовлення
+          </button>
+        </mat-card>
+      </div>
+    </div>
+  } @else {
+    <div class="cart-page__empty">
+      <img class="cart-page__empty-image"
+           [src]="'assets/images/empty-cart.png'"
+           alt="Empty cart">
+      <h2 class="cart-page__empty-text">Ваш кошик порожній</h2>
+    </div>
+  }
+</div>
+

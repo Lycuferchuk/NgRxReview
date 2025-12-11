@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PipHeader } from '../../../shared/components/pip-header/pip-header';
+import { NxsHeader } from '../../../shared/components/nxs-header/nxs-header.component';
 import { Product } from '../../../core/models/product.model';
 import { ActivatedRoute } from '@angular/router';
 import { MatCard, MatCardImage } from '@angular/material/card';
@@ -11,7 +11,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-product-details',
   imports: [
-    PipHeader,
+    NxsHeader,
     MatCard,
     MatCardImage,
     CurrencyPipe,

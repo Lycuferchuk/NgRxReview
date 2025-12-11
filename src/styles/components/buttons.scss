@@ -1,0 +1,44 @@
+@use '../abstracts/variables';
+
+a,
+button {
+  &.nexus-button {
+    &[mat-button],
+    &[mat-raised-button],
+    &[mat-stroked-button],
+    &[mat-flat-button] {
+      border-radius: 12px;
+      background: linear-gradient(120deg,
+        var(--glow-cyan-middle),
+        var(--glow-purple-middle));
+      color: var(--text-color-primary);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      box-shadow: 0 0 8px var(--glow-cyan-middle), 0 0 8px var(--glow-purple-middle);
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 8px var(--glow-cyan), 0 0 8px var(--glow-purple);
+    }
+
+    .mdc-button__label {
+      width: 100%;
+    }
+  }
+
+  &.nexus-icon-button {
+    &[mat-icon-button] {
+      color: var(--cart-icon-color);
+    }
+
+    &:hover {
+      color: var(--cart-icon-hover-color);
+    }
+  }
+}
