@@ -3,6 +3,7 @@ import { CartItem } from '../models/cart-item.model';
 import { DataService } from './data.service';
 import { Product } from '../models/product.model';
 import { BehaviorSubject } from 'rxjs';
+import { CART_STORAGE_KEY } from '../constants/storage-key.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,6 @@ import { BehaviorSubject } from 'rxjs';
 export class CartService {
   public cartCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  private readonly cartKey: string = 'cart';
   private items: CartItem[] = [];
 
   constructor(private readonly dataService: DataService) {
@@ -61,11 +61,11 @@ export class CartService {
   }
 
   private saveCart(): void {
-    this.dataService.saveLocalStorage<CartItem[]>(this.cartKey, this.items);
+    this.dataService.saveLocalStorage<CartItem[]>(CART_STORAGE_KEY, this.items);
   }
 
   private loadCart(): void {
-    this.items = this.dataService.loadLocalStorage<CartItem[]>(this.cartKey) || [];
+    this.items = this.dataService.loadLocalStorage<CartItem[]>(CART_STORAGE_KEY) || [];
   }
 
   private updateCartCount(): void {

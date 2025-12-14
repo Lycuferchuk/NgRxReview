@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NxsHeader } from '../../shared/components/nxs-header/nxs-header.component';
 import { CurrencyPipe } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -9,11 +8,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { NxsNoData } from '../../shared/components/nxs-no-data/nxs-no-data';
+import { EmptyStateType } from '../../core/enums/empry-state.enum';
 
 @Component({
   selector: 'app-nxs-cart',
   imports: [
-    NxsHeader,
     CurrencyPipe,
     MatCard,
     MatButton,
@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     MatIconButton,
     MatInput,
     FormsModule,
+    NxsNoData,
   ],
   templateUrl: './nxs-cart.html',
   styleUrl: './nxs-cart.scss',
@@ -29,6 +30,7 @@ import { FormsModule } from '@angular/forms';
 export class CartComponent implements OnInit {
   public items: CartItem[] = [];
   public totalPrice = 0;
+  public readonly emptyStateType = EmptyStateType;
 
   constructor(private readonly _cartService: CartService) {}
 

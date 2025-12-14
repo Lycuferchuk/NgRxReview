@@ -1,58 +1,74 @@
-import { Component, OnInit } from '@angular/core';
-import { NxsHeader } from '../../../shared/components/nxs-header/nxs-header.component';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Product } from '../../../core/models/product.model';
 import { ActivatedRoute } from '@angular/router';
-import { MatCard, MatCardImage } from '@angular/material/card';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { MatCard } from '@angular/material/card';
+import { CurrencyPipe } from '@angular/common';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CartService } from '../../../core/services/cart.service';
+import { ProductService } from '../../../core/services/product.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NxsNoData } from '../../../shared/components/nxs-no-data/nxs-no-data';
+import { EmptyStateType } from '../../../core/enums/empry-state.enum';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-product-details',
-  imports: [
-    NxsHeader,
-    MatCard,
-    MatCardImage,
-    CurrencyPipe,
-    MatDivider,
-    NgClass,
-    MatButton,
-    MatProgressSpinner,
-  ],
+  imports: [MatCard, CurrencyPipe, MatDivider, MatButton, MatProgressSpinner, NxsNoData, MatIcon],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
 export class ProductDetails implements OnInit {
-  public product: Product = {
-    id: '1',
-    name: 'iPhone 15 Pro',
-    description: 'Новий флагман Apple з надшвидким процесором A17 Bionic та покращеною камерою.',
-    price: 1200,
-    brand: 'Apple',
-    type: 'Smartphone',
-    imageUrl: 'assets/images/iphone15pro.jpg',
-    features: ['6.1 inch display', '48MP camera', '128GB storage'],
-    stock: 10,
-    rating: 4.8,
-  };
+  public product!: Product;
   public isLoading = true;
+  public noData = false;
+  public readonly emptyStateType = EmptyStateType;
 
-  constructor(private _route: ActivatedRoute) {}
+  private destroyRef = inject(DestroyRef);
+
+  constructor(
+    private _route: ActivatedRoute,
+    private readonly _cartService: CartService,
+    private readonly _productService: ProductService,
+  ) {}
 
   ngOnInit(): void {
+    this.getProductId();
+  }
+
+  public addToCart(): void {
+    this._cartService.addToCart(this.product);
+  }
+
+  private getProductId(): void {
     const productId = this._route.snapshot.paramMap.get('productId');
-    this.isLoading = false;
-    if (!productId) return;
-    /*
-    this._productService.getProductById(productId).subscribe({
-      next: (product) => {
-        this.product = product;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      },
-    });*/
+
+    if (!productId) {
+      this.isLoading = false;
+      this.noData = true;
+      return;
+    }
+    this.getProduct(productId);
+  }
+
+  private getProduct(id: string): void {
+    this._productService
+      .getProductById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (product) => {
+          this.isLoading = false;
+          if (!product) {
+            this.noData = true;
+            return;
+          }
+          this.product = product;
+        },
+        error: (err) => {
+          console.error(`Error loading product id=${id}`, err);
+          this.noData = true;
+        },
+      });
   }
 }

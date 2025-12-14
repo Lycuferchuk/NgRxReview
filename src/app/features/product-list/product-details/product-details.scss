@@ -1,72 +1,128 @@
 .product-details {
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  padding: 16px;
 
   &__card {
-    max-width: 900px;
+    max-width: 1100px;
     width: 100%;
-    padding: 1rem;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
   }
 
   &__header {
     display: flex;
     gap: 2rem;
-    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
   }
 
   &__image {
-    width: 300px;
-    height: 300px;
+    width: 440px;
+    height: 440px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 16px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+    }
   }
 
   &__info {
     flex: 1;
-  }
-
-  &__price-rating {
-    margin-top: 1rem;
     display: flex;
-    gap: 2rem;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  &__price {
+  &__name {
     font-size: 1.6rem;
-    font-weight: bold;
+    margin: 0;
   }
 
   &__rating {
     font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #ffb400;
   }
 
-  &__body {
-    margin-top: 1.5rem;
-
-    p {
-      font-size: 1rem;
-      line-height: 1.4;
-    }
+  &__divider {
+    margin: 0.75rem 0;
+    opacity: 0.2;
   }
 
   &__stock {
-    margin-top: 1rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #00c853;
 
-    .in-stock {
-      color: #00c853;
-    }
-
-    .out-stock {
+    &--out {
       color: #d50000;
     }
   }
 
-  &__actions {
+  &__price-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .product-details__old-price {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: line-through;
+    }
+
+    .product-details__price {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+  }
+
+  &__buy-btn {
+    min-width: 120px;
+  }
+
+  &__body {
     margin-top: 1.5rem;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__brand,
+  &__type,
+  &__description {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  &__features-title {
+    margin-top: 1rem;
+  }
+
+  &__features-list {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+  }
+
+  &__feature-item {
+    margin-bottom: 0.25rem;
+  }
+
+  &__spinner {
+    margin: 3rem auto;
   }
 }

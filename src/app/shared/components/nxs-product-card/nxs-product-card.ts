@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from '../../../core/services/cart.service';
 
 @Component({
-  selector: 'app-product-card',
+  selector: 'app-nxs-product-card',
   imports: [
     MatCardHeader,
     MatCard,
@@ -18,10 +18,10 @@ import { CartService } from '../../../core/services/cart.service';
     MatIconButton,
     CurrencyPipe,
   ],
-  templateUrl: './product-card.html',
-  styleUrl: './product-card.scss',
+  templateUrl: './nxs-product-card.html',
+  styleUrl: './nxs-product-card.scss',
 })
-export class ProductCardComponent {
+export class NxsProductCard {
   @Input() public product: Product = {} as Product;
   @Input() index = 1;
 
@@ -40,7 +40,7 @@ export class ProductCardComponent {
     }
   }
 
-  public navigateToDetails(product: Product): void {
-    this._router.navigate([product.id, 'details'], { relativeTo: this._route });
+  public navigateToDetails(): void {
+    this._router.navigate([this.product.id, 'details'], { relativeTo: this._route });
   }
 }

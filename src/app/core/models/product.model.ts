@@ -9,7 +9,8 @@ export interface Product {
   stock: number;
   publishDate?: string;
   category?: string;
-  discount?: number;
+  discount?: string;
+  discountPrice?: string;
   features?: string[];
-  rating?: number;
+  rating?: string;
 }

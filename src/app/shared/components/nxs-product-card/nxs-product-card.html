@@ -29,6 +29,7 @@
     <div class="product-card__image-wrap">
       <img
         class="product-card__image"
+        (click)="navigateToDetails()"
         [src]="product.imageUrl"
         [alt]="product.name"
         [class.product-card__image--hover]="isHovered()"
@@ -60,7 +61,7 @@
     </div>
 
     <div class="product-card__meta">
-      <h3 class="product-card__title" [class.product-card__title--hover]="isHovered()">
+      <h3 (click)="navigateToDetails()" class="product-card__title" [class.product-card__title--hover]="isHovered()">
         {{ product.name }}
       </h3>
       <p class="product-card__brand">{{ product.brand }}</p>

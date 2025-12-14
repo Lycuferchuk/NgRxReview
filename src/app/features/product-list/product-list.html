@@ -1,5 +1,3 @@
-<app-nxs-header></app-nxs-header>
-
 <div class="product-list">
   <div class="product-list__content">
     <div class="product-list__filters">
@@ -8,7 +6,7 @@
 
     <div class="product-list__list">
       @for (product of products; track product.id) {
-        <app-product-card [product]="product" [index]="$index"></app-product-card>
+        <app-nxs-product-card [product]="product" [index]="$index"></app-nxs-product-card>
       }
     </div>
   </div>
