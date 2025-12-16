@@ -1,33 +1,26 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { Product } from '../../core/models/product.model';
+import { Component, inject, OnInit } from '@angular/core';
 import { NxsProductCard } from '../../shared/components/nxs-product-card/nxs-product-card';
 import { FilterPanelComponent } from './filter/filter';
-import { ProductService } from '../../core/services/product.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductStore } from '../../core/store/products.store';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NxsNoData } from '../../shared/components/nxs-no-data/nxs-no-data';
 
 @Component({
   selector: 'app-product-list',
-  imports: [NxsProductCard, FilterPanelComponent],
+  imports: [NxsProductCard, FilterPanelComponent, MatProgressSpinner, NxsNoData],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
 export class ProductList implements OnInit {
-  public products: Product[] = [];
+  private readonly productStore = inject(ProductStore);
+  public readonly products = this.productStore.products;
+  public readonly loading = this.productStore.loading;
 
-  private destroyRef = inject(DestroyRef);
-
-  constructor(private readonly _productService: ProductService) {}
-
-  ngOnInit(): void {
-    this.loadProducts();
+  constructor() {
+    /* empty */
   }
 
-  public loadProducts(): void {
-    this._productService
-      .getProductsList()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        this.products = result;
-      });
+  public ngOnInit(): void {
+    this.productStore.loadProducts();
   }
 }

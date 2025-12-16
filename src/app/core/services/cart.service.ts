@@ -41,6 +41,7 @@ export class CartService {
   }
 
   public getCart(): CartItem[] {
+    this.loadCart();
     return this.items;
   }
 
@@ -66,6 +67,7 @@ export class CartService {
 
   private loadCart(): void {
     this.items = this.dataService.loadLocalStorage<CartItem[]>(CART_STORAGE_KEY) || [];
+    this.updateCartCount();
   }
 
   private updateCartCount(): void {

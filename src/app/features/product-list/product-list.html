@@ -3,10 +3,15 @@
     <div class="product-list__filters">
       <app-filter></app-filter>
     </div>
-
     <div class="product-list__list">
-      @for (product of products; track product.id) {
-        <app-nxs-product-card [product]="product" [index]="$index"></app-nxs-product-card>
+      @if (loading()) {
+        <mat-spinner></mat-spinner>
+      } @else if (!loading() && !products()) {
+        <app-nxs-no-data></app-nxs-no-data>
+      } @else {
+        @for (product of products(); track product.id) {
+          <app-nxs-product-card [product]="product"></app-nxs-product-card>
+        }
       }
     </div>
   </div>

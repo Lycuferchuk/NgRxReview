@@ -1,69 +1,84 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatCard } from '@angular/material/card';
-import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { FormsModule } from '@angular/forms';
-import { Product } from '../../../core/models/product.model';
-import { Filters } from '../../../core/models/filter.model';
-import { MatButton } from '@angular/material/button';
-import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
-import { MatFormField } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { Filter, PriceRange } from '../../../core/models/filter.model';
+import { filterFormOutput, FilterGroup } from './filter-group/filter-group';
 
 @Component({
   selector: 'app-filter',
-  imports: [
-    MatCard,
-    MatSlider,
-    MatCheckbox,
-    FormsModule,
-    MatButton,
-    MatRadioButton,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    MatSliderRangeThumb,
-    MatFormField,
-    MatInput,
-    MatRadioGroup,
-  ],
+  imports: [MatCard, FormsModule, ReactiveFormsModule, FilterGroup],
   templateUrl: './filter.html',
   styleUrl: './filter.scss',
 })
 export class FilterPanelComponent {
-  @Input() products: Product[] = [];
-  @Input() filters: Filters = {
-    categories: ['Phones', 'laptops', 'earbuds'],
-    brands: ['Brand X', 'Brand Y', 'Brand Z'],
-    priceRange: [0, 1000],
-    minRating: 1,
-    inStock: false,
-  };
+  public filters: Filter[] = [
+    {
+      key: 'brand',
+      label: 'Бренд',
+      type: 'checkbox',
+      options: [
+        { value: 'apple', label: 'Apple', count: 124 },
+        { value: 'samsung', label: 'Samsung', count: 98 },
+        { value: 'xiaomi', label: 'Xiaomi', count: 56, disabled: true },
+      ],
+    },
+    {
+      key: 'rating',
+      label: 'Рейтинг',
+      type: 'radio',
+      options: [
+        { value: 5, label: '5 зірок' },
+        { value: 4, label: '4 зірки і більше' },
+        { value: 3, label: '3 зірки і більше' },
+      ],
+    },
+    {
+      key: 'price',
+      label: 'Ціна',
+      type: 'range',
+      min: 0,
+      max: 50000,
+    },
+    {
+      key: 'inStock',
+      label: 'Тільки в наявності',
+      type: 'boolean',
+    },
+    {
+      key: 'discount',
+      label: 'Зі знижкою',
+      type: 'boolean',
+    },
+  ];
 
-  get categories(): (string | undefined)[] {
-    return Array.from(new Set(this.products.map((p) => p.category)));
+  public form: FormGroup = new FormGroup({
+    brand: new FormControl<string[]>([], { nonNullable: true }),
+    price: new FormControl<PriceRange>({ min: 0, max: 1000 }, { nonNullable: true }),
+    availability: new FormControl<boolean>(false, { nonNullable: true }),
+    condition: new FormControl<string | null>(null),
+  });
+
+  public onFilterChange(event: filterFormOutput): void {
+    const control = this.form.get(event.key);
+
+    if (control instanceof FormArray && event.checked !== undefined) {
+      this.updateCheckboxArray(control, event);
+    }
   }
 
-  get brands(): string[] {
-    return Array.from(new Set(this.products.map((p) => p.brand)));
-  }
-
-  toggleCategory(category: string) {
-    const i = this.filters.categories.indexOf(category);
-    if (i >= 0) this.filters.categories.splice(i, 1);
-    else this.filters.categories.push(category);
-  }
-
-  toggleBrand(brand: string) {
-    const i = this.filters.brands.indexOf(brand);
-    if (i >= 0) this.filters.brands.splice(i, 1);
-    else this.filters.brands.push(brand);
+  private updateCheckboxArray(
+    control: FormArray<FormControl<string>>,
+    event: filterFormOutput,
+  ): void {
+    if (!event.checked || !event.value) {
+      return;
+    }
+    control.push(new FormControl(event.value, { nonNullable: true }));
   }
 }

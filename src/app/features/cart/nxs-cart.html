@@ -1,11 +1,11 @@
 <div class="cart-page">
-  @if (items.length) {
+  @if (items().length) {
     <div class="cart-page__cart-wrapper">
       <h1 class="cart-page__title">Ваш кошик</h1>
 
       <div class="cart-page__content">
         <div class="cart-page__cart-list">
-          @for (item of items; track item.product.id) {
+          @for (item of items(); track item.product.id) {
             <mat-card animate.leave="fade-out" class="cart-page__product">
               <div class="product__glow"></div>
               <div class="cart-page__image-wrap">
@@ -63,7 +63,7 @@
           <mat-card class="cart-page__summary-card">
             <div class="summary-card__glow"></div>
             <h2>Разом:</h2>
-            <p class="cart-page__summary-price">{{ totalPrice | currency }}</p>
+            <p class="cart-page__summary-price">{{ totalPrice() | currency }}</p>
 
             <button (click)="orderCart()" mat-flat-button color="primary" class="nexus-button cart-page__summary-checkout">
               Оформити замовлення

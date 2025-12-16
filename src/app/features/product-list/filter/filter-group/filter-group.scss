@@ -1,0 +1,33 @@
+.filter-panel {
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__section-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__checkbox,
+  &__radio {
+    color: var(--color-white-60);
+  }
+
+  &__form-inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__expansion-panel {
+    background: transparent;
+    box-shadow: none !important;
+  }
+}
+
+mat-divider {
+  margin: 8px 0;
+}
