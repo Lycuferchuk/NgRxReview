@@ -1,13 +1,13 @@
-<div class="cart-page">
+<div class="cart-page p-16">
   @if (items().length) {
     <div class="cart-page__cart-wrapper">
-      <h1 class="cart-page__title">Ваш кошик</h1>
+      <h1 class="cart-page__title mb-24">Ваш кошик</h1>
 
-      <div class="cart-page__content">
-        <div class="cart-page__cart-list">
+      <div class="flex cart-page__content gap-32">
+        <div class="flex-col cart-page__cart-list gap-16">
           @for (item of items(); track item.product.id) {
-            <mat-card animate.leave="fade-out" class="cart-page__product">
-              <div class="product__glow"></div>
+            <mat-card animate.leave="fade-out" class="nexus-card flex cart-page__product gap-24">
+              <div class="card-glow"></div>
               <div class="cart-page__image-wrap">
                 <img
                   class="cart-page__image"
@@ -16,20 +16,20 @@
                 />
               </div>
 
-              <div class="cart-page__product-info">
-                <div class="cart-page__product-name">
+              <div class="flex cart-page__product-info">
+                <div class="cart-page__product-name mt-8">
                   <h2>{{ item.product.name }}</h2>
-                  <p class="cart-page__product-type">Тип: {{ item.product.type }}</p>
+                  <p class="cart-page__product-type">Тип: {{ item.product.brand }}</p>
                   <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
                 </div>
 
-                <div class="cart-page__action-block">
-                  <div class="cart-page__quantity-input">
+                <div class="flex cart-page__action-block gap-16">
+                  <div class="flex cart-page__quantity-input gap-8">
                     <button class="nexus-icon-button" mat-icon-button color="primary" (click)="decreaseQuantity(item)">
                       <mat-icon>remove</mat-icon>
                     </button>
 
-                    <mat-form-field appearance="fill" class="nexus-counter-input qty-input-field">
+                    <mat-form-field appearance="fill" class="nexus-counter-input">
                       <input matInput type="number" [(ngModel)]="item.quantity" (blur)="validateQuantity(item)">
                     </mat-form-field>
 
@@ -38,8 +38,7 @@
                     </button>
                   </div>
 
-
-                  <div class="cart-page__price-block">
+                  <div class="flex-col cart-page__price-block mt-12 mb-12 gap-16">
                   <span class="cart-page__price">
                     {{ item.totalPrice | currency }}
                   </span>
@@ -60,12 +59,11 @@
         </div>
 
         <div class="cart-page__summary">
-          <mat-card class="cart-page__summary-card">
-            <div class="summary-card__glow"></div>
-            <h2>Разом:</h2>
-            <p class="cart-page__summary-price">{{ totalPrice() | currency }}</p>
+          <mat-card class="nexus-card cart-page__summary-card p-24">
+            <h2 class="mb-16">Разом:</h2>
+            <p class="cart-page__summary-price f-s-24 mb-24">{{ totalPrice() | currency }}</p>
 
-            <button (click)="orderCart()" mat-flat-button color="primary" class="nexus-button cart-page__summary-checkout">
+            <button (click)="orderCart()" mat-flat-button color="primary" class="nexus-button cart-page__summary-checkout w-100">
               Оформити замовлення
             </button>
           </mat-card>

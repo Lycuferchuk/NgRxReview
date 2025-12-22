@@ -1,11 +1,11 @@
 <mat-card
-  class="product-card"
+  class="nexus-card product-card"
   (mouseenter)="isHovered.set(true)"
   (mouseleave)="isHovered.set(false)"
 >
-  <div class="product-card__glow"></div>
-  <mat-card-header class="product-card__header">
-    <div class="product-card__badges">
+  <div class="card-glow"></div>
+  <mat-card-header class="flex w-100 product-card__header">
+    <div class="product-card__badges gap-8">
       @if (isNew) {
         <div class="product-card__badge product-card__badge-new">
           <mat-icon>auto_awesome</mat-icon>
@@ -19,13 +19,13 @@
         </div>
       }
     </div>
-    <div class="product-card__rating">
+    <div class="flex product-card__rating gap-6 f-s-18">
       <mat-icon>star</mat-icon>
       <span>{{ product.rating }}</span>
     </div>
   </mat-card-header>
 
-  <mat-card-content class="product-card__content">
+  <mat-card-content class="product-card__content p-0">
     <div class="product-card__image-wrap">
       <img
         class="product-card__image"
@@ -37,13 +37,13 @@
 
       @if (product.stock) {
         <div
-          class="product-card__quick"
-          [class.product-card__quick--visible]="isHovered()"
+          class="product-card__quick-buy-wrapper"
+          [class.product-card__quick-buy-wrapper-visible]="isHovered()"
         >
           <button
             mat-flat-button
             color="primary"
-            class="product-card__quick-btn"
+            class="product-card__quick-buy-btn gap-4"
             (click)="handleAdd()"
             [disabled]="!product.stock"
           >
@@ -64,15 +64,15 @@
       <h3 (click)="navigateToDetails()" class="product-card__title" [class.product-card__title--hover]="isHovered()">
         {{ product.name }}
       </h3>
-      <p class="product-card__brand">{{ product.brand }}</p>
+      <p class="product-card__brand mb-12 f-s-12">{{ product.category }}</p>
 
       <div class="product-card__controls">
-        <div class="product-card__prices">
+        <div class="flex product-card__prices gap-8">
           @if (product.discount) {
-            <span class="product-card__price-old">{{ product.price | currency }}</span>
-            <span class="product-card__price-new">{{ product.discount | currency }}</span>
+            <span class="product-card__price-old f-s-14">{{ product.price | currency }}</span>
+            <span class="product-card__price-new f-s-16">{{ product.discount | currency }}</span>
           } @else {
-            <span class="product-card__price">{{ product.price | currency }}</span>
+            <span class="product-card__price f-s-16">{{ product.price | currency }}</span>
           }
         </div>
 

@@ -1,12 +1,12 @@
-<header class="nxs-header">
-  <div class="nxs-header__logo-wrapper">
+<header class="nxs-header gap-16">
+  <div class="nxs-header__logo-wrapper flex gap-12">
     <div class="nxs-header__icon-container">
       <mat-icon (click)="toHome()">electric_bolt</mat-icon>
     </div>
-    <h1 (click)="toHome()" class="nxs-header__logo-text">NEXUS</h1>
+    <h1 (click)="toHome()" class="nxs-header__logo-text f-s-20">NEXUS</h1>
   </div>
 
-  <div class="nxs-header__search-wrapper">
+  <div class="transparent-bg nxs-header__search-wrapper flex pl-12">
     <mat-icon class="nxs-header__search-icon">search</mat-icon>
     <mat-form-field appearance="fill" class="nexus-search-form-field">
       <mat-label>Шукати девайси</mat-label>
@@ -18,7 +18,7 @@
     <div class="nxs-header__search-bg"></div>
   </div>
 
-  <div class="nxs-header__cart">
+  <div class="nxs-header__cart flex">
     <button (click)="toCart()" mat-icon-button class="nxs-header__cart-button">
       <mat-icon>shopping_cart</mat-icon>
       @if (cartCount() > 0) {

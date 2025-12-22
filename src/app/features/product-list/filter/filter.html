@@ -1,14 +1,54 @@
-<mat-card class="filter-panel" [formGroup]="form">
+<mat-card class="nexus-card filter-panel">
   <div class="filter-panel__header">
-    <h2 class="filter-panel__title">Фільтри</h2>
+    <h2 class="filter-panel__title">
+      Фільтри
+      @if (activeFiltersCount() > 0) {
+        <span class="badge">{{ activeFiltersCount() }}</span>
+      }
+    </h2>
+    <button
+      mat-button
+      color="warn"
+      (click)="reset()"
+      [disabled]="!hasActiveFilters()">
+      Скинути
+    </button>
+  </div>
+
+  <div class="results-info">
+    Знайдено: {{ filteredCount() }} з {{ totalCount() }}
   </div>
 
   <form [formGroup]="form">
-    @for (filter of filters; track filter.key) {
-      <app-filter-group
-        [filter]="filter"
-        [parentForm]="form"
-        (controlChange)="onFilterChange($event)"></app-filter-group>
-    }
+    <!-- Категорія -->
+    <app-nxs-checkbox-form
+      formControlName="category"
+      [config]="categoryConfig" />
+
+    <!-- Ціна -->
+    <app-form-range-slider
+      formGroupName="price" />
+<!--      label="Ціна, ₴" />-->
+
+    <!-- В наявності -->
+    <app-nxs-checkbox-form
+      formControlName="inStock"
+      [config]="inStockConfig" />
+
+    <!-- Рейтинг -->
+    <app-nxs-checkbox-form
+      formControlName="rating"
+      [config]="ratingConfig" />
+
+    <!-- Динамічні фільтри - поки закоментовано -->
+    <!--
+    <div formGroupName="dynamic">
+      @for (filter of dynamicFilters(); track filter.key) {
+        <app-filter-control
+          [config]="filter"
+          [formControlName]="filter.key" />
+      }
+    </div>
+    -->
   </form>
 </mat-card>

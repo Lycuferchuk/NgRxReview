@@ -1,43 +1,42 @@
-<div class="product-details">
+<div class="product-details flex p-16">
   @if (isLoading) {
     <mat-spinner class="product-details__spinner"></mat-spinner>
   } @else if (noData) {
     <app-nxs-no-data [type]="emptyStateType.NO_DATA"></app-nxs-no-data>
   } @else {
-    <mat-card class="product-details__card">
-      <div class="product-details__header">
+    <mat-card class="nexus-card product-details__card">
+      <div class="flex product-details__header gap-32 mb-24">
         <img
           [src]="product.imageUrl"
           [alt]="product.name"
-          class="product-details__image"
+          class="nexus-img product-details__image"
         />
 
-        <div class="product-details__info">
-          <!-- Назва і рейтинг -->
-          <h1 class="product-details__name">{{ product.name }}</h1>
+        <div class="flex-col product-details__info gap-8">
+          <h1 class="m-0 f-s-28">{{ product.name }}</h1>
 
           @if (product.rating) {
-            <span class="product-details__rating">
+            <span class="flex product-details__rating f-s-20 gap-4">
               <mat-icon>star</mat-icon>
               {{ product.rating }}/5
             </span>
           }
 
-          <mat-divider class="product-details__divider"></mat-divider>
+          <mat-divider class="nexus-divider"></mat-divider>
 
           @if (product.stock > 0) {
-            <span class="product-details__stock">Є в наявності</span>
+            <span class="product-details__stock f-s-16">Є в наявності</span>
           } @else {
-            <span class="product-details__stock product-details__stock--out">Немає в наявності</span>
+            <span class="product-details__stock product-details__stock-out">Немає в наявності</span>
           }
 
-          <div class="product-details__price-actions">
+          <div class="flex product-details__price-actions gap-16">
             @if (product.discount) {
-              <span class="product-details__old-price">{{ product.discountPrice | currency }}</span>
+              <span class="product-details__old-price f-s-20">{{ product.discountPrice | currency }}</span>
             }
-            <span class="product-details__price">{{ product.price | currency }}</span>
+            <span class="product-details__price f-s-28">{{ product.price | currency }}</span>
             <button
-              class="product-details__buy-btn nexus-button"
+              class="nexus-button"
               mat-flat-button
               color="primary"
               (click)="addToCart()"
@@ -52,20 +51,20 @@
 
       <mat-divider></mat-divider>
 
-      <div class="product-details__body">
-        <h2 class="product-details__subtitle">Опис</h2>
-        <p class="product-details__brand">Бренд: {{ product.brand }}</p>
-        <p class="product-details__type">Тип: {{ product.type }}</p>
-        <p class="product-details__description">{{ product.description }}</p>
+      <div class="flex-col product-details__body mt-24 gap-8">
+        <h2 class="product-details__subtitle f-s-22 mb-8">Опис</h2>
+        <p class="product-details__brand f-s-16 m-0">Бренд: {{ product.brand }}</p>
+<!--        <p class="product-details__type f-s-16 m-0">Тип: {{ product.type }}</p>-->
+        <p class="product-details__description f-s-16 m-0">{{ product.description }}</p>
 
-        @if (product.features?.length) {
-          <h3 class="product-details__features-title">Особливості:</h3>
-          <ul class="product-details__features-list">
-            @for (feature of product.features; track feature) {
-              <li class="product-details__feature-item">{{ feature }}</li>
-            }
-          </ul>
-        }
+<!--        @if (product.features?.length) {-->
+<!--          <h3 class="product-details__features-title">Особливості:</h3>-->
+<!--          <ul class="product-details__features-list">-->
+<!--            @for (feature of product.features; track feature) {-->
+<!--              <li class="product-details__feature-item">{{ feature }}</li>-->
+<!--            }-->
+<!--          </ul>-->
+<!--        }-->
       </div>
     </mat-card>
   }

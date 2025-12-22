@@ -1,0 +1,40 @@
+<mat-expansion-panel class="nexus-expansion-panel" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Ціна</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div class="flex-col gap-16 w-100">
+    <div [formGroup]="rangeGroup" class="flex gap-16 range-inputs">
+      <mat-form-field class="nexus-counter-input" appearance="fill">
+        <mat-label>Від</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="min"
+          [min]="min()"
+          [max]="max()"
+        />
+      </mat-form-field>
+
+      <mat-form-field class="nexus-counter-input" appearance="fill">
+        <mat-label>До</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="max"
+          [min]="min()"
+          [max]="max()"
+        />
+      </mat-form-field>
+    </div>
+
+    <div [formGroup]="rangeGroup">
+      <mat-slider [min]="min()" [max]="max()" class="w-100 m-0 range-slider">
+        <input matSliderStartThumb formControlName="min"/>
+        <input matSliderEndThumb formControlName="max"/>
+      </mat-slider>
+    </div>
+  </div>
+</mat-expansion-panel>
+
+<mat-divider class="mt-8 mb-8" />

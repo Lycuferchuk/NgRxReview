@@ -6,12 +6,12 @@ import { CurrencyPipe } from '@angular/common';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { CartService } from '../../../core/services/cart.service';
 import { ProductService } from '../../../core/services/product.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NxsNoData } from '../../../shared/components/nxs-no-data/nxs-no-data';
 import { EmptyStateType } from '../../../core/enums/empry-state.enum';
 import { MatIcon } from '@angular/material/icon';
+import { CartStore } from '../../../core/store/cart.store';
 
 @Component({
   selector: 'app-product-details',
@@ -24,12 +24,12 @@ export class ProductDetails implements OnInit {
   public isLoading = true;
   public noData = false;
   public readonly emptyStateType = EmptyStateType;
+  public cart = inject(CartStore);
 
   private destroyRef = inject(DestroyRef);
 
   constructor(
     private _route: ActivatedRoute,
-    private readonly _cartService: CartService,
     private readonly _productService: ProductService,
   ) {}
 
@@ -38,7 +38,7 @@ export class ProductDetails implements OnInit {
   }
 
   public addToCart(): void {
-    this._cartService.addToCart(this.product);
+    this.cart.addToCart(this.product);
   }
 
   private getProductId(): void {

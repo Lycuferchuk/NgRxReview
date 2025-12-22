@@ -1,0 +1,116 @@
+@use 'sass:string';
+
+$spacings: (
+  0: 0,
+  1: 1px,
+  2: 2px,
+  4: 4px,
+  6: 6px,
+  8: 8px,
+  10: 10px,
+  12: 12px,
+  14: 14px,
+  16: 16px,
+  18: 18px,
+  20: 20px,
+  24: 24px,
+  26: 26px,
+  32: 32px,
+  40: 40px,
+  42: 42px,
+  46: 46px,
+  48: 48px,
+  60: 60px,
+  80: 80px,
+  90: 90px,
+  120: 120px,
+);
+
+$sides: (top, bottom, left, right);
+
+$percentage: (
+  5: 5%,
+  10: 10%,
+  15: 15%,
+  20: 20%,
+  25: 25%,
+  30: 30%,
+  35: 35%,
+  40: 40%,
+  45: 45%,
+  50: 50%,
+  55: 55%,
+  60: 60%,
+  65: 65%,
+  70: 70%,
+  75: 75%,
+  80: 80%,
+  85: 85%,
+  90: 90%,
+  95: 95%,
+  100: 100%,
+);
+
+@each $name, $size in $spacings {
+  .m-#{$name} {
+    margin: $size !important;
+  }
+
+  .p-#{$name} {
+    padding: $size !important;
+  }
+
+  @each $side in $sides {
+    .m#{string.slice($side, 0, 1)}-#{$name} {
+      margin-#{$side}: $size !important;
+    }
+
+    .p#{string.slice($side, 0, 1)}-#{$name} {
+      padding-#{$side}: $size !important;
+    }
+  }
+}
+
+$sizes: (8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40);
+
+@each $size in $sizes {
+  .f-s-#{$size} {
+    font-size: #{$size}px !important;
+  }
+}
+
+@each $name, $size in $percentage {
+  .w-#{$name} {
+    width: $size !important;
+  }
+}
+
+@each $name, $size in $percentage {
+  .h-#{$name} {
+    height: $size;
+  }
+}
+
+@each $name, $size in $spacings {
+  .gap-#{$name} {
+    gap: $size;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.items-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}

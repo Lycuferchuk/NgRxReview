@@ -1,0 +1,44 @@
+<mat-expansion-panel class="nexus-expansion-panel" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ config().label }}</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div>
+    @if (config().type === 'boolean') {
+      <mat-checkbox
+        [checked]="value"
+        (change)="onBooleanChange($event.checked)">
+        {{ config().label }}
+      </mat-checkbox>
+    }
+
+    @if (config().type === 'checkbox' && config().options) {
+      @for (option of config().options; track option.value) {
+        <mat-checkbox
+          class="flex-col"
+          [checked]="isChecked(option.value)"
+          (change)="onCheckboxChange($event.checked, option.value)">
+          {{ option.label }}
+          @if (option.count !== undefined) {
+            <span class="count">({{ option.count }})</span>
+          }
+        </mat-checkbox>
+      }
+    }
+
+    @if (config().type === 'radio' && config().options) {
+      <mat-radio-group
+        class="flex-col"
+        [value]="value"
+        (change)="onRadioChange($event.value)">
+        @for (option of config().options; track option.value) {
+          <mat-radio-button [value]="option.value">
+            {{ option.label }}
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    }
+  </div>
+</mat-expansion-panel>
+
+<mat-divider class="mt-8 mb-8" />

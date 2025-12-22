@@ -1,11 +1,13 @@
 <div class="product-list">
-  <div class="product-list__content">
-    <div class="product-list__filters">
+  <div class="flex product-list__content gap-8">
+    <div class="product-list__filters ml-8">
       <app-filter></app-filter>
     </div>
-    <div class="product-list__list">
+    <div class="flex items-center product-list__list gap-16">
       @if (loading()) {
-        <mat-spinner></mat-spinner>
+        @for (item of [1,2,3,4,5,6,7,8,9,10]; track item) {
+          <app-nxs-skeleton-card></app-nxs-skeleton-card>
+        }
       } @else if (!loading() && !products()) {
         <app-nxs-no-data></app-nxs-no-data>
       } @else {

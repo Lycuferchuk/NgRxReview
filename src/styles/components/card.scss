@@ -1,0 +1,40 @@
+.transparent-bg {
+  background: var(--filter-bg) !important;
+  border: 1px solid var(--filter-border) !important;
+  color: var(--product-text);
+}
+
+.nexus-card {
+  @extend .transparent-bg;
+
+  position: relative;
+  overflow: visible;
+  border-radius: 12px;
+}
+
+.nexus-img {
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  background: transparent;
+}
+
+.card-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+      130deg,
+      var(--glow-cyan-weak),
+      var(--glow-purple-weak)
+  );
+  filter: blur(14px);
+  transition: opacity 0.3s ease;
+
+  &--visible {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,109 @@
+.skeleton-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.skeleton-card__image-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+}
+
+.skeleton-card__header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  z-index: 2;
+  background: transparent;
+}
+
+.skeleton-card__body {
+  padding: 12px 16px 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.skeleton-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+/* Skeleton elements */
+.skeleton-element {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  position: relative;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-element--badge {
+  width: 60px;
+  height: 28px;
+  border-radius: 10px;
+}
+
+.skeleton-element--rating {
+  width: 50px;
+  height: 28px;
+  border-radius: 10px;
+}
+
+.skeleton-element--img {
+  width: 280px;
+  height: 280px;
+  border-radius: 0;
+}
+
+.skeleton-element--title {
+  width: 80%;
+  height: 20px;
+  margin-bottom: 12px;
+}
+
+.skeleton-element--subtitle {
+  width: 45%;
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.skeleton-element--price {
+  width: 90px;
+  height: 20px;
+}
+
+.skeleton-element--icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Wave animation */
+.skeleton-wave {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      transparent 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: wave 2s infinite ease-in-out;
+}

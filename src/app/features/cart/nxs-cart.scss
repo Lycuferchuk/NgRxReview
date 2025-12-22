@@ -1,65 +1,18 @@
 .cart-page {
-  padding: 16px;
-
   &__cart-wrapper {
     margin: 24px 150px;
   }
 
-  &__title {
-    margin-bottom: 24px;
-  }
-
-  &__content {
-    display: flex;
-    gap: 2rem;
-  }
-
   &__cart-list {
     flex: 2;
-    display: flex;
-    transition:
-      transform 500ms ease,
-      opacity 500ms ease,
-      height 500ms ease,
-      margin 500ms ease;
     overflow: hidden;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   &__product {
-    display: flex;
     flex-direction: row;
-    gap: 1.5rem;
     align-items: flex-start;
-    position: relative;
-    overflow: visible;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--product-text);
-    border: 1px solid rgba(255, 255, 255, 0.1);
 
-    .product__glow {
-      position: absolute;
-      inset: -6px;
-      border-radius: 14px;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 0;
-      background: linear-gradient(
-          130deg,
-          var(--glow-cyan-weak),
-          var(--glow-purple-weak)
-      );
-      filter: blur(14px);
-      transition: opacity 0.3s ease;
-
-      &--visible {
-        opacity: 1;
-      }
-    }
-
-    &:hover .product__glow {
+    &:hover .card-glow {
       opacity: 1;
     }
   }
@@ -70,7 +23,7 @@
     border-top-left-radius: 11px;
     border-bottom-left-radius: 11px;
   }
-  /* replace SCSS to mat-card.scss*/
+
   &__image {
     height: 100%;
     width: 120px;
@@ -78,44 +31,25 @@
     transition: transform .45s ease;
     display: block;
     background: transparent;
-
-    &--hover {
-      transform: scale(1.06) rotate(0.5deg);
-      backface-visibility: hidden;
-    }
   }
 
   &__product-info {
     flex: 1;
-    display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 8px 16px;
   }
 
-
-  &__product-name {
-    margin-top: 8px;
-  }
-
   &__action-block {
-    display: flex;
     flex-direction: row;
-    gap: 16px;
     align-items: center;
   }
 
   &__quantity-input {
-    display: flex;
     align-items: center;
-    gap: 8px;
   }
 
   &__price-block {
-    margin: 0.7rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
     align-items: center;
   }
 
@@ -124,58 +58,11 @@
     font-weight: bold;
   }
 
-  &__rating {
-    font-size: 1rem;
-  }
-
   &__summary {
     flex: 1;
-
-    mat-card {
-      padding: 1.5rem;
-
-      h2 {
-        margin: 0 0 1rem 0;
-      }
-    }
-  }
-
-  &__summary-card {
-    position: relative;
-    overflow: visible;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--product-text);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
-    .summary-card__glow {
-      position: absolute;
-      inset: -6px;
-      border-radius: 14px;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 0;
-      background: linear-gradient(
-          130deg,
-          var(--glow-cyan-weak),
-          var(--glow-purple-weak)
-      );
-      filter: blur(14px);
-      transition: opacity 0.3s ease;
-
-      &--visible {
-        opacity: 1;
-      }
-    }
   }
 
   &__summary-price {
-     font-size: 1.5rem;
      font-weight: bold;
-     margin-bottom: 1.5rem;
-   }
-
-  &__summary-checkout {
-    width: 100%;
   }
 }
