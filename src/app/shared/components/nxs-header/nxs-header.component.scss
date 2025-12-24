@@ -17,7 +17,7 @@
       var(--header-bg-middle),
       var(--header-bg-end)
   );
-  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  border-bottom: 1px solid var(--header-border);
 
   &__logo-wrapper {
     align-items: center;
@@ -26,27 +26,15 @@
   &__icon-container {
     position: relative;
     align-content: center;
-    width: 2rem;
-    height: 2rem;
-    color: var(--logo-glow-color);
+    width: 40px;
     cursor: pointer;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-color: rgba(6, 182, 212, 0.5);
-      filter: blur(12px);
-      border-radius: 50%;
-      z-index: -1;
-    }
   }
 
   &__logo-text {
     background: linear-gradient(
         to right,
-        var(--logo-gradient-start),
-        var(--logo-gradient-middle)
+        var(--glow-cyan),
+        var(--glow-purple)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -62,20 +50,20 @@
     align-items: center;
     width: 40rem;
     border-radius: 16px;
-    color: var(--text-color-primary);
+    color: var(--text-primary);
 
     &:focus-within {
       background: linear-gradient(
           to right,
-          var(--search-bg-gradient-focus-start) 0%,
-          var(--search-bg-gradient-focus-middle) 50%,
-          var(--search-bg-gradient-focus-end) 100%
+          var(--search-bg-focus-start) 0%,
+          var(--search-bg-focus-middle) 50%,
+          var(--search-bg-focus-end) 100%
       );
-      outline: 1px solid var(--cart-icon-hover-color);
+      outline: 1px solid var(--glow-cyan);
       transition: outline 0.2s ease;
 
       mat-icon {
-        color: var(--cart-icon-hover-color);
+        color: var(--glow-cyan);
         transition: outline 0.2s ease;
       }
     }
@@ -86,7 +74,7 @@
   }
 
   &__search-icon {
-    color: var(--placeholder-color);
+    color: var(--text-placeholder);
   }
 
   &__cart {
@@ -94,11 +82,11 @@
   }
 
   &__cart-button {
-    color: var(--cart-icon-color);
+    color: var(--cart-icon);
     transition: color 0.3s;
 
     &:hover {
-      color: var(--cart-icon-hover-color);
+      color: var(--glow-cyan);
     }
   }
 
@@ -109,7 +97,7 @@
     width: 1.20rem;
     height: 1.20rem;
     background: linear-gradient(to right, var(--cart-count-gradient-start), var(--cart-count-gradient-end));
-    color: var(--text-color-primary);
+    color: var(--text-primary);
     font-size: 0.75rem;
     font-weight: bold;
     border-radius: 9999px;

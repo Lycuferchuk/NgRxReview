@@ -28,15 +28,15 @@
 
   &__rating {
     align-items: center;
-    color: #ffb400;
+    color: var(--rating);
   }
 
   &__stock {
     font-weight: 500;
-    color: #00c853;
+    color: var(--status-in-stock);
 
     &-out {
-      color: #d50000;
+      color: var(--status-out-stock);
     }
   }
 
@@ -46,12 +46,12 @@
   }
 
   .product-details__old-price {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary);
     text-decoration: line-through;
   }
 
   .product-details__price {
     font-weight: bold;
-    color: #ffffff;
+    color: var(--text-primary);
   }
 }

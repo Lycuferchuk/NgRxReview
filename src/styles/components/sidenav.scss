@@ -1,0 +1,44 @@
+@use '@angular/material' as mat;
+
+.nexus-sidenav {
+  &.mat-drawer-container {
+    overflow: unset;
+  }
+
+  @include mat.sidenav-overrides(
+      (
+        content-background-color: transparent,
+        scrim-color: transparent,
+        container-shape: 0,
+      )
+  );
+
+  .mat-drawer {
+    width: 100%;
+    height: 100%;
+
+    @media (min-width: 768px) {
+      width: auto;
+      height: auto;
+      background: none;
+    }
+  }
+
+  &.mat-drawer-transition {
+    .mat-drawer,
+    .mat-drawer-content {
+      transition:
+        transform 250ms ease-in-out,
+        width 250ms ease-in-out,
+        margin-left 250ms ease-in-out,
+        margin-right 250ms ease-in-out,
+        background-color 500ms ease;
+    }
+  }
+
+  &.hidden {
+    .mat-drawer-side {
+      padding: 0;
+    }
+  }
+}

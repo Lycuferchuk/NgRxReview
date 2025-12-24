@@ -1,12 +1,12 @@
 html,
 body {
   height: 100%;
-  color: var(--text-color-primary);
+  color: var(--text-primary);
   background:
-    radial-gradient(circle at 15% 80%, rgba(0, 120, 150, 0.10) 0%, transparent 55%),
-    radial-gradient(circle at 85% 25%, rgba(90, 40, 160, 0.10) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(40, 80, 150, 0.10) 0%, transparent 70%),
-    linear-gradient(180deg, #050508 0%, #0d0d14 100%);
+    radial-gradient(circle at 15% 80%, var(--circle-bg-cyan) 0%, transparent 55%),
+    radial-gradient(circle at 85% 25%, var(--circle-bg-purple) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, var(--circle-bg-pink) 0%, transparent 70%),
+    linear-gradient(180deg, var(--background-gradient-0) 0%, var(--background-gradient-100) 100%);
   background-attachment: fixed;
   background-size: cover;
 }

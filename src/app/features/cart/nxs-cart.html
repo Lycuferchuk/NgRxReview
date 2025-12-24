@@ -6,7 +6,7 @@
       <div class="flex cart-page__content gap-32">
         <div class="flex-col cart-page__cart-list gap-16">
           @for (item of items(); track item.product.id) {
-            <mat-card animate.leave="fade-out" class="nexus-card flex cart-page__product gap-24">
+            <mat-card animate.leave="fade-out" class="nexus-card flex cart-page__product">
               <div class="card-glow"></div>
               <div class="cart-page__image-wrap">
                 <img
@@ -14,15 +14,13 @@
                   [src]="item.product.imageUrl"
                   alt="{{ item.product.name }}"
                 />
-              </div>
 
-              <div class="flex cart-page__product-info">
                 <div class="cart-page__product-name mt-8">
-                  <h2>{{ item.product.name }}</h2>
-                  <p class="cart-page__product-type">Тип: {{ item.product.brand }}</p>
-                  <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
-                </div>
-
+                <h2>{{ item.product.name }}</h2>
+                <p class="cart-page__product-type">Тип: {{ item.product.category }}</p>
+                <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
+              </div>
+              </div>
                 <div class="flex cart-page__action-block gap-16">
                   <div class="flex cart-page__quantity-input gap-8">
                     <button class="nexus-icon-button" mat-icon-button color="primary" (click)="decreaseQuantity(item)">
@@ -53,7 +51,6 @@
                     </button>
                   </div>
                 </div>
-              </div>
             </mat-card>
           }
         </div>

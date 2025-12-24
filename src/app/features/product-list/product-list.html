@@ -1,20 +1,48 @@
 <div class="product-list">
-  <div class="flex product-list__content gap-8">
-    <div class="product-list__filters ml-8">
+  @if (isMobile()) {
+    <div class="flex">
+      <button
+        mat-raised-button
+        class="nexus-button product-list__filter-toggle mr-8"
+        (click)="toggleFilters()">
+        <mat-icon>filter_list</mat-icon>
+        Фільтри
+      </button>
+
+      <button
+        [disabled]="!filtersCounter()"
+        mat-raised-button
+        class="nexus-secondary-button product-list__filter-toggle ml-8"
+        (click)="resetFilters()">
+        <span>Скинути</span>
+        {{ filtersCounter() }}
+      </button>
+    </div>
+  }
+
+  <mat-sidenav-container class="nexus-sidenav product-list__container">
+    <mat-sidenav
+      #sidenav
+      [mode]="isMobile() ? 'over' : 'side'"
+      [opened]="!isMobile()"
+      class="product-list__sidenav">
       <app-filter></app-filter>
-    </div>
-    <div class="flex items-center product-list__list gap-16">
-      @if (loading()) {
-        @for (item of [1,2,3,4,5,6,7,8,9,10]; track item) {
-          <app-nxs-skeleton-card></app-nxs-skeleton-card>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div class="flex items-center product-list__list gap-16">
+        @if (loading()) {
+          @for (item of [1,2,3,4,5,6,7,8,9,10]; track item) {
+            <app-nxs-skeleton-card></app-nxs-skeleton-card>
+          }
+        } @else if (!loading() && !products()) {
+          <app-nxs-no-data></app-nxs-no-data>
+        } @else {
+          @for (product of products(); track product.id) {
+            <app-nxs-product-card [product]="product"></app-nxs-product-card>
+          }
         }
-      } @else if (!loading() && !products()) {
-        <app-nxs-no-data></app-nxs-no-data>
-      } @else {
-        @for (product of products(); track product.id) {
-          <app-nxs-product-card [product]="product"></app-nxs-product-card>
-        }
-      }
-    </div>
-  </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

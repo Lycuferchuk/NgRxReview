@@ -1,4 +1,5 @@
 @use '../abstracts/variables';
+@use "./card";
 
 a,
 button {
@@ -11,11 +12,39 @@ button {
       background: linear-gradient(120deg,
         var(--glow-cyan-middle),
         var(--glow-purple-middle));
-      color: var(--text-color-primary);
+      color: var(--text-primary);
     }
 
     &:disabled {
       cursor: not-allowed;
+    }
+
+    &:hover {
+      box-shadow: 0 0 8px var(--glow-cyan-middle), 0 0 8px var(--glow-purple-middle);
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 8px var(--glow-cyan), 0 0 8px var(--glow-purple);
+    }
+
+    .mdc-button__label {
+      width: 100%;
+    }
+  }
+
+  &.nexus-secondary-button {
+    &[mat-button],
+    &[mat-raised-button],
+    &[mat-stroked-button],
+    &[mat-flat-button] {
+      @extend .transparent-bg;
+      border-radius: 12px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: grey;
     }
 
     &:hover {
@@ -38,7 +67,7 @@ button {
     }
 
     &:hover {
-      color: var(--cart-icon-hover-color);
+      color: var(--glow-cyan);
     }
   }
 }

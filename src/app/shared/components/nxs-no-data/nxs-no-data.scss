@@ -14,8 +14,8 @@
   &__text {
     background: linear-gradient(
         to right,
-        var(--logo-gradient-start),
-        var(--logo-gradient-middle)
+        var(--glow-cyan),
+        var(--glow-purple)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

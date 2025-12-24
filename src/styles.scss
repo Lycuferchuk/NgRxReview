@@ -9,6 +9,8 @@
 @use "styles/components/buttons";
 @use "styles/components/card";
 @use "styles/components/expansion-panel";
+@use "styles/components/sidenav";
+@use "styles/themes/pallete";
 
 html {
   @include mat.theme((

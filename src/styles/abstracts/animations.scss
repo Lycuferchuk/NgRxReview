@@ -7,36 +7,6 @@
   }
 }
 
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 300ms ease forwards;
-}
-
-.fade-out {
-  opacity: 0;
-  height: auto;
-  margin-bottom: 12px;
-  animation: fadeOut 250ms ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    height: auto;
-    margin-bottom: 12px;
-  }
-  to {
-    opacity: 0;
-    height: 0;
-    margin-bottom: 0;
-  }
-}
-
 @keyframes wave {
   0% {
     left: -100%;
@@ -52,14 +22,5 @@
   }
   50% {
     opacity: 0.6;
-  }
-}
-
-@keyframes glowPulse {
-  0%, 100% {
-    opacity: 0.2;
-  }
-  50% {
-    opacity: 0.4;
   }
 }

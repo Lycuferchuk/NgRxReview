@@ -1,9 +1,24 @@
 .product-list {
-  &__content{
+  &__filter-toggle {
+    width: 100%;
+    margin: 12px;
+  }
+
+  &__container {
+    width: 100%;
     margin: 16px 12px;
+
+    @media (max-width: 970px) {
+      margin: 0;
+    }
   }
 
   &__list {
     flex-wrap: wrap;
+    padding: 16px;
+
+    @media (max-width: 970px) {
+      padding: 8px;
+    }
   }
 }
