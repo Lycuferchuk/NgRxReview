@@ -35,7 +35,7 @@ export class NxsProductCard {
   ) {}
 
   public handleAdd(): void {
-    if (this.product.stock) {
+    if (this.product.inStock) {
       this.cart.addToCart(this.product);
     }
   }

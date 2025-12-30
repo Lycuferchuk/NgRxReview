@@ -1,36 +1,8 @@
-import { signalStore, withState, withMethods, patchState, withComputed } from '@ngrx/signals';
-import { PriceRange } from '../models/filter.model';
 import { computed } from '@angular/core';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { BasicFilters, DynamicFilters, DynamicFilterValue } from '../models/filter.model';
 
-export interface BasicFilters {
-  price: PriceRange | null;
-  category: string;
-  inStock: boolean;
-  rating: number | null;
-}
-
-export interface DynamicFilters {
-  // Для телефонів
-  screenSize?: string[];
-  battery?: number;
-  camera?: string[];
-
-  // Для ноутбуків
-  ram?: string[];
-  processor?: string[];
-  gpu?: string[];
-  storage?: string[];
-
-  // Для навушників
-  type?: string[]; // over-ear, in-ear
-  noiseCancelling?: boolean;
-
-  // Загальні
-  brand?: string[];
-  [key: string]: any;
-}
-
-export interface FiltersState {
+interface FiltersState {
   basic: BasicFilters;
   dynamic: DynamicFilters;
   loading: boolean;
@@ -38,8 +10,9 @@ export interface FiltersState {
 
 const initialState: FiltersState = {
   basic: {
-    price: null,
-    category: 'all',
+    searchQuery: '',
+    categories: [],
+    brands: [],
     inStock: false,
     rating: null,
   },
@@ -52,16 +25,22 @@ export const FiltersStore = signalStore(
   withState<FiltersState>(initialState),
 
   withMethods((store) => ({
-    setPrice(price: PriceRange | null): void {
+    setSearchQuery(query: string): void {
       patchState(store, (state) => ({
-        basic: { ...state.basic, price },
+        basic: { ...state.basic, searchQuery: query },
       }));
     },
 
-    setCategory(category: string): void {
+    setCategories(categories: string[]): void {
       patchState(store, (state) => ({
-        basic: { ...state.basic, category },
-        dynamic: {}, // Скидаємо динамічні фільтри при зміні категорії
+        basic: { ...state.basic, categories },
+        dynamic: {},
+      }));
+    },
+
+    setBrands(brands: string[]): void {
+      patchState(store, (state) => ({
+        basic: { ...state.basic, brands },
       }));
     },
 
@@ -77,7 +56,7 @@ export const FiltersStore = signalStore(
       }));
     },
 
-    setDynamicFilter(key: string, value: any): void {
+    setDynamicFilter(key: string, value: DynamicFilterValue): void {
       patchState(store, (state) => ({
         dynamic: { ...state.dynamic, [key]: value },
       }));
@@ -89,47 +68,54 @@ export const FiltersStore = signalStore(
       }));
     },
 
+    removeDynamicFilter(key: string): void {
+      patchState(store, (state) => {
+        const { [key]: removed, ...rest } = state.dynamic;
+        return { dynamic: rest };
+      });
+    },
+
     reset(): void {
       patchState(store, initialState);
     },
 
     resetDynamic(): void {
-      patchState(store, () => ({
-        dynamic: {},
-      }));
+      patchState(store, { dynamic: {} });
+    },
+
+    setLoading(loading: boolean): void {
+      patchState(store, { loading });
     },
   })),
 
   withComputed((state) => ({
-    // Всі активні фільтри в одному об'єкті
     allFilters: computed(() => ({
       ...state.basic(),
       ...state.dynamic(),
     })),
 
-    // Чи є активні фільтри
     hasActiveFilters: computed(() => {
       const basic = state.basic();
       const dynamic = state.dynamic();
 
       return (
-        basic.price !== null ||
-        basic.category !== 'all' ||
+        basic.searchQuery.trim() !== '' ||
+        basic.categories.length > 0 ||
+        basic.brands.length > 0 ||
         basic.inStock ||
         basic.rating !== null ||
         Object.keys(dynamic).length > 0
       );
     }),
 
-    // Кількість активних фільтрів
     activeFiltersCount: computed(() => {
       const basic = state.basic();
       const dynamic = state.dynamic();
 
       let count = 0;
-
-      if (basic.price !== null) count++;
-      if (basic.category !== 'all') count++;
+      if (basic.searchQuery.trim() !== '') count++;
+      if (basic.categories.length > 0) count++;
+      if (basic.brands.length > 0) count++;
       if (basic.inStock) count++;
       if (basic.rating !== null) count++;
       count += Object.keys(dynamic).length;

@@ -54,4 +54,57 @@
     font-weight: bold;
     color: var(--text-primary);
   }
+
+  .skeleton-block {
+    background: #e0e0e0; // базовий колір
+    border-radius: 4px;
+
+    &.h-16 { height: 16px; }
+    &.h-20 { height: 20px; }
+    &.h-24 { height: 24px; }
+    &.h-28 { height: 28px; }
+    &.h-32 { height: 32px; }
+    &.h-40 { height: 40px; }
+
+    &.w-15 { width: 15%; }
+    &.w-20 { width: 20%; }
+    &.w-25 { width: 25%; }
+    &.w-30 { width: 30%; }
+    &.w-35 { width: 35%; }
+    &.w-50 { width: 50%; }
+    &.w-90 { width: 90%; }
+    &.w-95 { width: 95%; }
+    &.w-100 { width: 100%; }
+
+    &.rounded-btn {
+      border-radius: 20px; // для імітації кнопки
+    }
+  }
+
+  // Якщо анімація wave ще не прописана, ось приклад:
+  .skeleton-wave {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.5),
+          transparent
+      );
+      animation: wave 1.5s infinite;
+    }
+  }
+
+  @keyframes wave {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
 }

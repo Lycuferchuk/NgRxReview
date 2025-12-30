@@ -3,7 +3,7 @@
     <mat-panel-title>{{ config().label }}</mat-panel-title>
   </mat-expansion-panel-header>
 
-  <div>
+  <div class="flex-col">
     @if (config().type === 'boolean') {
       <mat-checkbox
         [checked]="value"
@@ -13,16 +13,28 @@
     }
 
     @if (config().type === 'checkbox' && config().options) {
-      @for (option of config().options; track option.value) {
-        <mat-checkbox
-          class="flex-col"
-          [checked]="isChecked(option.value)"
-          (change)="onCheckboxChange($event.checked, option.value)">
-          {{ option.label }}
-          @if (option.count !== undefined) {
-            <span class="count">({{ option.count }})</span>
-          }
-        </mat-checkbox>
+      @if (useFormArray() && formArray()) {
+        @for (option of config().options; track option.value; let i = $index) {
+          <mat-checkbox
+            [checked]="isFormArrayChecked(i)"
+            (change)="onFormArrayCheckboxChange(i, $event.checked)">
+            {{ option.label }}
+            @if (option.count !== undefined) {
+              <span class="count">({{ option.count }})</span>
+            }
+          </mat-checkbox>
+        }
+      } @else {
+        @for (option of config().options; track option.value) {
+          <mat-checkbox
+            [checked]="isChecked(option.value)"
+            (change)="onCheckboxChange($event.checked, option.value)">
+            {{ option.label }}
+            @if (option.count !== undefined) {
+              <span class="count">({{ option.count }})</span>
+            }
+          </mat-checkbox>
+        }
       }
     }
 

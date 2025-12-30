@@ -1,56 +1,85 @@
-// export interface Product {
-//   id: string;
-//   name: string;
-//   description: string;
-//   price: number;
-//   category: string; // phone / pc / earbuds
-//   imageUrl: string;
-//   brand: string;
-//   stock: number;
-//   publishDate: string;
-//   discount?: string;
-//   discountPrice?: number;
-//   rating?: number | null;
-//   // filterAttributes: Record<string, string | boolean | string[]>;
-// }
+export type Categories = 'phone' | 'laptop' | 'headphones' | 'tablet' | 'mouse';
 
-export interface Product {
+export type ProductAttributeValue = string | number | boolean | undefined;
+
+export interface Product<T extends ProductAttributes = ProductAttributes> {
   id: string;
   name: string;
-  description: string;
-  price: number;
-  category: 'phones' | 'laptops' | 'headphones' | 'all';
-  imageUrl: string;
+  category: Categories;
   brand: string;
-  stock: number;
-  publishDate: string;
-  discount?: number;
-  discountPrice?: number;
-  rating?: number | null;
-
-  attributes?: ProductAttributes;
+  price: string;
+  rating: string;
+  inStock: boolean;
+  imageUrl: string;
+  description?: string;
+  attributes: T;
 }
 
-export interface ProductAttributes {
-  // Для телефонів
-  screenSize?: string; // "6.1", "6.7"
-  battery?: number; // 4500 mAh
-  camera?: string[]; // ["48MP", "12MP"]
+export type ProductAttributes = Record<string, ProductAttributeValue>;
 
-  // Для ноутбуків
-  ram?: string; // "16GB", "32GB"
-  processor?: string; // "Intel i7", "AMD Ryzen 7"
-  gpu?: string; // "RTX 4060", "Integrated"
-  storage?: string; // "512GB SSD", "1TB HDD"
-  displaySize?: string; // "15.6", "14"
-
-  // Для навушників
-  type?: string; // "over-ear", "in-ear", "on-ear"
-  noiseCancelling?: boolean;
-  wireless?: boolean;
-
-  // Загальні
-  color?: string;
-  weight?: number;
-  [key: string]: any; // Для додаткових атрибутів
+export interface PhoneAttributes extends ProductAttributes {
+  screenSize: string;
+  screenType: string;
+  storage: string;
+  camera: string;
+  batteryCapacity: string;
+  processor: string;
+  ram: string;
+  has5G: boolean;
+  refreshRate: string;
 }
+
+export interface LaptopAttributes extends ProductAttributes {
+  processor: string;
+  ram: string;
+  storage: string;
+  screenSize: string;
+  screenType: string;
+  gpu: string;
+  weight: string;
+  batteryLife: string;
+  refreshRate: string;
+}
+
+export interface HeadphonesAttributes extends ProductAttributes {
+  type: string;
+  wireless: boolean;
+  noiseCancelling: boolean;
+  microphone: boolean;
+  waterResistant?: string;
+  driverSize?: string;
+  impedance?: string;
+  batteryLife?: string;
+}
+
+export interface TabletAttributes extends ProductAttributes {
+  screenSize: string;
+  screenType: string;
+  storage: string;
+  processor: string;
+  ram: string;
+  cellularSupport: boolean;
+  pencilSupport: boolean;
+  keyboardSupport: boolean;
+  batteryLife: string;
+  refreshRate: string;
+}
+
+export interface MouseAttributes extends ProductAttributes {
+  type: string;
+  wireless: boolean;
+  dpi: string;
+  buttons: string;
+  sensor: string;
+  batteryLife?: string;
+  weight: string;
+  rgb: boolean;
+  programmableButtons: boolean;
+}
+
+export type AllProductAttributes =
+  | PhoneAttributes
+  | LaptopAttributes
+  | HeadphonesAttributes
+  | TabletAttributes
+  | MouseAttributes;

@@ -1,87 +1,43 @@
-export type FilterType =
-  | 'checkbox'
-  | 'radio'
-  | 'range'
-  | 'boolean'
-  | 'select'
-  | 'multi-select'
-  | 'text';
+import { ProductAttributeValue } from './product.model';
 
-export interface FilterOption {
-  value: string | number;
-  label: string;
-  count?: number;
-  disabled?: boolean;
+export interface BasicFilters {
+  searchQuery: string;
+  categories: string[];
+  brands: string[];
+  inStock: boolean;
+  rating: number | null;
 }
 
-export interface BaseFilter {
+export type AttributeValue = string | number | boolean;
+
+export type DynamicFilterValue = AttributeValue[] | AttributeValue | null;
+
+export type DynamicFilters = Record<string, DynamicFilterValue>;
+
+export type FilterControlType = 'checkbox' | 'radio' | 'range' | 'toggle';
+
+export interface FilterConfigItem {
   key: string;
-  type: FilterType;
   label: string;
-  renderAs?: string;
-  queryParam?: string | PriceRange;
-  multiple?: boolean;
-  showCounts?: boolean;
-  ui?: Record<string, unknown>;
+  type: FilterControlType;
+  options?: (string | number | boolean)[];
 }
 
-export interface PriceRange {
-  min: number;
-  max: number;
+export interface FiltersConfig {
+  common: FilterConfigItem[];
+  categorySpecific: Record<string, FilterConfigItem[]>;
 }
 
-export interface CheckboxFilter extends BaseFilter {
-  type: 'checkbox';
-  options: FilterOption[];
+export interface AvailableFilterOptions {
+  categories: string[];
+  brands: string[];
+  attributeOptions: Record<string, CategoryAttributeOptions>;
 }
 
-export interface RadioFilter extends BaseFilter {
-  type: 'radio';
-  options: FilterOption[];
-}
+export type CategoryAttributeOptions = Record<string, Exclude<ProductAttributeValue, undefined>[]>;
 
-export interface SelectFilter extends BaseFilter {
-  type: 'select' | 'multi-select';
-  options: FilterOption[];
-}
-
-export interface RangeFilter extends BaseFilter {
-  type: 'range';
-  min: number;
-  max: number;
-  step?: number;
-  unit?: string;
-}
-
-export interface TextFilter extends BaseFilter {
-  type: 'text';
-  placeholder?: string;
-}
-
-export interface BooleanFilter extends BaseFilter {
-  type: 'boolean';
-}
-
-export type Filter =
-  | CheckboxFilter
-  | RadioFilter
-  | SelectFilter
-  | RangeFilter
-  | TextFilter
-  | BooleanFilter;
-
-export interface CategoryFilters {
+export interface CheckboxConfig {
   label: string;
-  filters: Filter[];
-}
-
-export interface FilterSchema {
-  globalFilters: Filter[];
-  categorySpecific: Record<string, CategoryFilters>;
-  uiHints?: {
-    showActiveChips?: boolean;
-    clearAllButton?: boolean;
-    mobileDrawer?: boolean;
-    collapseLongOptionListsThreshold?: number;
-  };
+  type: 'radio' | 'boolean' | 'checkbox';
+  options?: { value: string | number | boolean; label: string; count?: number }[];
 }

@@ -1,195 +1,262 @@
 {
-  "globalFilters": [
+  "common": [
     {
       "key": "category",
-      "type": "checkbox",
-      "label": "Категорії",
-      "renderAs": "mat-checkbox-list",
-      "options": [
-        { "value": "phones", "label": "Телефони" },
-        { "value": "laptops", "label": "Ноутбуки" },
-        { "value": "tv", "label": "Телевізори" }
-      ],
-      "queryParam": "category",
-      "multiple": true
+      "label": "Категорія",
+      "type": "checkbox"
     },
     {
       "key": "brand",
-      "type": "checkbox",
       "label": "Бренд",
-      "renderAs": "mat-checkbox-list",
-      "options": [
-        { "value": "apple", "label": "Apple" },
-        { "value": "samsung", "label": "Samsung" },
-        { "value": "xiaomi", "label": "Xiaomi" },
-        { "value": "dell", "label": "Dell" }
-      ],
-      "queryParam": "brand",
-      "multiple": true,
-      "showCounts": true
+      "type": "checkbox"
     },
     {
       "key": "price",
-      "type": "range",
       "label": "Ціна",
-      "renderAs": "mat-slider-range",
-      "min": 0,
-      "max": 5000,
-      "step": 1,
-      "unit": "USD",
-      "queryParam": { "min": "min", "max": "max" }
+      "type": "range"
     },
     {
       "key": "rating",
-      "type": "radio",
       "label": "Рейтинг",
-      "renderAs": "mat-radio-group",
-      "options": [
-        { "value": 5, "label": "5" },
-        { "value": 4, "label": "4" },
-        { "value": 3, "label": "3" },
-        { "value": 2, "label": "2" },
-        { "value": 1, "label": "1" }
-      ],
-      "queryParam": "rating",
-      "multiple": false
+      "type": "radio",
+      "options": [5, 4, 3, 2, 1]
     },
     {
       "key": "inStock",
-      "type": "boolean",
       "label": "Тільки в наявності",
-      "renderAs": "mat-checkbox",
-      "queryParam": "inStock"
+      "type": "toggle"
     }
   ],
   "categorySpecific": {
-    "phones": {
-      "label": "Телефони",
-      "filters": [
-        {
-          "key": "ram",
-          "type": "checkbox",
-          "label": "RAM",
-          "renderAs": "mat-checkbox-list",
-          "options": [
-            { "value": "4", "label": "4 GB" },
-            { "value": "6", "label": "6 GB" },
-            { "value": "8", "label": "8 GB" },
-            { "value": "12", "label": "12 GB" }
-          ],
-          "queryParam": "ram",
-          "multiple": true
-        },
-        {
-          "key": "storage",
-          "type": "checkbox",
-          "label": "Пам'ять",
-          "renderAs": "mat-checkbox-list",
-          "options": [
-            { "value": "64", "label": "64 GB" },
-            { "value": "128", "label": "128 GB" },
-            { "value": "256", "label": "256 GB" },
-            { "value": "512", "label": "512 GB" }
-          ],
-          "queryParam": "storage",
-          "multiple": true
-        },
-        {
-          "key": "screenSize",
-          "type": "range",
-          "label": "Діагональ екрану (дюйми)",
-          "renderAs": "mat-slider-range",
-          "min": 4.5,
-          "max": 7.0,
-          "step": 0.1,
-          "unit": "in",
-          "queryParam": { "min": "screenMin", "max": "screenMax" }
-        },
-        {
-          "key": "cameraMP",
-          "type": "checkbox",
-          "label": "Камера (МП)",
-          "renderAs": "mat-checkbox-list",
-          "options": [
-            { "value": "12", "label": "12 МП" },
-            { "value": "48", "label": "48 МП" },
-            { "value": "64", "label": "64 МП" },
-            { "value": "108", "label": "108 МП" }
-          ],
-          "queryParam": "camera",
-          "multiple": true
-        },
-        {
-          "key": "battery",
-          "type": "range",
-          "label": "Акумулятор (mAh)",
-          "renderAs": "mat-slider-range",
-          "min": 1500,
-          "max": 7000,
-          "step": 50,
-          "queryParam": { "min": "batMin", "max": "batMax" }
-        }
-      ]
-    },
-    "laptops": {
-      "label": "Ноутбуки",
-      "filters": [
-        {
-          "key": "cpu",
-          "type": "checkbox",
-          "label": "CPU",
-          "renderAs": "mat-checkbox-list",
-          "options": [
-            { "value": "i3", "label": "Intel i3" },
-            { "value": "i5", "label": "Intel i5" },
-            { "value": "i7", "label": "Intel i7" },
-            { "value": "ryzen5", "label": "AMD Ryzen 5" }
-          ],
-          "queryParam": "cpu",
-          "multiple": true
-        },
-        {
-          "key": "ram",
-          "type": "checkbox",
-          "label": "RAM",
-          "renderAs": "mat-checkbox-list",
-          "options": [
-            { "value": "8", "label": "8 GB" },
-            { "value": "16", "label": "16 GB" },
-            { "value": "32", "label": "32 GB" }
-          ],
-          "queryParam": "ram",
-          "multiple": true
-        },
-        {
-          "key": "storageType",
-          "type": "checkbox",
-          "label": "Тип пам'яті",
-          "renderAs": "mat-checkbox-list",
-          "options": [
-            { "value": "hdd", "label": "HDD" },
-            { "value": "ssd", "label": "SSD" }
-          ],
-          "queryParam": "storageType",
-          "multiple": true
-        },
-        {
-          "key": "screenSize",
-          "type": "range",
-          "label": "Діагональ екрану (дюйми)",
-          "renderAs": "mat-slider-range",
-          "min": 11,
-          "max": 17,
-          "step": 0.5,
-          "queryParam": { "min": "screenMin", "max": "screenMax" }
-        }
-      ]
-    }
-  },
-  "uiHints": {
-    "showActiveChips": true,
-    "clearAllButton": true,
-    "mobileDrawer": true,
-    "collapseLongOptionListsThreshold": 6
+    "phone": [
+      {
+        "key": "screenSize",
+        "label": "Діагональ екрану",
+        "type": "checkbox"
+      },
+      {
+        "key": "screenType",
+        "label": "Тип екрану",
+        "type": "checkbox"
+      },
+      {
+        "key": "storage",
+        "label": "Пам'ять",
+        "type": "checkbox"
+      },
+      {
+        "key": "camera",
+        "label": "Камера",
+        "type": "checkbox"
+      },
+      {
+        "key": "processor",
+        "label": "Процесор",
+        "type": "checkbox"
+      },
+      {
+        "key": "ram",
+        "label": "Оперативна пам'ять",
+        "type": "checkbox"
+      },
+      {
+        "key": "batteryCapacity",
+        "label": "Ємність батареї",
+        "type": "checkbox"
+      },
+      {
+        "key": "refreshRate",
+        "label": "Частота оновлення",
+        "type": "checkbox"
+      },
+      {
+        "key": "has5G",
+        "label": "5G",
+        "type": "toggle"
+      }
+    ],
+    "laptop": [
+      {
+        "key": "processor",
+        "label": "Процесор",
+        "type": "checkbox"
+      },
+      {
+        "key": "ram",
+        "label": "Оперативна пам'ять",
+        "type": "checkbox"
+      },
+      {
+        "key": "storage",
+        "label": "Накопичувач",
+        "type": "checkbox"
+      },
+      {
+        "key": "screenSize",
+        "label": "Діагональ екрану",
+        "type": "checkbox"
+      },
+      {
+        "key": "screenType",
+        "label": "Тип екрану",
+        "type": "checkbox"
+      },
+      {
+        "key": "gpu",
+        "label": "Відеокарта",
+        "type": "checkbox"
+      },
+      {
+        "key": "weight",
+        "label": "Вага",
+        "type": "checkbox"
+      },
+      {
+        "key": "batteryLife",
+        "label": "Час роботи",
+        "type": "checkbox"
+      },
+      {
+        "key": "refreshRate",
+        "label": "Частота оновлення",
+        "type": "checkbox"
+      }
+    ],
+    "headphones": [
+      {
+        "key": "type",
+        "label": "Тип",
+        "type": "checkbox"
+      },
+      {
+        "key": "wireless",
+        "label": "Бездротові",
+        "type": "toggle"
+      },
+      {
+        "key": "noiseCancelling",
+        "label": "Шумозаглушення",
+        "type": "toggle"
+      },
+      {
+        "key": "batteryLife",
+        "label": "Час роботи",
+        "type": "checkbox"
+      },
+      {
+        "key": "microphone",
+        "label": "Мікрофон",
+        "type": "toggle"
+      },
+      {
+        "key": "waterResistant",
+        "label": "Захист від води",
+        "type": "checkbox"
+      },
+      {
+        "key": "driverSize",
+        "label": "Розмір драйверів",
+        "type": "checkbox"
+      }
+    ],
+    "tablet": [
+      {
+        "key": "screenSize",
+        "label": "Діагональ екрану",
+        "type": "checkbox"
+      },
+      {
+        "key": "screenType",
+        "label": "Тип екрану",
+        "type": "checkbox"
+      },
+      {
+        "key": "storage",
+        "label": "Пам'ять",
+        "type": "checkbox"
+      },
+      {
+        "key": "processor",
+        "label": "Процесор",
+        "type": "checkbox"
+      },
+      {
+        "key": "ram",
+        "label": "Оперативна пам'ять",
+        "type": "checkbox"
+      },
+      {
+        "key": "cellularSupport",
+        "label": "Підтримка SIM",
+        "type": "toggle"
+      },
+      {
+        "key": "pencilSupport",
+        "label": "Підтримка стілуса",
+        "type": "toggle"
+      },
+      {
+        "key": "keyboardSupport",
+        "label": "Підтримка клавіатури",
+        "type": "toggle"
+      },
+      {
+        "key": "batteryLife",
+        "label": "Час роботи",
+        "type": "checkbox"
+      },
+      {
+        "key": "refreshRate",
+        "label": "Частота оновлення",
+        "type": "checkbox"
+      }
+    ],
+    "mouse": [
+      {
+        "key": "type",
+        "label": "Тип",
+        "type": "checkbox"
+      },
+      {
+        "key": "wireless",
+        "label": "Бездротова",
+        "type": "toggle"
+      },
+      {
+        "key": "dpi",
+        "label": "DPI",
+        "type": "checkbox"
+      },
+      {
+        "key": "buttons",
+        "label": "Кількість кнопок",
+        "type": "checkbox"
+      },
+      {
+        "key": "sensor",
+        "label": "Сенсор",
+        "type": "checkbox"
+      },
+      {
+        "key": "batteryLife",
+        "label": "Час роботи",
+        "type": "checkbox"
+      },
+      {
+        "key": "weight",
+        "label": "Вага",
+        "type": "checkbox"
+      },
+      {
+        "key": "rgb",
+        "label": "RGB підсвічування",
+        "type": "toggle"
+      },
+      {
+        "key": "programmableButtons",
+        "label": "Програмовані кнопки",
+        "type": "toggle"
+      }
+    ]
   }
 }

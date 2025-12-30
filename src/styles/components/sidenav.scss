@@ -1,8 +1,15 @@
 @use '@angular/material' as mat;
 
 .nexus-sidenav {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
   &.mat-drawer-container {
     overflow: unset;
+    /* Важливо: Material за замовчуванням може мати inline-style висоту,
+       ми її перевизначаємо */
+    height: 100% !important;
   }
 
   @include mat.sidenav-overrides(

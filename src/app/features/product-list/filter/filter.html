@@ -1,54 +1,67 @@
 <div class="nexus-card filter-panel">
-  <div class="filter-panel__header">
-    <h2 class="filter-panel__title">
-      Фільтри
-      @if (activeFiltersCount() > 0) {
-        <span class="badge">{{ activeFiltersCount() }}</span>
-      }
-    </h2>
-    <button
-      mat-button
-      color="warn"
-      (click)="reset()"
-      [disabled]="!hasActiveFilters()">
-      Скинути
-    </button>
-  </div>
-
-  <div class="results-info">
-    Знайдено: {{ filteredCount() }} з {{ totalCount() }}
-  </div>
-
-  <form [formGroup]="form">
-    <!-- Категорія -->
-    <app-nxs-checkbox-form
-      formControlName="category"
-      [config]="categoryConfig" />
-
-    <!-- Ціна -->
-    <app-form-range-slider
-      formGroupName="price" />
-<!--      label="Ціна, ₴" />-->
-
-    <!-- В наявності -->
-    <app-nxs-checkbox-form
-      formControlName="inStock"
-      [config]="inStockConfig" />
-
-    <!-- Рейтинг -->
-    <app-nxs-checkbox-form
-      formControlName="rating"
-      [config]="ratingConfig" />
-
-    <!-- Динамічні фільтри - поки закоментовано -->
-    <!--
-    <div formGroupName="dynamic">
-      @for (filter of dynamicFilters(); track filter.key) {
-        <app-filter-control
-          [config]="filter"
-          [formControlName]="filter.key" />
-      }
+  @if (loading) {
+    <div class="filter-panel__loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Завантаження фільтрів...</p>
     </div>
-    -->
-  </form>
+  } @else {
+    <div class="filter-panel__header">
+      <h2 class="filter-panel__title">
+        Фільтри
+        @if (activeFiltersCount() > 0) {
+          <span class="badge">{{ activeFiltersCount() }}</span>
+        }
+      </h2>
+      <button
+        mat-button
+        color="warn"
+        (click)="reset()"
+        [disabled]="!hasActiveFilters()">
+        Скинути
+      </button>
+    </div>
+
+    <div class="results-info">
+      Знайдено: {{ filteredCount() }} з {{ totalCount() }}
+    </div>
+
+    <form [formGroup]="form">
+      <app-nxs-checkbox-form
+        formControlName="category"
+        [config]="categoryConfig" />
+
+      <app-nxs-checkbox-form
+        formControlName="inStock"
+        [config]="inStockConfig" />
+
+      <app-nxs-checkbox-form
+        formControlName="rating"
+        [config]="ratingConfig" />
+
+      @if (selectedCategory !== 'all' && dynamicFilters.length > 0) {
+        <div formGroupName="attributes" class="dynamic-filters">
+          @for (filter of dynamicFilters; track filter.key; let i = $index) {
+            @if (filter.type === 'checkbox') {
+              <app-nxs-checkbox-form
+                [config]="dynamicFilterConfigs[i]"
+                [useFormArray]="true"
+                [formArray]="getAttributeArray(filter.key)" />
+            }
+
+            @if (filter.type === 'toggle') {
+              <app-nxs-checkbox-form
+                [formControlName]="filter.key"
+                [config]="{ label: filter.label, type: 'boolean' }" />
+            }
+
+            @if (filter.type === 'radio') {
+              <app-nxs-checkbox-form
+                [formControlName]="filter.key"
+                [config]="dynamicFilterConfigs[i]" />
+            }
+          }
+        </div>
+      }
+    </form>
+  }
 </div>

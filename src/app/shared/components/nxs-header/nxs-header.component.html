@@ -13,6 +13,8 @@
       <input
         class="nxs-header__search"
         matInput
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
       />
     </mat-form-field>
     <div class="nxs-header__search-bg"></div>

@@ -30,7 +30,7 @@ import { CartStore } from '../../core/store/cart.store';
 export class CartComponent implements OnInit {
   private readonly cartStore = inject(CartStore);
 
-  public readonly items = this.cartStore.itemsSignal;
+  public readonly items = this.cartStore.items;
   public readonly totalPrice = this.cartStore.totalPrice;
   public readonly emptyStateType = EmptyStateType;
 
@@ -46,7 +46,7 @@ export class CartComponent implements OnInit {
     this.cartStore.saveUpdatedItem({
       ...item,
       quantity: item.quantity + 1,
-      totalPrice: (item.quantity + 1) * item.product.price,
+      totalPrice: (item.quantity + 1) * Number(item.product.price),
     });
   }
 
@@ -58,7 +58,7 @@ export class CartComponent implements OnInit {
     this.cartStore.saveUpdatedItem({
       ...item,
       quantity: item.quantity - 1,
-      totalPrice: (item.quantity - 1) * item.product.price,
+      totalPrice: (item.quantity - 1) * Number(item.product.price),
     });
   }
 
@@ -68,7 +68,7 @@ export class CartComponent implements OnInit {
     this.cartStore.saveUpdatedItem({
       ...item,
       quantity,
-      totalPrice: quantity * item.product.price,
+      totalPrice: quantity * Number(item.product.price),
     });
   }
 

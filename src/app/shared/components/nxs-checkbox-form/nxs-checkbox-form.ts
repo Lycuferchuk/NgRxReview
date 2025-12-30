@@ -1,113 +1,106 @@
-import { Component, DestroyRef, forwardRef, inject, input } from '@angular/core';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { MatDivider } from '@angular/material/divider';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { Component, input } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDividerModule } from '@angular/material/divider';
+import { ControlValueAccessor, FormArray, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 export interface CheckboxOption {
-  value: any;
+  value: string | number | boolean | null;
   label: string;
   count?: number;
 }
 
 export interface CheckboxConfig {
   label: string;
-  type: 'checkbox' | 'radio' | 'boolean';
+  type: 'radio' | 'boolean' | 'checkbox';
   options?: CheckboxOption[];
 }
 
 @Component({
   selector: 'app-nxs-checkbox-form',
-  imports: [
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    MatCheckbox,
-    MatRadioGroup,
-    MatRadioButton,
-    MatDivider,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, MatCheckboxModule, MatRadioModule, MatExpansionModule, MatDividerModule],
   providers: [
-    // ✅ ДОДАЙ ЦЕ ТУТ
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NxsCheckboxForm),
+      useExisting: NxsCheckboxForm,
       multi: true,
     },
   ],
   templateUrl: './nxs-checkbox-form.html',
-  styleUrl: './nxs-checkbox-form.scss',
+  styleUrls: ['./nxs-checkbox-form.scss'],
 })
 export class NxsCheckboxForm implements ControlValueAccessor {
-  private destroyRef = inject(DestroyRef);
-
   config = input.required<CheckboxConfig>();
 
-  value: any = null;
-  selectedValues: any[] = [];
+  useFormArray = input<boolean>(false);
+  formArray = input<FormArray<FormControl<boolean>>>();
 
-  private onChange: any = () => {};
-  private onTouched: any = () => {};
+  value: string | number | boolean | null = null;
+  selectedValues: (string | number | boolean | null)[] = []; // Додали null
 
-  // Для boolean
+  private onChange: (value: unknown) => void = () => {};
+  private onTouched: () => void = () => {};
+
   onBooleanChange(checked: boolean): void {
-    console.log('🔘 Boolean changed:', checked); // ← ТУТ
     this.value = checked;
     this.onChange(checked);
     this.onTouched();
   }
 
-  // Для checkbox (multiple)
-  onCheckboxChange(checked: boolean, value: any): void {
-    console.log('☑️ Checkbox changed:', { checked, value }); // ← ТУТ
+  // Оновлено: додали null
+  onCheckboxChange(checked: boolean, value: string | number | boolean | null): void {
     if (checked) {
       this.selectedValues.push(value);
     } else {
       this.selectedValues = this.selectedValues.filter((v) => v !== value);
     }
-    console.log('☑️ Selected values:', this.selectedValues); // ← ТУТ
     this.onChange(this.selectedValues);
     this.onTouched();
   }
 
-  isChecked(value: any): boolean {
+  onFormArrayCheckboxChange(index: number, checked: boolean): void {
+    const array = this.formArray();
+    if (array) {
+      array.at(index).setValue(checked);
+      this.onTouched();
+    }
+  }
+
+  // Оновлено: додали null
+  isChecked(value: string | number | boolean | null): boolean {
     return this.selectedValues.includes(value);
   }
 
-  // Для radio
-  onRadioChange(value: any): void {
-    console.log('🔘 Radio changed:', value); // ← ТУТ
+  isFormArrayChecked(index: number): boolean {
+    const array = this.formArray();
+    return array ? array.at(index).value : false;
+  }
+
+  onRadioChange(value: string | number | boolean | null): void {
     this.value = value;
     this.onChange(value);
     this.onTouched();
   }
 
-  writeValue(value: any): void {
-    console.log('✍️ WriteValue called:', value); // ← ТУТ
+  writeValue(value: unknown): void {
     if (this.config().type === 'checkbox') {
       this.selectedValues = Array.isArray(value) ? value : [];
     } else {
-      this.value = value;
+      this.value = value as string | number | boolean | null;
     }
   }
 
-  registerOnChange(fn: any): void {
-    console.log('📝 RegisterOnChange called'); // ← ТУТ
+  registerOnChange(fn: (value: unknown) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
-    console.log('👆 RegisterOnTouched called'); // ← ТУТ
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
   setDisabledState(isDisabled: boolean): void {
-    console.log('🚫 SetDisabledState called:', isDisabled); // ← ТУТ
+    // Можна додати логіку для disabled стану
   }
 }

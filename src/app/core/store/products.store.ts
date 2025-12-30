@@ -29,119 +29,60 @@ export const ProductStore = signalStore(
       const basic = filtersStore.basic();
       const dynamic = filtersStore.dynamic();
 
-      console.log('🔍 Filtering products:', {
-        totalProducts: products.length,
-        filters: { basic, dynamic },
-      });
-
       return products.filter((product) => {
-        // Фільтр ціни
-        if (basic.price !== null) {
-          const min = basic.price.min ?? 0;
-          const max = basic.price.max ?? Number.MAX_SAFE_INTEGER;
+        if (basic.searchQuery.trim() !== '') {
+          const query = basic.searchQuery.toLowerCase();
+          const productName = product.name.toLowerCase();
 
-          if (product.price < min || product.price > max) {
+          if (!productName.includes(query)) {
             return false;
           }
         }
 
-        // Фільтр категорії
-        if (basic.category !== 'all' && product.category !== basic.category) {
-          return false;
-        }
-
-        // Фільтр наявності
-        if (basic.inStock && product.stock <= 0) {
-          return false;
-        }
-
-        // Фільтр рейтингу
-        if (basic.rating !== null && (product.rating ?? 0) < basic.rating) {
-          return false;
-        }
-
-        // Динамічні фільтри
-        if (!product.attributes) {
-          return true; // Якщо немає атрибутів, пропускаємо динамічні фільтри
-        }
-
-        // Фільтр бренду (якщо є)
-        if (dynamic.brand && dynamic.brand.length > 0) {
-          if (!dynamic.brand.includes(product.brand)) {
+        if (basic.categories.length > 0) {
+          if (!basic.categories.includes(product.category)) {
             return false;
           }
         }
 
-        // Фільтри для телефонів
-        if (product.category === 'phones') {
-          if (dynamic.screenSize && dynamic.screenSize.length > 0) {
-            if (
-              !product.attributes.screenSize ||
-              !dynamic.screenSize.includes(product.attributes.screenSize)
-            ) {
-              return false;
-            }
-          }
-
-          if (dynamic.battery && product.attributes.battery) {
-            if (product.attributes.battery < dynamic.battery) {
-              return false;
-            }
-          }
-
-          if (dynamic.camera && dynamic.camera.length > 0) {
-            if (
-              !product.attributes.camera ||
-              !dynamic.camera.some((c) => product.attributes?.camera?.includes(c))
-            ) {
-              return false;
-            }
+        if (basic.brands.length > 0) {
+          if (!basic.brands.includes(product.brand)) {
+            return false;
           }
         }
 
-        // Фільтри для ноутбуків
-        if (product.category === 'laptops') {
-          if (dynamic.ram && dynamic.ram.length > 0) {
-            if (!product.attributes.ram || !dynamic.ram.includes(product.attributes.ram)) {
-              return false;
-            }
-          }
+        if (basic.inStock && !product.inStock) {
+          return false;
+        }
 
-          if (dynamic.processor && dynamic.processor.length > 0) {
-            if (
-              !product.attributes.processor ||
-              !dynamic.processor.includes(product.attributes.processor)
-            ) {
-              return false;
-            }
-          }
-
-          if (dynamic.gpu && dynamic.gpu.length > 0) {
-            if (!product.attributes.gpu || !dynamic.gpu.includes(product.attributes.gpu)) {
-              return false;
-            }
-          }
-
-          if (dynamic.storage && dynamic.storage.length > 0) {
-            if (
-              !product.attributes.storage ||
-              !dynamic.storage.includes(product.attributes.storage)
-            ) {
-              return false;
-            }
+        if (basic.rating !== null) {
+          const productRating = parseFloat(product.rating);
+          if (productRating < basic.rating) {
+            return false;
           }
         }
 
-        // Фільтри для навушників
-        if (product.category === 'headphones') {
-          if (dynamic.type && dynamic.type.length > 0) {
-            if (!product.attributes.type || !dynamic.type.includes(product.attributes.type)) {
+        for (const [key, filterValue] of Object.entries(dynamic)) {
+          if (filterValue === undefined || filterValue === null) continue;
+
+          const attrValue = product.attributes[key];
+          if (attrValue === undefined) continue;
+
+          if (typeof filterValue === 'boolean') {
+            if (attrValue !== filterValue) {
               return false;
             }
-          }
+          } else if (Array.isArray(filterValue)) {
+            if (filterValue.length === 0) continue;
 
-          if (dynamic.noiseCancelling !== undefined) {
-            if (product.attributes.noiseCancelling !== dynamic.noiseCancelling) {
+            const normalizedFilters = filterValue.map((v) => String(v));
+            const normalizedAttr = String(attrValue);
+
+            if (!normalizedFilters.includes(normalizedAttr)) {
+              return false;
+            }
+          } else {
+            if (String(attrValue) !== String(filterValue)) {
               return false;
             }
           }
@@ -153,7 +94,6 @@ export const ProductStore = signalStore(
 
     return {
       filteredProducts,
-
       productsCount: computed(() => store.products().length),
       filteredProductsCount: computed(() => filteredProducts().length),
       isLoading: computed(() => store.loading()),
@@ -170,6 +110,7 @@ export const ProductStore = signalStore(
 
         productService.getProductsList().subscribe({
           next: (products) => {
+            console.log('patch state');
             patchState(store, {
               products,
               loading: false,
