@@ -24,10 +24,8 @@ import { CartStore } from '../../../core/store/cart.store';
 export class NxsProductCard {
   @Input() public product: Product = {} as Product;
 
-  public isHovered = signal<boolean>(false);
-  public isNew = true;
-
-  private cart = inject(CartStore);
+  private readonly cartStore = inject(CartStore);
+  public readonly isHovered = signal<boolean>(false);
 
   constructor(
     private readonly _router: Router,
@@ -36,11 +34,19 @@ export class NxsProductCard {
 
   public handleAdd(): void {
     if (this.product.inStock) {
-      this.cart.addToCart(this.product);
+      this.cartStore.addToCart(this.product);
     }
   }
 
   public navigateToDetails(): void {
     this._router.navigate([this.product.id, 'details'], { relativeTo: this._route });
+  }
+
+  public onMouseEnter(): void {
+    this.isHovered.set(true);
+  }
+
+  public onMouseLeave(): void {
+    this.isHovered.set(false);
   }
 }

@@ -12,7 +12,8 @@ import { EmptyStateType } from '../../../core/enums/empry-state.enum';
 import { MatIcon } from '@angular/material/icon';
 import { CartStore } from '../../../core/store/cart.store';
 import { NxsSkeletonDetails } from '../../../shared/components/nxs-skeleton-details/nxs-skeleton-details';
-import { CATEGORY_LABELS } from '../../../core/constants/filters.constants';
+import { ATTRIBUTE_LABELS } from '../../../core/constants/products.constants';
+import { FilterPrimitive } from '../../../core/models/filter.model';
 
 interface SpecItem {
   key: string;
@@ -27,58 +28,47 @@ interface SpecItem {
   styleUrl: './product-details.scss',
 })
 export class ProductDetails implements OnInit {
+  private readonly cartStore = inject(CartStore);
+  private readonly destroyRef = inject(DestroyRef);
+
   public product!: Product;
   public isLoading = true;
   public noData = false;
   public readonly emptyStateType = EmptyStateType;
-  public cart = inject(CartStore);
-
-  private destroyRef = inject(DestroyRef);
 
   constructor(
-    private _route: ActivatedRoute,
+    private readonly _route: ActivatedRoute,
     private readonly _productService: ProductService,
   ) {}
 
-  ngOnInit(): void {
-    this.getProductId();
+  public ngOnInit(): void {
+    this.loadProduct();
   }
 
   public addToCart(): void {
-    this.cart.addToCart(this.product);
-  }
-
-  public getCategoryLabel(category: string): string {
-    return CATEGORY_LABELS[category] || category;
+    this.cartStore.addToCart(this.product);
   }
 
   public getFormattedSpecs(): SpecItem[] {
-    // if (!this.product.attributes) return [];
-    //
-    // const specs: SpecItem[] = [];
-    //
-    // Object.entries(this.product.attributes).forEach(([key, value]) => {
-    //   if (value === undefined || value === null) return;
-    //
-    //   const label = ATTRIBUTE_LABELS[key] || key;
-    //   let formattedValue: string;
-    //
-    //   if (typeof value === 'boolean') {
-    //     formattedValue = value ? 'Так' : 'Ні';
-    //   } else {
-    //     formattedValue = String(value);
-    //   }
-    //
-    //   specs.push({
-    //     key,
-    //     label,
-    //     value: formattedValue,
-    //   });
-    // });
-    return [];
+    if (!this.product?.attributes) return [];
+
+    return Object.entries(this.product.attributes)
+      .filter(([_, value]) => value !== undefined && value !== null)
+      .map(([key, value]) => ({
+        key,
+        label: ATTRIBUTE_LABELS[key] || key,
+        value: this.formatAttributeValue(value),
+      }));
   }
 
-  private getProductId(): void {
+  private formatAttributeValue(value: FilterPrimitive): string {
+    if (typeof value === 'boolean') {
+      return value ? 'Так' : 'Ні';
+    }
+    return String(value);
+  }
+
+  private loadProduct(): void {
     const productId = this._route.snapshot.paramMap.get('productId');
 
     if (!productId) {
@@ -86,12 +76,9 @@ export class ProductDetails implements OnInit {
       this.noData = true;
       return;
     }
-    this.getProduct(productId);
-  }
 
-  private getProduct(id: string): void {
     this._productService
-      .getProductById(id)
+      .getProductById(productId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (product) => {
@@ -103,7 +90,8 @@ export class ProductDetails implements OnInit {
           this.product = product;
         },
         error: (err) => {
-          console.error(`Error loading product id=${id}`, err);
+          console.error(`Error loading product id=${productId}`, err);
+          this.isLoading = false;
           this.noData = true;
         },
       });

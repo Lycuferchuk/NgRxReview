@@ -10,3 +10,15 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
+
+::view-transition {
+  background: var(--background-body);
+}
+
+::view-transition-old(root) {
+  animation: fade-out 300ms ease-in-out;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 300ms ease-in-out;
+}

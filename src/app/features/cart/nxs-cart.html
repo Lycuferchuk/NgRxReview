@@ -6,51 +6,66 @@
       <div class="flex cart-page__content gap-32">
         <div class="flex-col cart-page__cart-list gap-16">
           @for (item of items(); track item.product.id) {
-            <mat-card animate.leave="fade-out" class="nexus-card flex cart-page__product">
+            <mat-card class="nexus-card flex cart-page__product">
               <div class="card-glow"></div>
               <div class="cart-page__image-wrap">
                 <img
                   class="cart-page__image"
                   [src]="item.product.imageUrl"
-                  alt="{{ item.product.name }}"
+                  [alt]="item.product.name"
                 />
 
                 <div class="cart-page__product-name mt-8">
-                <h2>{{ item.product.name }}</h2>
-                <p class="cart-page__product-type">Тип: {{ item.product.category }}</p>
-                <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
+                  <h2>{{ item.product.name }}</h2>
+                  <p class="cart-page__product-type">Тип: {{ item.product.category }}</p>
+                  <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
+                </div>
               </div>
-              </div>
-                <div class="flex cart-page__action-block gap-16">
-                  <div class="flex cart-page__quantity-input gap-8">
-                    <button class="nexus-icon-button" mat-icon-button color="primary" (click)="decreaseQuantity(item)">
-                      <mat-icon>remove</mat-icon>
-                    </button>
 
-                    <mat-form-field appearance="fill" class="nexus-counter-input">
-                      <input matInput type="number" [(ngModel)]="item.quantity" (blur)="validateQuantity(item)">
-                    </mat-form-field>
+              <div class="flex cart-page__action-block gap-16">
+                <div class="flex cart-page__quantity-input gap-8">
+                  <button
+                    class="nexus-icon-button"
+                    mat-icon-button
+                    color="primary"
+                    (click)="decreaseQuantity(item.product.id)"
+                    [disabled]="item.quantity <= 1">
+                    <mat-icon>remove</mat-icon>
+                  </button>
 
-                    <button class="nexus-icon-button" mat-icon-button color="primary" (click)="increaseQuantity(item)">
-                      <mat-icon>add</mat-icon>
-                    </button>
-                  </div>
+                  <mat-form-field appearance="fill" class="nexus-counter-input">
+                    <input
+                      matInput
+                      type="number"
+                      [value]="item.quantity"
+                      (change)="updateQuantity(item.product.id, $event)"
+                      min="1"
+                    />
+                  </mat-form-field>
 
-                  <div class="flex-col cart-page__price-block mt-12 mb-12 gap-16">
+                  <button
+                    class="nexus-icon-button"
+                    mat-icon-button
+                    color="primary"
+                    (click)="increaseQuantity(item.product.id)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+
+                <div class="flex-col cart-page__price-block mt-12 mb-12 gap-16">
                   <span class="cart-page__price">
-                    {{ item.totalPrice | currency }}
+                    {{ item.totalPrice | currency: 'UAH' : 'symbol-narrow' }}
                   </span>
 
-                    <button
-                      mat-flat-button
-                      class="nexus-button"
-                      color="warn"
-                      (click)="removeFromCart(item.product.id)"
-                    >
-                      Видалити
-                    </button>
-                  </div>
+                  <button
+                    mat-flat-button
+                    class="nexus-button"
+                    color="warn"
+                    (click)="removeFromCart(item.product.id)">
+                    Видалити
+                  </button>
                 </div>
+              </div>
             </mat-card>
           }
         </div>
@@ -58,9 +73,15 @@
         <div class="cart-page__summary">
           <mat-card class="nexus-card cart-page__summary-card p-24">
             <h2 class="mb-16">Разом:</h2>
-            <p class="cart-page__summary-price f-s-24 mb-24">{{ totalPrice() | currency }}</p>
+            <p class="cart-page__summary-price f-s-24 mb-24">
+              {{ totalPrice() | currency: 'UAH' : 'symbol-narrow' }}
+            </p>
 
-            <button (click)="orderCart()" mat-flat-button color="primary" class="nexus-button cart-page__summary-checkout w-100">
+            <button
+              (click)="checkout()"
+              mat-flat-button
+              color="primary"
+              class="nexus-button cart-page__summary-checkout w-100">
               Оформити замовлення
             </button>
           </mat-card>

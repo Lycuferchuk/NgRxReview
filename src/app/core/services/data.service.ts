@@ -9,10 +9,10 @@ export class DataService {
   private readonly url = 'assets/data/';
   private readonly fileType = '.json';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly _http: HttpClient) {}
 
   public getDataFromJson<T>(jsonKey: string): Observable<T> {
-    return this.http.get<T>(this.url + jsonKey + this.fileType);
+    return this._http.get<T>(this.url + jsonKey + this.fileType);
   }
 
   public loadLocalStorage<T>(key: string): T | null {
@@ -22,9 +22,5 @@ export class DataService {
 
   public saveLocalStorage<T>(key: string, data: T): void {
     localStorage.setItem(key, JSON.stringify(data));
-  }
-
-  public removeLocalStorage(key: string): void {
-    localStorage.removeItem(key);
   }
 }

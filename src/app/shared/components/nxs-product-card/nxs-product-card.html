@@ -1,17 +1,12 @@
 <mat-card
   class="nexus-card product-card"
-  (mouseenter)="isHovered.set(true)"
-  (mouseleave)="isHovered.set(false)"
->
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
   <div class="card-glow"></div>
+
   <mat-card-header class="flex w-100 product-card__header">
     <div class="product-card__badges gap-8">
-<!--      @if (product.) {-->
-<!--        <div class=" product-card__badge product-card__badge-discount">-->
-<!--          <mat-icon>bolt</mat-icon>-->
-<!--          <span>-{{ product.discount }}%</span>-->
-<!--        </div>-->
-<!--      }-->
+      <!-- Badges placeholder -->
     </div>
     <div class="flex product-card__rating gap-6 f-s-18">
       <mat-icon>star</mat-icon>
@@ -32,22 +27,17 @@
       @if (product.inStock) {
         <div
           class="product-card__quick-buy-wrapper"
-          [class.product-card__quick-buy-wrapper-visible]="isHovered()"
-        >
+          [class.product-card__quick-buy-wrapper-visible]="isHovered()">
           <button
             mat-flat-button
             color="primary"
             class="product-card__quick-buy-btn gap-4"
-            (click)="handleAdd()"
-            [disabled]="!product.inStock"
-          >
+            (click)="handleAdd()">
             <mat-icon>shopping_cart</mat-icon>
             Додати в кошик
           </button>
         </div>
-      }
-
-      @if (!product.inStock) {
+      } @else {
         <div class="product-card__empty-stock">
           <div class="product-card__empty-stock-inner">Немає в наявності</div>
         </div>
@@ -55,19 +45,17 @@
     </div>
 
     <div class="product-card__meta">
-      <h3 (click)="navigateToDetails()" class="product-card__title" [class.product-card__title--hover]="isHovered()">
+      <h3
+        (click)="navigateToDetails()"
+        class="product-card__title"
+        [class.product-card__title--hover]="isHovered()">
         {{ product.name }}
       </h3>
       <p class="product-card__brand mb-12 f-s-12">{{ product.category }}</p>
 
       <div class="product-card__controls">
         <div class="flex product-card__prices gap-8">
-<!--          @if (product.discount) {-->
-<!--            <span class="product-card__price-old f-s-14">{{ product.price | currency }}</span>-->
-<!--            <span class="product-card__price-new f-s-16">{{ product.discount | currency }}</span>-->
-<!--          } @else {-->
-            <span class="product-card__price f-s-16">{{ product.price | currency }}</span>
-<!--          }-->
+          <span class="product-card__price f-s-16">{{ product.price | currency: 'UAH' : 'symbol-narrow' }}</span>
         </div>
 
         <button
@@ -75,8 +63,7 @@
           aria-label="Add to cart"
           (click)="handleAdd()"
           [disabled]="!product.inStock"
-          class="product-card__cart-btn"
-        >
+          class="product-card__cart-btn">
           <mat-icon>shopping_cart</mat-icon>
         </button>
       </div>

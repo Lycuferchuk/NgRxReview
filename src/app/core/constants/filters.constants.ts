@@ -1,34 +1,31 @@
-import { CheckboxConfig } from '../models/filter.model';
+import { FilterUIConfig } from '../models/filter.model';
 
-export const CATEGORY_LABELS: Record<string, string> = {
-  phone: 'Телефони',
-  laptop: 'Ноутбуки',
-  headphones: 'Навушники',
-  tablet: 'Планшети',
-  mouse: 'Мишки',
-};
-
-export const RATING_LABELS: Record<number, string> = {
-  5: '⭐⭐⭐⭐⭐',
-  4: '⭐⭐⭐⭐',
-  3: '⭐⭐⭐',
-  2: '⭐⭐',
-  1: '⭐',
-};
-
-export const BASE_CATEGORY_CONFIG: CheckboxConfig = {
+export const CATEGORY_CONFIG: FilterUIConfig = {
   label: 'Категорія',
   type: 'radio',
-  options: [{ value: 'all', label: 'Всі товари' }],
+  options: [
+    { value: 'all', label: 'Всі товари' },
+    { value: 'phone', label: 'Телефони' },
+    { value: 'laptop', label: 'Ноутбуки' },
+    { value: 'headphones', label: 'Навушники' },
+    { value: 'tablet', label: 'Планшети' },
+    { value: 'mouse', label: 'Мишки' },
+  ],
 };
 
-export const BASE_IN_STOCK_CONFIG: CheckboxConfig = {
-  label: 'Тільки в наявності',
-  type: 'boolean',
-};
-
-export const BASE_RATING_CONFIG: CheckboxConfig = {
+export const RATING_CONFIG: FilterUIConfig = {
   label: 'Рейтинг',
   type: 'radio',
-  options: [],
+  options: [
+    { value: 5, label: '5 зірок і вище' },
+    { value: 4, label: '4 зірки і вище' },
+    { value: 3, label: '3 зірки і вище' },
+    { value: 2, label: '2 зірки і вище' },
+    { value: 1, label: '1 зірка і вище' },
+  ],
+};
+
+export const IN_STOCK_CONFIG: FilterUIConfig = {
+  label: 'Тільки в наявності',
+  type: 'boolean',
 };

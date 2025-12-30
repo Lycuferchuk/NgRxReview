@@ -41,23 +41,23 @@
       @if (selectedCategory !== 'all' && dynamicFilters.length > 0) {
         <div formGroupName="attributes" class="dynamic-filters">
           @for (filter of dynamicFilters; track filter.key; let i = $index) {
-            @if (filter.type === 'checkbox') {
-              <app-nxs-checkbox-form
-                [config]="dynamicFilterConfigs[i]"
-                [useFormArray]="true"
-                [formArray]="getAttributeArray(filter.key)" />
-            }
-
-            @if (filter.type === 'toggle') {
-              <app-nxs-checkbox-form
-                [formControlName]="filter.key"
-                [config]="{ label: filter.label, type: 'boolean' }" />
-            }
-
-            @if (filter.type === 'radio') {
-              <app-nxs-checkbox-form
-                [formControlName]="filter.key"
-                [config]="dynamicFilterConfigs[i]" />
+            @switch (filter.type) {
+              @case ('checkbox') {
+                <app-nxs-checkbox-form
+                  [config]="dynamicFilterConfigs[i]"
+                  [useFormArray]="true"
+                  [formArray]="getAttributeArray(filter.key)" />
+              }
+              @case ('toggle') {
+                <app-nxs-checkbox-form
+                  [formControlName]="filter.key"
+                  [config]="{ label: filter.label, type: 'boolean' }" />
+              }
+              @case ('radio') {
+                <app-nxs-checkbox-form
+                  [formControlName]="filter.key"
+                  [config]="dynamicFilterConfigs[i]" />
+              }
             }
           }
         </div>

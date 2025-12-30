@@ -3,6 +3,7 @@ import { computed, inject } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { FiltersStore } from './filters.store';
 import { Product } from '../models/product.model';
+import { filterProducts } from '../utils/filter.util';
 
 export interface ProductState {
   products: Product[];
@@ -24,73 +25,9 @@ export const ProductStore = signalStore(
   withComputed((store) => {
     const filtersStore = inject(FiltersStore);
 
-    const filteredProducts = computed(() => {
-      const products = store.products();
-      const basic = filtersStore.basic();
-      const dynamic = filtersStore.dynamic();
-
-      return products.filter((product) => {
-        if (basic.searchQuery.trim() !== '') {
-          const query = basic.searchQuery.toLowerCase();
-          const productName = product.name.toLowerCase();
-
-          if (!productName.includes(query)) {
-            return false;
-          }
-        }
-
-        if (basic.categories.length > 0) {
-          if (!basic.categories.includes(product.category)) {
-            return false;
-          }
-        }
-
-        if (basic.brands.length > 0) {
-          if (!basic.brands.includes(product.brand)) {
-            return false;
-          }
-        }
-
-        if (basic.inStock && !product.inStock) {
-          return false;
-        }
-
-        if (basic.rating !== null) {
-          const productRating = parseFloat(product.rating);
-          if (productRating < basic.rating) {
-            return false;
-          }
-        }
-
-        for (const [key, filterValue] of Object.entries(dynamic)) {
-          if (filterValue === undefined || filterValue === null) continue;
-
-          const attrValue = product.attributes[key];
-          if (attrValue === undefined) continue;
-
-          if (typeof filterValue === 'boolean') {
-            if (attrValue !== filterValue) {
-              return false;
-            }
-          } else if (Array.isArray(filterValue)) {
-            if (filterValue.length === 0) continue;
-
-            const normalizedFilters = filterValue.map((v) => String(v));
-            const normalizedAttr = String(attrValue);
-
-            if (!normalizedFilters.includes(normalizedAttr)) {
-              return false;
-            }
-          } else {
-            if (String(attrValue) !== String(filterValue)) {
-              return false;
-            }
-          }
-        }
-
-        return true;
-      });
-    });
+    const filteredProducts = computed(() =>
+      filterProducts(store.products(), filtersStore.basic(), filtersStore.dynamic()),
+    );
 
     return {
       filteredProducts,
@@ -110,7 +47,6 @@ export const ProductStore = signalStore(
 
         productService.getProductsList().subscribe({
           next: (products) => {
-            console.log('patch state');
             patchState(store, {
               products,
               loading: false,

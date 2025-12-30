@@ -1,14 +1,9 @@
 import { computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { BasicFilters, DynamicFilters, DynamicFilterValue } from '../models/filter.model';
+import { FiltersState } from '../models/filter.model';
+import { Category } from '../models/product.model';
 
-interface FiltersState {
-  basic: BasicFilters;
-  dynamic: DynamicFilters;
-  loading: boolean;
-}
-
-const initialState: FiltersState = {
+const INITIAL_FILTERS_STATE: FiltersState = {
   basic: {
     searchQuery: '',
     categories: [],
@@ -22,7 +17,8 @@ const initialState: FiltersState = {
 
 export const FiltersStore = signalStore(
   { providedIn: 'root' },
-  withState<FiltersState>(initialState),
+
+  withState<FiltersState>(INITIAL_FILTERS_STATE),
 
   withMethods((store) => ({
     setSearchQuery(query: string): void {
@@ -31,7 +27,7 @@ export const FiltersStore = signalStore(
       }));
     },
 
-    setCategories(categories: string[]): void {
+    setCategories(categories: Category[]): void {
       patchState(store, (state) => ({
         basic: { ...state.basic, categories },
         dynamic: {},
@@ -56,27 +52,24 @@ export const FiltersStore = signalStore(
       }));
     },
 
-    setDynamicFilter(key: string, value: DynamicFilterValue): void {
+    setDynamicFilter(
+      key: string,
+      value: string | number | boolean | (string | number | boolean)[] | null,
+    ): void {
       patchState(store, (state) => ({
         dynamic: { ...state.dynamic, [key]: value },
       }));
     },
 
-    setMultipleDynamicFilters(filters: DynamicFilters): void {
-      patchState(store, (state) => ({
-        dynamic: { ...state.dynamic, ...filters },
-      }));
-    },
-
     removeDynamicFilter(key: string): void {
       patchState(store, (state) => {
-        const { [key]: removed, ...rest } = state.dynamic;
+        const { [key]: _, ...rest } = state.dynamic;
         return { dynamic: rest };
       });
     },
 
     reset(): void {
-      patchState(store, initialState);
+      patchState(store, INITIAL_FILTERS_STATE);
     },
 
     resetDynamic(): void {

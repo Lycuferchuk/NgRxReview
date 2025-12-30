@@ -23,11 +23,11 @@ import { FiltersStore } from '../../../core/store/filters.store';
   styleUrl: './nxs-header.component.scss',
 })
 export class NxsHeader {
-  public cart = inject(CartStore);
-  public searchQuery = '';
-  public cartCount = this.cart.cartCount;
+  private readonly cartStore = inject(CartStore);
+  private readonly filtersStore = inject(FiltersStore);
 
-  private filtersStore = inject(FiltersStore);
+  public readonly cartCount = this.cartStore.cartCount;
+  public searchQuery = '';
 
   constructor(private readonly _router: Router) {}
 
@@ -39,7 +39,7 @@ export class NxsHeader {
     this._router.navigate(['products']);
   }
 
-  onSearchChange(query: string): void {
+  public onSearchChange(query: string): void {
     this.filtersStore.setSearchQuery(query);
   }
 }

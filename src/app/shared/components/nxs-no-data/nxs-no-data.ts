@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { EMPTY_STATE_MAP, EmptyStateType } from '../../../core/enums/empry-state.enum';
+import { EmptyStateType } from '../../../core/enums/empry-state.enum';
 import { EmptyStateConfig } from '../../../core/models/empty-state-config.model';
+import { EMPTY_STATE_MAP } from '../../../core/constants/empty-state.constants';
 
 @Component({
   selector: 'app-nxs-no-data',
@@ -12,6 +13,10 @@ export class NxsNoData {
   @Input() type!: EmptyStateType;
 
   public get config(): EmptyStateConfig {
-    return EMPTY_STATE_MAP[this.type];
+    return this.getEmptyStateConfig(this.type);
+  }
+
+  private getEmptyStateConfig(type: EmptyStateType): EmptyStateConfig {
+    return EMPTY_STATE_MAP[type] ?? EMPTY_STATE_MAP[EmptyStateType.NO_DATA];
   }
 }

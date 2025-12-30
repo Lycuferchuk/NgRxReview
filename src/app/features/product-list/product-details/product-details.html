@@ -15,12 +15,10 @@
         <div class="flex-col product-details__info gap-8">
           <h1 class="m-0 f-s-28">{{ product.name }}</h1>
 
-          @if (product.rating) {
-            <span class="flex product-details__rating f-s-20 gap-4">
-              <mat-icon>star</mat-icon>
-              {{ product.rating }}/5
-            </span>
-          }
+          <span class="flex product-details__rating f-s-20 gap-4">
+            <mat-icon>star</mat-icon>
+            {{ product.rating }}/5
+          </span>
 
           <mat-divider class="nexus-divider"></mat-divider>
 
@@ -37,14 +35,13 @@
           }
 
           <div class="flex product-details__price-actions gap-16 mt-8">
-            <span class="product-details__price f-s-28">{{ product.price | currency }}</span>
+            <span class="product-details__price f-s-28">{{ product.price | currency: 'UAH' : 'symbol-narrow' }}</span>
             <button
               class="nexus-button"
               mat-flat-button
               color="primary"
               (click)="addToCart()"
-              [disabled]="!product.inStock"
-            >
+              [disabled]="!product.inStock">
               <mat-icon>shopping_cart</mat-icon>
               Купити
             </button>
@@ -61,27 +58,29 @@
             <strong>Бренд:</strong> {{ product.brand }}
           </p>
           <p class="product-details__category f-s-16 mb-8">
-            <strong>Категорія:</strong> {{ getCategoryLabel(product.category) }}
+            <strong>Категорія:</strong> {{ product.category }}
           </p>
           @if (product.description) {
             <p class="product-details__description f-s-16 m-0">{{ product.description }}</p>
           }
         </div>
 
-        <mat-divider></mat-divider>
+        @if (getFormattedSpecs().length > 0) {
+          <mat-divider></mat-divider>
 
-        <div class="product-details__section">
-          <h2 class="product-details__subtitle f-s-22 mb-12">Характеристики</h2>
-          <div class="product-details__specs">
-            @for (spec of getFormattedSpecs(); track spec.key) {
-              <div class="product-details__spec-item">
-                <span class="product-details__spec-key">{{ spec.label }}</span>
-                <span class="product-details__spec-divider"></span>
-                <span class="product-details__spec-value">{{ spec.value }}</span>
-              </div>
-            }
+          <div class="product-details__section">
+            <h2 class="product-details__subtitle f-s-22 mb-12">Характеристики</h2>
+            <div class="product-details__specs">
+              @for (spec of getFormattedSpecs(); track spec.key) {
+                <div class="product-details__spec-item">
+                  <span class="product-details__spec-key">{{ spec.label }}</span>
+                  <span class="product-details__spec-divider"></span>
+                  <span class="product-details__spec-value">{{ spec.value }}</span>
+                </div>
+              }
+            </div>
           </div>
-        </div>
+        }
       </div>
     </mat-card>
   }

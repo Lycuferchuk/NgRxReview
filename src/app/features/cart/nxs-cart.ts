@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { CartItem } from '../../core/models/cart-item.model';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -42,37 +41,21 @@ export class CartComponent implements OnInit {
     this.cartStore.removeFromCart(productId);
   }
 
-  public increaseQuantity(item: CartItem): void {
-    this.cartStore.saveUpdatedItem({
-      ...item,
-      quantity: item.quantity + 1,
-      totalPrice: (item.quantity + 1) * Number(item.product.price),
-    });
+  public increaseQuantity(productId: string): void {
+    this.cartStore.incrementQuantity(productId);
   }
 
-  public decreaseQuantity(item: CartItem): void {
-    if (item.quantity <= 1) {
-      return;
-    }
-
-    this.cartStore.saveUpdatedItem({
-      ...item,
-      quantity: item.quantity - 1,
-      totalPrice: (item.quantity - 1) * Number(item.product.price),
-    });
+  public decreaseQuantity(productId: string): void {
+    this.cartStore.decrementQuantity(productId);
   }
 
-  public validateQuantity(item: CartItem): void {
-    const quantity = item.quantity < 1 ? 1 : item.quantity;
-
-    this.cartStore.saveUpdatedItem({
-      ...item,
-      quantity,
-      totalPrice: quantity * Number(item.product.price),
-    });
+  public updateQuantity(productId: string, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const quantity = Math.max(1, parseInt(input.value, 10) || 1);
+    this.cartStore.updateQuantity(productId, quantity);
   }
 
-  public orderCart(): void {
+  public checkout(): void {
     this.cartStore.checkout();
   }
 }

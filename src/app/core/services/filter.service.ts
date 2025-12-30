@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, forkJoin } from 'rxjs';
 import { DataService } from './data.service';
-import {
-  AvailableFilterOptions,
-  CategoryAttributeOptions,
-  FiltersConfig,
-} from '../models/filter.model';
-import { Product, ProductAttributeValue } from '../models/product.model';
+import { AvailableFilterOptions, FilterPrimitive, FiltersConfig } from '../models/filter.model';
+import { Category, Product } from '../models/product.model';
 import { FILTERS_JSON_KEY } from '../constants/data-key.constants';
 import { ProductService } from './product.service';
 
@@ -22,13 +18,13 @@ export class FiltersService {
     private readonly _productsService: ProductService,
   ) {}
 
-  public getFiltersOptions(): Observable<FiltersConfig> {
+  public getFiltersConfig(): Observable<FiltersConfig> {
     return this._dataService.getDataFromJson<FiltersConfig>(FILTERS_JSON_KEY);
   }
 
   public loadFiltersData(): Observable<FiltersData> {
     return forkJoin({
-      config: this.getFiltersOptions(),
+      config: this.getFiltersConfig(),
       products: this._productsService.getProductsList(),
     }).pipe(
       map(({ config, products }) => ({
@@ -39,54 +35,62 @@ export class FiltersService {
   }
 
   private extractAvailableOptions(products: Product[]): AvailableFilterOptions {
-    const categories = [...new Set(products.map((p) => p.category))];
-    const brands = [...new Set(products.map((p) => p.brand))].sort();
-    const attributeOptions: Record<string, Record<string, Set<ProductAttributeValue>>> = {};
+    const categories = this.extractUniqueCategories(products);
+    const brands = this.extractUniqueBrands(products);
+    const attributeOptions = this.extractAttributeOptions(products);
 
-    products.forEach((product) => {
-      if (!attributeOptions[product.category]) {
-        attributeOptions[product.category] = {};
+    return { categories, brands, attributeOptions };
+  }
+
+  private extractUniqueCategories(products: Product[]): Category[] {
+    return [...new Set(products.map((p) => p.category))];
+  }
+
+  private extractUniqueBrands(products: Product[]): string[] {
+    return [...new Set(products.map((p) => p.brand))].sort();
+  }
+
+  private extractAttributeOptions(
+    products: Product[],
+  ): Record<Category, Record<string, FilterPrimitive[]>> {
+    const result: Record<string, Record<string, Set<FilterPrimitive>>> = {};
+
+    for (const product of products) {
+      const { category, attributes } = product;
+
+      if (!result[category]) {
+        result[category] = {};
       }
 
-      Object.entries(product.attributes).forEach(([key, value]) => {
-        if (value === null || value === undefined) {
-          return;
+      for (const [key, value] of Object.entries(attributes)) {
+        if (value === null || value === undefined) continue;
+
+        if (!result[category][key]) {
+          result[category][key] = new Set();
         }
 
-        if (!attributeOptions[product.category][key]) {
-          attributeOptions[product.category][key] = new Set<ProductAttributeValue>();
-        }
+        result[category][key].add(value);
+      }
+    }
 
-        attributeOptions[product.category][key].add(value);
-      });
+    const formatted: Record<Category, Record<string, FilterPrimitive[]>> = {} as any;
+
+    for (const [category, attrs] of Object.entries(result)) {
+      formatted[category as Category] = {};
+
+      for (const [key, valueSet] of Object.entries(attrs)) {
+        formatted[category as Category][key] = this.sortValues(Array.from(valueSet));
+      }
+    }
+
+    return formatted;
+  }
+
+  private sortValues(values: FilterPrimitive[]): FilterPrimitive[] {
+    return values.sort((a, b) => {
+      if (typeof a === 'number' && typeof b === 'number') return a - b;
+      if (typeof a === 'boolean' && typeof b === 'boolean') return a === b ? 0 : a ? -1 : 1;
+      return String(a).localeCompare(String(b));
     });
-
-    const formattedAttributeOptions: Record<string, CategoryAttributeOptions> = {};
-
-    Object.entries(attributeOptions).forEach(([category, attrs]) => {
-      formattedAttributeOptions[category] = {};
-
-      Object.entries(attrs).forEach(([key, valueSet]) => {
-        const values = Array.from(valueSet).filter(
-          (v): v is Exclude<ProductAttributeValue, undefined> => v !== undefined,
-        );
-
-        formattedAttributeOptions[category][key] = values.sort((a, b) => {
-          if (typeof a === 'number' && typeof b === 'number') {
-            return a - b;
-          }
-          if (typeof a === 'boolean' && typeof b === 'boolean') {
-            return a === b ? 0 : a ? -1 : 1;
-          }
-          return String(a).localeCompare(String(b));
-        });
-      });
-    });
-
-    return {
-      categories,
-      brands,
-      attributeOptions: formattedAttributeOptions,
-    };
   }
 }

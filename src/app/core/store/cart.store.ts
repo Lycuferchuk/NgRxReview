@@ -1,82 +1,68 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { CartItem } from '../models/cart-item.model';
+import { CartItem, CartState } from '../models/cart-item.model';
 import { computed, inject } from '@angular/core';
 import { Product } from '../models/product.model';
 import { DataService } from '../services/data.service';
 import { CART_STORAGE_KEY } from '../constants/storage-key.constants';
 
-export interface CartState {
-  items: CartItem[];
-}
-
-const initCart: CartState = {
+const INITIAL_CART_STATE: CartState = {
   items: [],
 };
 
 export const CartStore = signalStore(
   { providedIn: 'root' },
 
-  withState(initCart),
+  withState(INITIAL_CART_STATE),
 
   withComputed(({ items }) => ({
     cartCount: computed(() => items().reduce((acc, item) => acc + item.quantity, 0)),
-
     totalPrice: computed(() => items().reduce((acc, item) => acc + item.totalPrice, 0)),
+    isEmpty: computed(() => items().length === 0),
   })),
 
   withMethods((store) => {
     const dataService = inject(DataService);
 
     const persist = (): void => {
-      const currentItems = store.items();
-      dataService.saveLocalStorage<CartItem[]>(CART_STORAGE_KEY, currentItems);
+      dataService.saveLocalStorage<CartItem[]>(CART_STORAGE_KEY, store.items());
     };
 
-    const loadFromStorage = (): void => {
-      const saved = dataService.loadLocalStorage<CartItem[]>(CART_STORAGE_KEY);
-      if (saved && Array.isArray(saved)) {
-        patchState(store, { items: saved });
-      }
-    };
-
-    const calculateItemPrice = (product: Product, quantity: number): number => {
-      const price = parseFloat(product.price);
+    const calculateTotalPrice = (price: number, quantity: number): number => {
       return price * quantity;
     };
 
     return {
       loadCart(): void {
-        loadFromStorage();
+        const saved = dataService.loadLocalStorage<CartItem[]>(CART_STORAGE_KEY);
+        if (saved && Array.isArray(saved)) {
+          patchState(store, { items: saved });
+        }
       },
 
       addToCart(product: Product, quantity = 1): void {
         patchState(store, (state) => {
-          const existing = state.items.find((item) => item.product.id === product.id);
+          const existingIndex = state.items.findIndex((item) => item.product.id === product.id);
 
-          if (existing) {
+          if (existingIndex !== -1) {
+            // Оновлюємо існуючий елемент
+            const existing = state.items[existingIndex];
             const newQuantity = existing.quantity + quantity;
-            return {
-              items: state.items.map((item) =>
-                item.product.id === product.id
-                  ? {
-                      ...item,
-                      quantity: newQuantity,
-                      totalPrice: calculateItemPrice(product, newQuantity),
-                    }
-                  : item,
-              ),
+            const updatedItems = [...state.items];
+            updatedItems[existingIndex] = {
+              ...existing,
+              quantity: newQuantity,
+              totalPrice: calculateTotalPrice(product.price, newQuantity),
             };
+            return { items: updatedItems };
           }
 
+          // Додаємо новий елемент
           const newItem: CartItem = {
             product,
             quantity,
-            totalPrice: calculateItemPrice(product, quantity),
+            totalPrice: calculateTotalPrice(product.price, quantity),
           };
-
-          return {
-            items: [...state.items, newItem],
-          };
+          return { items: [...state.items, newItem] };
         });
 
         persist();
@@ -101,7 +87,7 @@ export const CartStore = signalStore(
               ? {
                   ...item,
                   quantity,
-                  totalPrice: calculateItemPrice(item.product, quantity),
+                  totalPrice: calculateTotalPrice(item.product.price, quantity),
                 }
               : item,
           ),
@@ -109,57 +95,18 @@ export const CartStore = signalStore(
         persist();
       },
 
-      increaseQuantity(productId: string): void {
-        patchState(store, (state) => ({
-          items: state.items.map((item) => {
-            if (item.product.id === productId) {
-              const newQuantity = item.quantity + 1;
-              return {
-                ...item,
-                quantity: newQuantity,
-                totalPrice: calculateItemPrice(item.product, newQuantity),
-              };
-            }
-            return item;
-          }),
-        }));
-        persist();
+      incrementQuantity(productId: string): void {
+        const item = store.items().find((i) => i.product.id === productId);
+        if (item) {
+          this.updateQuantity(productId, item.quantity + 1);
+        }
       },
 
-      decreaseQuantity(productId: string): void {
-        patchState(store, (state) => {
-          const item = state.items.find((i) => i.product.id === productId);
-
-          if (!item) return state;
-
-          if (item.quantity <= 1) {
-            return {
-              items: state.items.filter((i) => i.product.id !== productId),
-            };
-          }
-
-          return {
-            items: state.items.map((i) => {
-              if (i.product.id === productId) {
-                const newQuantity = i.quantity - 1;
-                return {
-                  ...i,
-                  quantity: newQuantity,
-                  totalPrice: calculateItemPrice(i.product, newQuantity),
-                };
-              }
-              return i;
-            }),
-          };
-        });
-        persist();
-      },
-
-      saveUpdatedItem(item: CartItem): void {
-        patchState(store, (state) => ({
-          items: state.items.map((it) => (it.product.id === item.product.id ? { ...item } : it)),
-        }));
-        persist();
+      decrementQuantity(productId: string): void {
+        const item = store.items().find((i) => i.product.id === productId);
+        if (item && item.quantity > 1) {
+          this.updateQuantity(productId, item.quantity - 1);
+        }
       },
 
       clearCart(): void {
@@ -168,17 +115,8 @@ export const CartStore = signalStore(
       },
 
       checkout(): void {
-        patchState(store, { items: [] });
-        persist();
-      },
-
-      isInCart(productId: string): boolean {
-        return store.items().some((item) => item.product.id === productId);
-      },
-
-      getItemQuantity(productId: string): number {
-        const item = store.items().find((i) => i.product.id === productId);
-        return item?.quantity ?? 0;
+        if (store.items().length === 0) return;
+        this.clearCart();
       },
     };
   }),

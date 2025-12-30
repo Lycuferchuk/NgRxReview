@@ -10,9 +10,9 @@ import { CartStore } from './core/store/cart.store';
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
-  cart = inject(CartStore);
+  private readonly cartStore = inject(CartStore);
 
   public ngOnInit(): void {
-    this.cart.loadCart();
+    this.cartStore.loadCart();
   }
 }
