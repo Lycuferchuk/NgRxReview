@@ -1,6 +1,6 @@
 import { computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { FiltersState } from '../models/filter.model';
+import { FilterPrimitive, FiltersState } from '../models/filter.model';
 import { Category } from '../models/product.model';
 
 const INITIAL_FILTERS_STATE: FiltersState = {
@@ -52,10 +52,7 @@ export const FiltersStore = signalStore(
       }));
     },
 
-    setDynamicFilter(
-      key: string,
-      value: string | number | boolean | (string | number | boolean)[] | null,
-    ): void {
+    setDynamicFilter(key: string, value: FilterPrimitive | FilterPrimitive[] | null): void {
       patchState(store, (state) => ({
         dynamic: { ...state.dynamic, [key]: value },
       }));

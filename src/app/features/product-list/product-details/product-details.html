@@ -1,4 +1,11 @@
 <div class="product-details flex p-16">
+  <button
+    mat-icon-button
+    class="nexus-icon-button product-details__back-btn mb-16"
+    (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
   @if (isLoading) {
     <app-nxs-skeleton-details></app-nxs-skeleton-details>
   } @else if (noData) {

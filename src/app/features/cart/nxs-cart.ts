@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { NxsNoData } from '../../shared/components/nxs-no-data/nxs-no-data';
 import { EmptyStateType } from '../../core/enums/empry-state.enum';
 import { CartStore } from '../../core/store/cart.store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nxs-cart',
@@ -33,8 +34,13 @@ export class CartComponent implements OnInit {
   public readonly totalPrice = this.cartStore.totalPrice;
   public readonly emptyStateType = EmptyStateType;
 
+  constructor(private readonly _router: Router) {}
   public ngOnInit(): void {
     this.cartStore.loadCart();
+  }
+
+  public goBack(): void {
+    this._router.navigate(['products']);
   }
 
   public removeFromCart(productId: string): void {

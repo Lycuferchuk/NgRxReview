@@ -1,4 +1,10 @@
 .cart-page {
+  &__back-btn {
+    top: var(--header-height) + 16px;
+    left: 16px;
+    position: absolute;
+  }
+
   &__cart-wrapper {
     margin: 24px 100px;
   }

@@ -1,4 +1,11 @@
 <div class="cart-page p-16">
+  <button
+    mat-icon-button
+    class="nexus-icon-button cart-page__back-btn mb-16"
+    (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
   @if (items().length) {
     <div class="cart-page__cart-wrapper">
       <h1 class="cart-page__title mb-24">Ваш кошик</h1>

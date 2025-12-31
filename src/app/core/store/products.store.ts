@@ -3,7 +3,7 @@ import { computed, inject } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { FiltersStore } from './filters.store';
 import { Product } from '../models/product.model';
-import { filterProducts } from '../utils/filter.util';
+import { FilterHelper } from '../helper/filter.helper';
 
 export interface ProductState {
   products: Product[];
@@ -26,7 +26,7 @@ export const ProductStore = signalStore(
     const filtersStore = inject(FiltersStore);
 
     const filteredProducts = computed(() =>
-      filterProducts(store.products(), filtersStore.basic(), filtersStore.dynamic()),
+      FilterHelper.filterProducts(store.products(), filtersStore.basic(), filtersStore.dynamic()),
     );
 
     return {

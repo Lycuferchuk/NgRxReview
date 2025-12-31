@@ -1,10 +1,10 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { Product } from '../../../core/models/product.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCard } from '@angular/material/card';
 import { CurrencyPipe } from '@angular/common';
 import { MatDivider } from '@angular/material/divider';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { ProductService } from '../../../core/services/product.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NxsNoData } from '../../../shared/components/nxs-no-data/nxs-no-data';
@@ -23,7 +23,17 @@ interface SpecItem {
 
 @Component({
   selector: 'app-product-details',
-  imports: [MatCard, CurrencyPipe, MatDivider, MatButton, NxsNoData, MatIcon, NxsSkeletonDetails],
+  imports: [
+    MatCard,
+    CurrencyPipe,
+    MatDivider,
+    MatButton,
+    NxsNoData,
+    MatIcon,
+    NxsSkeletonDetails,
+    MatIconButton,
+    NxsSkeletonDetails,
+  ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
@@ -39,10 +49,15 @@ export class ProductDetails implements OnInit {
   constructor(
     private readonly _route: ActivatedRoute,
     private readonly _productService: ProductService,
+    private readonly _router: Router,
   ) {}
 
   public ngOnInit(): void {
     this.loadProduct();
+  }
+
+  public goBack(): void {
+    this._router.navigate(['products']);
   }
 
   public addToCart(): void {
