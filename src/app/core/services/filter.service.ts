@@ -11,6 +11,10 @@ interface FiltersData {
   availableOptions: AvailableFilterOptions;
 }
 
+type AttributeSet = Record<string, Set<FilterPrimitive>>;
+type CategoryAttributeSets = Record<string, AttributeSet>;
+type CategoryAttributeArrays = Record<Category, Record<string, FilterPrimitive[]>>;
+
 @Injectable({ providedIn: 'root' })
 export class FiltersService {
   constructor(
@@ -50,46 +54,51 @@ export class FiltersService {
     return [...new Set(products.map((p) => p.brand))].sort();
   }
 
-  private extractAttributeOptions(
-    products: Product[],
-  ): Record<Category, Record<string, FilterPrimitive[]>> {
-    const result: Record<string, Record<string, Set<FilterPrimitive>>> = {};
-
-    for (const product of products) {
-      const { category, attributes } = product;
-
-      if (!result[category]) {
-        result[category] = {};
-      }
-
-      for (const [key, value] of Object.entries(attributes)) {
-        if (value === null || value === undefined) continue;
-
-        if (!result[category][key]) {
-          result[category][key] = new Set();
-        }
-
-        result[category][key].add(value);
-      }
-    }
-
-    const formatted: Record<Category, Record<string, FilterPrimitive[]>> = {} as any;
-
-    for (const [category, attrs] of Object.entries(result)) {
-      formatted[category as Category] = {};
-
-      for (const [key, valueSet] of Object.entries(attrs)) {
-        formatted[category as Category][key] = this.sortValues(Array.from(valueSet));
-      }
-    }
-
-    return formatted;
+  private extractAttributeOptions(products: Product[]): CategoryAttributeArrays {
+    const grouped = this.groupAttributesByCategory(products);
+    return this.convertSetsToSortedArrays(grouped);
   }
 
-  private sortValues(values: FilterPrimitive[]): FilterPrimitive[] {
+  private groupAttributesByCategory(products: Product[]): CategoryAttributeSets {
+    return products.reduce<CategoryAttributeSets>((acc, product) => {
+      const categoryAttrs = acc[product.category] ?? {};
+
+      Object.entries(product.attributes).forEach(([key, value]) => {
+        if (value == null) return;
+
+        const attrSet = categoryAttrs[key] ?? new Set();
+        attrSet.add(value);
+        categoryAttrs[key] = attrSet;
+      });
+
+      acc[product.category] = categoryAttrs;
+      return acc;
+    }, {});
+  }
+
+  private convertSetsToSortedArrays(grouped: CategoryAttributeSets): CategoryAttributeArrays {
+    return Object.entries(grouped).reduce<CategoryAttributeArrays>((acc, [category, attrs]) => {
+      acc[category as Category] = Object.entries(attrs).reduce<Record<string, FilterPrimitive[]>>(
+        (attrAcc, [key, valueSet]) => {
+          attrAcc[key] = this.sortByType([...valueSet]);
+          return attrAcc;
+        },
+        {},
+      );
+      return acc;
+    }, {} as CategoryAttributeArrays);
+  }
+
+  private sortByType(values: FilterPrimitive[]): FilterPrimitive[] {
     return values.sort((a, b) => {
-      if (typeof a === 'number' && typeof b === 'number') return a - b;
-      if (typeof a === 'boolean' && typeof b === 'boolean') return a === b ? 0 : a ? -1 : 1;
+      if (typeof a === 'number' && typeof b === 'number') {
+        return a - b;
+      }
+
+      if (typeof a === 'boolean' && typeof b === 'boolean') {
+        return a === b ? 0 : a ? -1 : 1;
+      }
+
       return String(a).localeCompare(String(b));
     });
   }

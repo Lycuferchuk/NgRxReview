@@ -10,6 +10,7 @@ import { MatButton } from '@angular/material/button';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { FiltersStore } from '../../core/store/filters.store';
 import { EmptyStateType } from '../../core/enums/empry-state.enum';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-product-list',
@@ -23,12 +24,14 @@ import { EmptyStateType } from '../../core/enums/empry-state.enum';
     MatSidenavContainer,
     MatIcon,
     MatButton,
+    MatDivider,
   ],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
 export class ProductList implements OnInit {
   @ViewChild('sidenav') public sidenav!: MatSidenav;
+  @ViewChild(FilterPanelComponent) public filterPanel!: FilterPanelComponent;
   private readonly productStore = inject(ProductStore);
   private readonly filtersStore = inject(FiltersStore);
 
@@ -52,8 +55,8 @@ export class ProductList implements OnInit {
   }
 
   public resetFilters(): void {
-    this.filtersStore.reset();
-    if (this.sidenav.opened) {
+    this.filterPanel.reset();
+    if (this.sidenav.opened && this.isMobile()) {
       this.sidenav.close();
     }
   }

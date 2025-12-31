@@ -1,36 +1,37 @@
-<div class="cart-page p-16">
-  <button
-    mat-icon-button
-    class="nexus-icon-button cart-page__back-btn mb-16"
-    (click)="goBack()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
+<div class="cart-page">
+  <div class="cart-page__title-wrapper flex gap-16">
+    <button
+      mat-icon-button
+      class="cart-page__back-btn"
+      (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="cart-page__title mb-16">Ваш кошик</h1>
+  </div>
 
   @if (items().length) {
     <div class="cart-page__cart-wrapper">
-      <h1 class="cart-page__title mb-24">Ваш кошик</h1>
-
-      <div class="flex cart-page__content gap-32">
-        <div class="flex-col cart-page__cart-list gap-16">
+      <div class="cart-page__content">
+        <div class="cart-page__cart-list">
           @for (item of items(); track item.product.id) {
-            <mat-card class="nexus-card flex cart-page__product">
+            <mat-card class="nexus-card cart-page__product">
               <div class="card-glow"></div>
+
               <div class="cart-page__image-wrap">
                 <img
                   class="cart-page__image"
                   [src]="item.product.imageUrl"
                   [alt]="item.product.name"
                 />
-
-                <div class="cart-page__product-name mt-8">
+                <div class="cart-page__product-name">
                   <h2>{{ item.product.name }}</h2>
-                  <p class="cart-page__product-type">Тип: {{ item.product.category }}</p>
-                  <p class="cart-page__product-brand">Бренд: {{ item.product.brand }}</p>
+                  <p>{{ item.product.category }}</p>
+                  <p>{{ item.product.brand }}</p>
                 </div>
               </div>
 
-              <div class="flex cart-page__action-block gap-16">
-                <div class="flex cart-page__quantity-input gap-8">
+              <div class="cart-page__action-block">
+                <div class="cart-page__quantity-input">
                   <button
                     class="nexus-icon-button"
                     mat-icon-button
@@ -59,11 +60,10 @@
                   </button>
                 </div>
 
-                <div class="flex-col cart-page__price-block mt-12 mb-12 gap-16">
+                <div class="cart-page__price-block">
                   <span class="cart-page__price">
                     {{ item.totalPrice | currency: 'UAH' : 'symbol-narrow' }}
                   </span>
-
                   <button
                     mat-flat-button
                     class="nexus-button"
@@ -78,17 +78,16 @@
         </div>
 
         <div class="cart-page__summary">
-          <mat-card class="nexus-card cart-page__summary-card p-24">
-            <h2 class="mb-16">Разом:</h2>
-            <p class="cart-page__summary-price f-s-24 mb-24">
+          <mat-card class="nexus-card cart-page__summary-card">
+            <h2>Разом</h2>
+            <p class="cart-page__summary-price">
               {{ totalPrice() | currency: 'UAH' : 'symbol-narrow' }}
             </p>
-
             <button
-              (click)="checkout()"
               mat-flat-button
               color="primary"
-              class="nexus-button cart-page__summary-checkout w-100">
+              class="nexus-button cart-page__summary-checkout"
+              (click)="checkout()">
               Оформити замовлення
             </button>
           </mat-card>
@@ -99,4 +98,3 @@
     <app-nxs-no-data [type]="emptyStateType.EMPTY_CART"></app-nxs-no-data>
   }
 </div>
-

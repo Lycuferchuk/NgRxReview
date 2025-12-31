@@ -1,7 +1,7 @@
-<div class="product-details flex p-16">
+<div class="product-details">
   <button
     mat-icon-button
-    class="nexus-icon-button product-details__back-btn mb-16"
+    class="product-details__back-btn"
     (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -12,37 +12,37 @@
     <app-nxs-no-data [type]="emptyStateType.NO_DATA"></app-nxs-no-data>
   } @else {
     <mat-card class="nexus-card product-details__card">
-      <div class="flex product-details__header gap-32 mb-24">
+      <div class="product-details__header">
         <img
           [src]="product.imageUrl"
           [alt]="product.name"
-          class="nexus-img product-details__image"
+          class="product-details__image"
         />
 
-        <div class="flex-col product-details__info gap-8">
-          <h1 class="m-0 f-s-28">{{ product.name }}</h1>
+        <div class="product-details__info">
+          <h1 class="product-details__title">{{ product.name }}</h1>
 
-          <span class="flex product-details__rating f-s-20 gap-4">
+          <div class="product-details__rating">
             <mat-icon>star</mat-icon>
             {{ product.rating }}/5
-          </span>
-
-          <mat-divider class="nexus-divider"></mat-divider>
+          </div>
 
           @if (product.inStock) {
-            <span class="product-details__stock product-details__stock--available f-s-16">
+            <span class="product-details__stock product-details__stock--available">
               <mat-icon>check_circle</mat-icon>
               Є в наявності
             </span>
           } @else {
-            <span class="product-details__stock product-details__stock--out f-s-16">
+            <span class="product-details__stock product-details__stock--out">
               <mat-icon>cancel</mat-icon>
               Немає в наявності
             </span>
           }
 
-          <div class="flex product-details__price-actions gap-16 mt-8">
-            <span class="product-details__price f-s-28">{{ product.price | currency: 'UAH' : 'symbol-narrow' }}</span>
+          <div class="product-details__price-actions">
+            <span class="product-details__price">
+              {{ product.price | currency: 'UAH' : 'symbol-narrow' }}
+            </span>
             <button
               class="nexus-button"
               mat-flat-button
@@ -50,33 +50,34 @@
               (click)="addToCart()"
               [disabled]="!product.inStock">
               <mat-icon>shopping_cart</mat-icon>
-              Купити
+              Додати в кошик
             </button>
           </div>
         </div>
       </div>
 
-      <mat-divider></mat-divider>
-
-      <div class="flex-col product-details__body mt-24 gap-24">
+      <mat-divider class="mt-12"></mat-divider>
+      <div class="product-details__body">
         <div class="product-details__section">
-          <h2 class="product-details__subtitle f-s-22 mb-12">Опис</h2>
-          <p class="product-details__brand f-s-16 mb-8">
-            <strong>Бренд:</strong> {{ product.brand }}
-          </p>
-          <p class="product-details__category f-s-16 mb-8">
-            <strong>Категорія:</strong> {{ product.category }}
-          </p>
-          @if (product.description) {
-            <p class="product-details__description f-s-16 m-0">{{ product.description }}</p>
-          }
+          <h2 class="product-details__subtitle">Опис</h2>
+          <div class="product-details__description-content">
+            <p class="product-details__meta-item">
+              <strong>Бренд:</strong> {{ product.brand }}
+            </p>
+            <p class="product-details__meta-item">
+              <strong>Категорія:</strong> {{ product.category }}
+            </p>
+            @if (product.description) {
+              <p class="product-details__description">{{ product.description }}</p>
+            }
+          </div>
         </div>
 
         @if (getFormattedSpecs().length > 0) {
           <mat-divider></mat-divider>
 
           <div class="product-details__section">
-            <h2 class="product-details__subtitle f-s-22 mb-12">Характеристики</h2>
+            <h2 class="product-details__subtitle">Характеристики</h2>
             <div class="product-details__specs">
               @for (spec of getFormattedSpecs(); track spec.key) {
                 <div class="product-details__spec-item">

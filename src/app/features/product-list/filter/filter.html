@@ -26,17 +26,9 @@
     </div>
 
     <form [formGroup]="form">
-      <app-nxs-checkbox-form
-        formControlName="category"
-        [config]="categoryConfig" />
-
-      <app-nxs-checkbox-form
-        formControlName="inStock"
-        [config]="inStockConfig" />
-
-      <app-nxs-checkbox-form
-        formControlName="rating"
-        [config]="ratingConfig" />
+      <app-nxs-checkbox-form formControlName="category" [config]="categoryConfig" />
+      <app-nxs-checkbox-form formControlName="inStock" [config]="inStockConfig" />
+      <app-nxs-checkbox-form formControlName="rating" [config]="ratingConfig" />
 
       @if (selectedCategory !== 'all' && dynamicFilters.length > 0) {
         <div formGroupName="attributes" class="dynamic-filters">
