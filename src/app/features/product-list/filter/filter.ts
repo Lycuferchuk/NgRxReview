@@ -15,10 +15,14 @@ import { NxsCheckboxForm } from '../../../shared/components/nxs-checkbox-form/nx
 import { ProductStore } from '../../../core/store/products.store';
 import { FiltersService } from '../../../core/services/filter.service';
 import {
+  CheckboxValue,
+  DynamicControlValue,
   FilterConfig,
   FilterPrimitive,
   FiltersConfig,
   FilterUIConfig,
+  RadioValue,
+  ToggleValue,
 } from '../../../core/models/filter.model';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {
@@ -49,19 +53,19 @@ export class FilterPanelComponent implements OnInit {
   public readonly filteredCount = this.productStore.filteredProductsCount;
   public readonly totalCount = this.productStore.productsCount;
 
+  public readonly categoryConfig: FilterUIConfig = CATEGORY_CONFIG;
+  public readonly inStockConfig: FilterUIConfig = IN_STOCK_CONFIG;
+  public readonly ratingConfig: FilterUIConfig = RATING_CONFIG;
+
   public loading = true;
   public selectedCategory = 'all';
   public dynamicFilters: DynamicFilter[] = [];
   public dynamicFilterConfigs: FilterUIConfig[] = [];
 
-  public readonly categoryConfig: FilterUIConfig = CATEGORY_CONFIG;
-  public readonly inStockConfig: FilterUIConfig = IN_STOCK_CONFIG;
-  public readonly ratingConfig: FilterUIConfig = RATING_CONFIG;
-
-  public form: FormGroup = this.fb.group({
-    category: ['all'],
-    inStock: [false],
-    rating: [null as number | null],
+  public form = this.fb.group({
+    category: this.fb.nonNullable.control('all'),
+    inStock: this.fb.nonNullable.control(false),
+    rating: this.fb.control<number | null>(null),
     attributes: this.fb.group({}),
   });
 
@@ -69,7 +73,7 @@ export class FilterPanelComponent implements OnInit {
   private attributeOptions!: Record<Category, Record<string, FilterPrimitive[]>>;
 
   private get attributesGroup(): FormGroup {
-    return this.form.get('attributes') as FormGroup;
+    return this.form.controls.attributes as FormGroup;
   }
 
   constructor(
@@ -86,7 +90,11 @@ export class FilterPanelComponent implements OnInit {
   }
 
   public reset(): void {
-    this.form.reset({ category: 'all', inStock: false, rating: null });
+    this.form.reset({
+      category: 'all',
+      inStock: false,
+      rating: null,
+    });
     this.selectedCategory = 'all';
     this.clearDynamicFilters();
     this.filtersStore.reset();
@@ -97,9 +105,9 @@ export class FilterPanelComponent implements OnInit {
       .loadFiltersData()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ config, availableOptions }) => {
-          this.filtersConfig = config;
-          this.attributeOptions = availableOptions.attributeOptions;
+        next: (result) => {
+          this.filtersConfig = result.config;
+          this.attributeOptions = result.availableOptions.attributeOptions;
           this.setupFormListeners();
           this.loading = false;
         },
@@ -116,23 +124,29 @@ export class FilterPanelComponent implements OnInit {
   }
 
   private listenCategoryChanges(): void {
-    this.form
-      .get('category')
-      ?.valueChanges.pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-      .subscribe((category: string) => this.onCategoryChange(category));
+    this.form.controls.category.valueChanges
+      .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((category) => {
+        this.selectedCategory = category;
+        this.clearDynamicFilters();
+        this.buildDynamicFilters(category);
+        this.filtersStore.setCategory(category === 'all' ? null : (category as Category));
+      });
   }
 
   private listenFormChanges(): void {
     this.form.valueChanges
       .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => this.syncToStore(value));
-  }
+      .subscribe(() => {
+        const form = this.form.getRawValue();
 
-  private onCategoryChange(category: string): void {
-    this.selectedCategory = category;
-    this.clearDynamicFilters();
-    this.buildDynamicFilters(category);
-    this.filtersStore.setCategories(category === 'all' ? [] : [category as Category]);
+        this.filtersStore.setInStock(form.inStock);
+        this.filtersStore.setRating(form.rating);
+
+        if (this.selectedCategory !== 'all') {
+          this.syncDynamicFilters(form.attributes as Record<string, DynamicControlValue>);
+        }
+      });
   }
 
   private clearDynamicFilters(): void {
@@ -149,15 +163,15 @@ export class FilterPanelComponent implements OnInit {
   }
 
   private buildDynamicFilters(category: string): void {
-    const { filters, configs } = FilterHelper.buildDynamicFilters(
+    const dynamicFilter = FilterHelper.buildDynamicFilters(
       category,
       this.filtersConfig,
       this.attributeOptions,
     );
 
-    this.dynamicFilters = filters;
-    this.dynamicFilterConfigs = configs;
-    this.addDynamicControls(filters);
+    this.dynamicFilters = dynamicFilter.filters;
+    this.dynamicFilterConfigs = dynamicFilter.configs;
+    this.addDynamicControls(dynamicFilter.filters);
   }
 
   private addDynamicControls(filters: DynamicFilter[]): void {
@@ -180,43 +194,28 @@ export class FilterPanelComponent implements OnInit {
     }
   }
 
-  private syncToStore(value: {
-    inStock: boolean;
-    rating: number | null;
-    attributes: Record<string, unknown>;
-  }): void {
-    this.filtersStore.setInStock(value.inStock);
-    this.filtersStore.setRating(value.rating);
-
-    if (this.selectedCategory !== 'all') {
-      this.syncDynamicFilters(value.attributes);
-    }
-  }
-
-  private syncDynamicFilters(attributes: Record<string, unknown>): void {
+  private syncDynamicFilters(attributes: Record<string, DynamicControlValue>): void {
     this.dynamicFilters.forEach((filter) => {
       const value = attributes[filter.key];
       this.syncSingleFilter(filter, value);
     });
   }
 
-  private syncSingleFilter(filter: DynamicFilter, value: unknown): void {
+  private syncSingleFilter(filter: DynamicFilter, value: DynamicControlValue): void {
     switch (filter.type) {
       case 'checkbox':
-        this.syncCheckboxFilter(filter.key, value as boolean[], filter.options);
+        this.syncCheckboxFilter(filter.key, value as CheckboxValue, filter.options);
         break;
       case 'toggle':
-        this.syncToggleFilter(filter.key, value as boolean);
+        this.syncToggleFilter(filter.key, value as ToggleValue);
         break;
       case 'radio':
-        this.syncRadioFilter(filter.key, value as FilterPrimitive | null);
+        this.syncRadioFilter(filter.key, value as RadioValue);
         break;
     }
   }
 
-  private syncCheckboxFilter(key: string, values: boolean[], options: FilterPrimitive[]): void {
-    if (!Array.isArray(values)) return;
-
+  private syncCheckboxFilter(key: string, values: CheckboxValue, options: FilterPrimitive[]): void {
     const selected = FilterHelper.extractSelectedCheckboxValues(values, options);
 
     if (selected.length > 0) {
@@ -226,7 +225,7 @@ export class FilterPanelComponent implements OnInit {
     }
   }
 
-  private syncToggleFilter(key: string, value: boolean): void {
+  private syncToggleFilter(key: string, value: ToggleValue): void {
     if (value) {
       this.filtersStore.setDynamicFilter(key, true);
     } else {
@@ -234,8 +233,8 @@ export class FilterPanelComponent implements OnInit {
     }
   }
 
-  private syncRadioFilter(key: string, value: FilterPrimitive | null): void {
-    if (value !== null && value !== undefined) {
+  private syncRadioFilter(key: string, value: RadioValue): void {
+    if (value != null) {
       this.filtersStore.setDynamicFilter(key, value);
     } else {
       this.filtersStore.removeDynamicFilter(key);

@@ -1,5 +1,5 @@
 <div class="product-list">
-  @if (isMobile()) {
+  @if (isMobile) {
     <div class="flex">
       <button
         mat-raised-button
@@ -26,8 +26,8 @@
   <mat-sidenav-container class="nexus-sidenav product-list__container">
     <mat-sidenav
       #sidenav
-      [mode]="isMobile() ? 'over' : 'side'"
-      [opened]="!isMobile()"
+      [mode]="isMobile ? 'over' : 'side'"
+      [opened]="!isMobile"
       class="product-list__sidenav">
       <app-filter></app-filter>
     </mat-sidenav>

@@ -68,7 +68,7 @@ export class ProductDetails implements OnInit {
     if (!this.product?.attributes) return [];
 
     return Object.entries(this.product.attributes)
-      .filter(([_, value]) => value !== undefined && value !== null)
+      .filter(([_, value]) => value != null)
       .map(([key, value]) => ({
         key,
         label: ATTRIBUTE_LABELS[key] || key,

@@ -6,7 +6,7 @@ import { Category } from '../models/product.model';
 const INITIAL_FILTERS_STATE: FiltersState = {
   basic: {
     searchQuery: '',
-    categories: [],
+    category: null,
     brands: [],
     inStock: false,
     rating: null,
@@ -27,9 +27,9 @@ export const FiltersStore = signalStore(
       }));
     },
 
-    setCategories(categories: Category[]): void {
+    setCategory(category: Category | null): void {
       patchState(store, (state) => ({
-        basic: { ...state.basic, categories },
+        basic: { ...state.basic, category },
         dynamic: {},
       }));
     },
@@ -90,7 +90,7 @@ export const FiltersStore = signalStore(
 
       return (
         basic.searchQuery.trim() !== '' ||
-        basic.categories.length > 0 ||
+        basic.category !== null ||
         basic.brands.length > 0 ||
         basic.inStock ||
         basic.rating !== null ||
@@ -104,7 +104,7 @@ export const FiltersStore = signalStore(
 
       let count = 0;
       if (basic.searchQuery.trim() !== '') count++;
-      if (basic.categories.length > 0) count++;
+      if (basic.category !== null) count++;
       if (basic.brands.length > 0) count++;
       if (basic.inStock) count++;
       if (basic.rating !== null) count++;

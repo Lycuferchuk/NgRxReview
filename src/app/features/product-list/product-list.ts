@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { NxsProductCard } from '../../shared/components/nxs-product-card/nxs-product-card';
 import { FilterPanelComponent } from './filter/filter';
 import { ProductStore } from '../../core/store/products.store';
@@ -38,7 +38,7 @@ export class ProductList implements OnInit {
   public readonly products = this.productStore.filteredProducts;
   public readonly loading = this.productStore.loading;
   public readonly filtersCounter = this.filtersStore.activeFiltersCount;
-  public readonly isMobile = signal<boolean>(false);
+  public isMobile = false;
   public readonly emptyStateType = EmptyStateType;
 
   public readonly skeletonItems = Array.from({ length: 10 }, (_, i) => i);
@@ -56,14 +56,14 @@ export class ProductList implements OnInit {
 
   public resetFilters(): void {
     this.filterPanel.reset();
-    if (this.sidenav.opened && this.isMobile()) {
+    if (this.sidenav.opened && this.isMobile) {
       this.sidenav.close();
     }
   }
 
   private observeBreakpoint(): void {
     this._breakpointObserver.observe(['(max-width: 768px)']).subscribe((result) => {
-      this.isMobile.set(result.matches);
+      this.isMobile = result.matches;
     });
   }
 }

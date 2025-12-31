@@ -25,7 +25,7 @@ export class FilterHelper {
   ): Product[] {
     return products.filter((product) => {
       if (!this.matchesSearchQuery(product, basic.searchQuery)) return false;
-      if (!this.matchesCategories(product, basic.categories)) return false;
+      if (!this.matchesCategories(product, basic.category)) return false;
       if (!this.matchesBrands(product, basic.brands)) return false;
       if (!this.matchesInStock(product, basic.inStock)) return false;
       if (!this.matchesRating(product, basic.rating)) return false;
@@ -38,8 +38,8 @@ export class FilterHelper {
     return product.name.toLowerCase().includes(query.toLowerCase());
   }
 
-  private static matchesCategories(product: Product, categories: string[]): boolean {
-    if (categories.length === 0) return true;
+  private static matchesCategories(product: Product, categories: Category | null): boolean {
+    if (!categories) return true;
     return categories.includes(product.category);
   }
 
@@ -59,38 +59,28 @@ export class FilterHelper {
   }
 
   private static matchesDynamicFilters(product: Product, dynamic: DynamicFilters): boolean {
-    for (const [key, filterValue] of Object.entries(dynamic)) {
-      if (filterValue === null || filterValue === undefined) continue;
+    return Object.entries(dynamic).every(([key, filterValue]) => {
+      if (filterValue == null) return true;
 
       const attrValue = product.attributes[key];
-      if (attrValue === undefined) continue;
+      if (attrValue == null) return true;
 
-      if (!this.matchesAttributeValue(attrValue, filterValue)) {
-        return false;
-      }
-    }
-    return true;
+      return this.matchesAttributeValue(attrValue, filterValue);
+    });
   }
 
   private static matchesAttributeValue(
     attrValue: FilterPrimitive,
-    filterValue: FilterPrimitive | FilterPrimitive[] | null,
+    filterValue: FilterPrimitive | FilterPrimitive[],
   ): boolean {
-    if (filterValue === null) return true;
-
-    if (typeof filterValue === 'boolean') {
-      return attrValue === filterValue;
-    }
-
     if (Array.isArray(filterValue)) {
       if (filterValue.length === 0) return true;
       return filterValue.some((v) => String(v) === String(attrValue));
     }
-
-    return String(attrValue) === String(filterValue);
+    return attrValue === filterValue;
   }
 
-  public static buildDynamicFilters(
+  static buildDynamicFilters(
     category: string,
     filtersConfig: FiltersConfig,
     attributeOptions: Record<Category, Record<string, FilterPrimitive[]>>,
@@ -99,42 +89,29 @@ export class FilterHelper {
       return { filters: [], configs: [] };
     }
 
-    const categoryConfig = filtersConfig.categorySpecific[category as Category] || [];
-    const options = attributeOptions[category as Category] || {};
-    const filters: DynamicFilter[] = [];
-    const configs: FilterUIConfig[] = [];
+    const cat = category as Category;
+    const categoryConfig = filtersConfig.categorySpecific[cat] ?? [];
+    const options = attributeOptions[cat] ?? {};
 
-    for (const filter of categoryConfig) {
-      const filterOptions = this.getFilterOptions(filter, options);
+    return categoryConfig.reduce<DynamicFiltersResult>(
+      (result, filter) => {
+        const filterOptions = options[filter.key] ?? filter.options ?? [];
 
-      if (filterOptions.length === 0 && filter.type !== 'toggle') continue;
+        if (filterOptions.length === 0 && filter.type !== 'toggle') {
+          return result;
+        }
 
-      filters.push({ ...filter, options: filterOptions });
-      configs.push(this.buildUIConfig(filter, filterOptions));
-    }
+        result.filters.push({ ...filter, options: filterOptions as FilterPrimitive[] });
+        result.configs.push({
+          label: filter.label,
+          type: filter.type === 'toggle' ? 'boolean' : filter.type,
+          options: filterOptions.map((opt) => ({ value: opt, label: String(opt) })),
+        });
 
-    return { filters, configs };
-  }
-
-  private static getFilterOptions(
-    filter: FilterConfig,
-    categoryOptions: Record<string, FilterPrimitive[]>,
-  ): FilterPrimitive[] {
-    const productOptions = categoryOptions[filter.key];
-    return productOptions?.length > 0
-      ? productOptions
-      : (filter.options as FilterPrimitive[]) || [];
-  }
-
-  static buildUIConfig(filter: FilterConfig, options: FilterPrimitive[]): FilterUIConfig {
-    return {
-      label: filter.label,
-      type: filter.type === 'toggle' ? 'boolean' : (filter.type as 'checkbox' | 'radio'),
-      options: options.map((opt) => ({
-        value: opt,
-        label: String(opt),
-      })),
-    };
+        return result;
+      },
+      { filters: [], configs: [] },
+    );
   }
 
   public static extractSelectedCheckboxValues(
