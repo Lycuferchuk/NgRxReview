@@ -1,0 +1,35 @@
+.price-range {
+  padding: 8px 0;
+
+  &__inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  &__input {
+    flex: 1;
+
+    input {
+      text-align: center;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  &__separator {
+    color: var(--text-secondary);
+    font-size: 16px;
+  }
+
+  &__slider {
+    mat-slider {
+      width: 100%;
+    }
+  }
+}

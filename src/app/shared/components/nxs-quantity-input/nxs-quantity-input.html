@@ -1,0 +1,31 @@
+<div class="quantity-input" [class.quantity-input--compact]="compact()">
+  <button
+    class="nexus-icon-button"
+    mat-icon-button
+    color="primary"
+    (click)="onDecrease()">
+    <mat-icon>{{ quantity() <= min() ? 'delete' : 'remove' }}</mat-icon>
+  </button>
+
+  @if (!compact()) {
+    <mat-form-field appearance="fill" class="nexus-counter-input">
+      <input
+        matInput
+        type="number"
+        [value]="quantity()"
+        (change)="onInputChange($event)"
+        [min]="min()"
+      />
+    </mat-form-field>
+  } @else {
+    <span class="quantity-input__value">{{ quantity() }}</span>
+  }
+
+  <button
+    class="nexus-icon-button"
+    mat-icon-button
+    color="primary"
+    (click)="onIncrease()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

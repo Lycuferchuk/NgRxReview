@@ -1,0 +1,39 @@
+.quantity-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .nexus-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &--compact {
+    gap: 4px;
+
+    .nexus-icon-button {
+      width: 32px;
+      height: 32px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  &__value {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}

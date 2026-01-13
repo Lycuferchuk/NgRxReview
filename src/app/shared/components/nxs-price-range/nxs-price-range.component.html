@@ -1,0 +1,46 @@
+<mat-expansion-panel class="nexus-expansion-panel" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Ціна</mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <div class="price-range">
+    <div class="price-range__inputs">
+      <mat-form-field appearance="fill" class="price-range__input">
+        <mat-label>Від</mat-label>
+        <input
+          matInput
+          type="number"
+          [value]="selectedMin()"
+          (change)="onMinInputChange($event)"
+          [min]="min()"
+          [max]="selectedMax()"
+        />
+        <span matTextSuffix>₴</span>
+      </mat-form-field>
+
+      <span class="price-range__separator">–</span>
+
+      <mat-form-field appearance="fill" class="price-range__input">
+        <mat-label>До</mat-label>
+        <input
+          matInput
+          type="number"
+          [value]="selectedMax()"
+          (change)="onMaxInputChange($event)"
+          [min]="selectedMin()"
+          [max]="max()"
+        />
+        <span matTextSuffix>₴</span>
+      </mat-form-field>
+    </div>
+
+    <div class="price-range__slider">
+      <mat-slider [min]="min()" [max]="max()" [step]="100">
+        <input matSliderStartThumb [value]="selectedMin()" (valueChange)="onMinChange($event)" />
+        <input matSliderEndThumb [value]="selectedMax()" (valueChange)="onMaxChange($event)" />
+      </mat-slider>
+    </div>
+  </div>
+</mat-expansion-panel>
+
+<mat-divider class="mt-8 mb-8" />
