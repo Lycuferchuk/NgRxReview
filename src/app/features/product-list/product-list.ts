@@ -6,17 +6,16 @@ import { NxsNoData } from '../../shared/components/nxs-no-data/nxs-no-data';
 import { NxsSkeletonCard } from '../../shared/components/nxs-skeleton-card/nxs-skeleton-card';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatFabButton } from '@angular/material/button';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { FiltersStore } from '../../core/store/filters.store';
 import { EmptyStateType } from '../../core/enums/empry-state.enum';
 import { MatDivider } from '@angular/material/divider';
 
 @Component({
-  selector: 'app-product-list',
+  selector: 'nxs-product-list',
   imports: [
     NxsProductCard,
-    FilterPanelComponent,
     NxsNoData,
     NxsSkeletonCard,
     MatSidenavContent,
@@ -24,7 +23,9 @@ import { MatDivider } from '@angular/material/divider';
     MatSidenavContainer,
     MatIcon,
     MatButton,
+    MatFabButton,
     MatDivider,
+    FilterPanelComponent,
   ],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
@@ -35,7 +36,7 @@ export class ProductList implements OnInit {
   private readonly productStore = inject(ProductStore);
   private readonly filtersStore = inject(FiltersStore);
 
-  public readonly products = this.productStore.filteredProducts;
+  public readonly products = this.productStore.products;
   public readonly loading = this.productStore.loading;
   public readonly filtersCounter = this.filtersStore.activeFiltersCount;
   public isMobile = false;
@@ -48,6 +49,7 @@ export class ProductList implements OnInit {
   public ngOnInit(): void {
     this.observeBreakpoint();
     this.productStore.loadProducts();
+    this.filtersStore.markAsApplied();
   }
 
   public toggleFilters(): void {
@@ -55,8 +57,9 @@ export class ProductList implements OnInit {
   }
 
   public resetFilters(): void {
-    this.filterPanel.reset();
-    if (this.sidenav.opened && this.isMobile) {
+    this.filtersStore.reset();
+    this.productStore.loadProducts();
+    if (this.sidenav.opened) {
       this.sidenav.close();
     }
   }

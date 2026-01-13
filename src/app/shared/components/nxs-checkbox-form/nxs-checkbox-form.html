@@ -1,22 +1,22 @@
 <mat-expansion-panel class="nexus-expansion-panel" [expanded]="true">
   <mat-expansion-panel-header>
-    <mat-panel-title>{{ config.label }}</mat-panel-title>
+    <mat-panel-title>{{ config().label }}</mat-panel-title>
   </mat-expansion-panel-header>
 
   <div class="flex-col">
-    @switch (config.type) {
+    @switch (config().type) {
       @case ('boolean') {
         <mat-checkbox
-          [checked]="!!value"
+          [checked]="!!value()"
           (change)="onBooleanChange($event.checked)">
-          {{ config.label }}
+          {{ config().label }}
         </mat-checkbox>
       }
 
       @case ('checkbox') {
-        @if (config.options) {
-          @if (useFormArray && formArray) {
-            @for (option of config.options; track option.value; let i = $index) {
+        @if (config().options) {
+          @if (useFormArray() && formArray()) {
+            @for (option of config().options; track option.value; let i = $index) {
               <mat-checkbox
                 [checked]="isFormArrayChecked(i)"
                 (change)="onFormArrayCheckboxChange(i, $event.checked)">
@@ -27,7 +27,7 @@
               </mat-checkbox>
             }
           } @else {
-            @for (option of config.options; track option.value) {
+            @for (option of config().options; track option.value) {
               <mat-checkbox
                 [checked]="isChecked(option.value)"
                 (change)="onCheckboxChange($event.checked, option.value)">
@@ -42,12 +42,12 @@
       }
 
       @case ('radio') {
-        @if (config.options) {
+        @if (config().options) {
           <mat-radio-group
             class="flex-col"
-            [value]="value"
+            [value]="value()"
             (change)="onRadioChange($event.value)">
-            @for (option of config.options; track option.value) {
+            @for (option of config().options; track option.value) {
               <mat-radio-button [value]="option.value">
                 {{ option.label }}
               </mat-radio-button>
@@ -58,5 +58,6 @@
     }
   </div>
 </mat-expansion-panel>
+
 
 <mat-divider class="mt-8 mb-8" />

@@ -1,9 +1,9 @@
 <header class="nxs-header gap-16">
-  <div class="nxs-header__logo-wrapper flex gap-12">
+  <div class="nxs-header__logo-wrapper flex gap-12" (click)="toHome()">
     <div class="nxs-header__icon-container">
-      <img (click)="toHome()" class="nxs-header__logo" src="assets/images/logo.png" alt="logo" />
+      <img class="nxs-header__logo" src="assets/images/logo.png" alt="logo" />
     </div>
-    <h1 (click)="toHome()" class="nxs-header__logo-text f-s-20">NEXUS</h1>
+    <h1 class="nxs-header__logo-text f-s-20">NEXUS</h1>
   </div>
 
   <div class="transparent-bg nxs-header__search-wrapper flex pl-12">
@@ -11,10 +11,9 @@
     <mat-form-field appearance="fill" class="nexus-search-form-field">
       <mat-label>Шукати девайси</mat-label>
       <input
+        #searchInput
         class="nxs-header__search"
         matInput
-        [(ngModel)]="searchQuery"
-        (ngModelChange)="onSearchChange($event)"
       />
     </mat-form-field>
     <div class="nxs-header__search-bg"></div>

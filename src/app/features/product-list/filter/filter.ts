@@ -21,6 +21,7 @@ import {
   FilterPrimitive,
   FiltersConfig,
   FilterUIConfig,
+  PriceRange,
   RadioValue,
   ToggleValue,
 } from '../../../core/models/filter.model';
@@ -32,31 +33,42 @@ import {
 } from '../../../core/constants/filters.constants';
 import { Category } from '../../../core/models/product.model';
 import { FilterHelper } from '../../../core/helper/filter.helper';
+import { NxsPriceRange } from '../../../shared/components/nxs-price-range/nxs-price-range.component';
+import { MatIcon } from '@angular/material/icon';
 
 interface DynamicFilter extends FilterConfig {
   options: FilterPrimitive[];
 }
 
 @Component({
-  selector: 'app-filter',
-  imports: [FormsModule, ReactiveFormsModule, MatButton, NxsCheckboxForm, MatProgressSpinner],
+  selector: 'nxs-filter',
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatButton,
+    NxsCheckboxForm,
+    MatProgressSpinner,
+    NxsPriceRange,
+    MatIcon,
+  ],
   templateUrl: './filter.html',
   styleUrl: './filter.scss',
 })
 export class FilterPanelComponent implements OnInit {
-  private readonly filtersStore = inject(FiltersStore);
+  public readonly filtersStore = inject(FiltersStore);
   private readonly productStore = inject(ProductStore);
   private readonly destroyRef = inject(DestroyRef);
 
   public readonly hasActiveFilters = this.filtersStore.hasActiveFilters;
   public readonly activeFiltersCount = this.filtersStore.activeFiltersCount;
-  public readonly filteredCount = this.productStore.filteredProductsCount;
+  public readonly filteredCount = this.productStore.productsCount;
   public readonly totalCount = this.productStore.productsCount;
 
   public readonly categoryConfig: FilterUIConfig = CATEGORY_CONFIG;
   public readonly inStockConfig: FilterUIConfig = IN_STOCK_CONFIG;
   public readonly ratingConfig: FilterUIConfig = RATING_CONFIG;
-
+  public readonly isDirty = this.filtersStore.isDirty;
+  public priceRange = { min: 0, max: 100000 };
   public loading = true;
   public selectedCategory = 'all';
   public dynamicFilters: DynamicFilter[] = [];
@@ -98,6 +110,16 @@ export class FilterPanelComponent implements OnInit {
     this.selectedCategory = 'all';
     this.clearDynamicFilters();
     this.filtersStore.reset();
+    this.productStore.loadProducts();
+  }
+
+  public onPriceRangeChange(range: PriceRange): void {
+    this.filtersStore.setPriceRange(range.min, range.max);
+  }
+
+  public applyFilters(): void {
+    this.productStore.loadProducts();
+    this.filtersStore.markAsApplied();
   }
 
   private loadFiltersData(): void {
@@ -105,9 +127,10 @@ export class FilterPanelComponent implements OnInit {
       .loadFiltersData()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (result) => {
-          this.filtersConfig = result.config;
-          this.attributeOptions = result.availableOptions.attributeOptions;
+        next: ({ config, availableOptions }) => {
+          this.filtersConfig = config;
+          this.attributeOptions = availableOptions.attributeOptions;
+          this.priceRange = availableOptions.priceRange; // додати
           this.setupFormListeners();
           this.loading = false;
         },

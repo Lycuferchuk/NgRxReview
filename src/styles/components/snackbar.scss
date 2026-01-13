@@ -1,0 +1,14 @@
+.snackbar--success {
+  --mdc-snackbar-container-color: var(--success-bg);
+  --mdc-snackbar-supporting-text-color: var(--text-primary);
+}
+
+.snackbar--error {
+  --mdc-snackbar-container-color: var(--error-bg);
+  --mdc-snackbar-supporting-text-color: var(--text-primary);
+}
+
+.snackbar--info {
+  --mdc-snackbar-container-color: var(--info-bg);
+  --mdc-snackbar-supporting-text-color: var(--text-primary);
+}

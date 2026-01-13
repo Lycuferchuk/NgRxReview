@@ -29,8 +29,18 @@ export class FilterHelper {
       if (!this.matchesBrands(product, basic.brands)) return false;
       if (!this.matchesInStock(product, basic.inStock)) return false;
       if (!this.matchesRating(product, basic.rating)) return false;
+      if (!this.matchesPriceRange(product, basic.priceMin, basic.priceMax)) return false;
       return this.matchesDynamicFilters(product, dynamic);
     });
+  }
+
+  private static matchesPriceRange(
+    product: Product,
+    priceMin: number | null,
+    priceMax: number | null,
+  ): boolean {
+    if (priceMin !== null && product.price < priceMin) return false;
+    return !(priceMax !== null && product.price > priceMax);
   }
 
   private static matchesSearchQuery(product: Product, query: string): boolean {

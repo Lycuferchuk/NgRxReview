@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-nxs-skeleton-details',
+  selector: 'nxs-skeleton-details',
   imports: [],
   templateUrl: './nxs-skeleton-details.html',
   styleUrl: './nxs-skeleton-details.scss',

@@ -1,17 +1,23 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { DataService } from './data.service';
-import { Product } from '../models/product.model';
-import { map, Observable } from 'rxjs';
+import { Product, ProductFilters } from '../models/product.model';
+import { delay, map, Observable } from 'rxjs';
 import { PRODUCTS_JSON_KEY } from '../constants/data-key.constants';
+import { FilterHelper } from '../helper/filter.helper';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private readonly _dataService: DataService) {}
+  private readonly dataService = inject(DataService);
 
-  public getProductsList(): Observable<Product[]> {
-    return this._dataService.getDataFromJson<Product[]>(PRODUCTS_JSON_KEY);
+  getProductsList(filters?: ProductFilters): Observable<Product[]> {
+    return this.dataService.getDataFromJson<Product[]>(PRODUCTS_JSON_KEY).pipe(
+      map((products) =>
+        filters ? FilterHelper.filterProducts(products, filters.basic, filters.dynamic) : products,
+      ),
+      delay(500),
+    );
   }
 
   public getProductById(id: string): Observable<Product | undefined> {

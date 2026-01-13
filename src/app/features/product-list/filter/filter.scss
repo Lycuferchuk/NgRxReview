@@ -13,12 +13,52 @@
 
   &__title {
     background: linear-gradient(90deg,
-        var(--glow-cyan),
-        var(--glow-purple),
-        var(--glow-pink));
+      var(--glow-cyan),
+      var(--glow-purple),
+      var(--glow-pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 600;
     font-size: 18px;
+  }
+
+  &__apply {
+    margin: 8px 0;
+  }
+
+  &__apply-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+
+    &--dirty {
+      background: linear-gradient(120deg, var(--glow-cyan), var(--glow-purple));
+      animation: pulse-glow 1.5s infinite;
+    }
+
+    mat-spinner {
+      display: inline-block;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    gap: 12px;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--glow-cyan);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--glow-purple);
   }
 }

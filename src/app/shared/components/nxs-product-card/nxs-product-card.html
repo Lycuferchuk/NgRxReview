@@ -1,7 +1,4 @@
-<mat-card
-  class="nexus-card product-card"
-  (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()">
+<mat-card class="nexus-card product-card">
   <div class="card-glow"></div>
 
   <mat-card-header class="flex w-100 product-card__header">
@@ -10,7 +7,7 @@
     </div>
     <div class="flex product-card__rating gap-6 f-s-18">
       <mat-icon>star</mat-icon>
-      <span>{{ product.rating }}</span>
+      <span>{{ product().rating }}</span>
     </div>
   </mat-card-header>
 
@@ -19,15 +16,16 @@
       <img
         class="product-card__image"
         (click)="navigateToDetails()"
-        [src]="product.imageUrl"
-        [alt]="product.name"
-        [class.product-card__image--hover]="isHovered()"
+        [ngSrc]="product().imageUrl"
+        [alt]="product().name"
+        nxsViewTransition="product-image"
+        [nxsViewTransitionId]="product().id"
+        width="280"
+        height="280"
       />
 
-      @if (product.inStock) {
-        <div
-          class="product-card__quick-buy-wrapper"
-          [class.product-card__quick-buy-wrapper-visible]="isHovered()">
+      @if (product().inStock) {
+        <div class="product-card__quick-buy-wrapper">
           <button
             mat-flat-button
             color="primary"
@@ -47,25 +45,39 @@
     <div class="product-card__meta">
       <h3
         (click)="navigateToDetails()"
-        class="product-card__title"
-        [class.product-card__title--hover]="isHovered()">
-        {{ product.name }}
+        class="product-card__title">
+        {{ product().name }}
       </h3>
-      <p class="product-card__brand mb-12 f-s-12">{{ product.category }}</p>
+      <p class="product-card__brand mb-12 f-s-12">{{ product().category }}</p>
 
       <div class="product-card__controls">
         <div class="flex product-card__prices gap-8">
-          <span class="product-card__price f-s-16">{{ product.price | currency: 'UAH' : 'symbol-narrow' }}</span>
+          <span class="product-card__price f-s-16">{{ product().price | currency: 'UAH' : 'symbol-narrow' }}</span>
         </div>
 
-        <button
-          mat-icon-button
-          aria-label="Add to cart"
-          (click)="handleAdd()"
-          [disabled]="!product.inStock"
-          class="product-card__cart-btn">
-          <mat-icon>shopping_cart</mat-icon>
-        </button>
+        <div class="product-card__cart-action">
+          @if (isInCart()) {
+            <nxs-quantity-input
+              animate.enter="quantity-enter"
+              [quantity]="quantity()"
+              [compact]="true"
+              (increase)="handleIncrease()"
+              (decrease)="handleDecrease()"
+              (remove)="handleRemove()"
+              (change)="handleQuantityChange($event)"
+            />
+          } @else {
+            <button
+              animate.leave="cart-btn-leave"
+              mat-icon-button
+              aria-label="Add to cart"
+              (click)="handleAdd()"
+              [disabled]="!product().inStock"
+              class="product-card__cart-btn">
+              <mat-icon>shopping_cart</mat-icon>
+            </button>
+          }
+        </div>
       </div>
     </div>
   </mat-card-content>

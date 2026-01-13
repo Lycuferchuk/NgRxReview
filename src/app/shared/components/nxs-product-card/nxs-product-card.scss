@@ -3,6 +3,14 @@
     opacity: 1;
   }
 
+  .quantity-enter {
+    animation: scale-in 200ms ease-out;
+  }
+
+  .cart-btn-leave {
+    animation: scale-out 150ms ease-in;
+  }
+
   &__header {
     position: absolute;
     background: transparent;
@@ -46,11 +54,11 @@
     background: transparent;
     cursor: pointer;
     text-align: center;
+    backface-visibility: hidden;
+  }
 
-    &--hover {
-      transform: scale(1.06) rotate(0.5deg);
-      backface-visibility: hidden;
-    }
+  &:hover &__image {
+    transform: scale(1.06) rotate(0.5deg);
   }
 
   &__quick-buy-wrapper {
@@ -64,6 +72,12 @@
     display: flex;
     justify-content: center;
     z-index: 3;
+    min-height: 40px;
+  }
+
+  &:hover &__quick-buy-wrapper {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   &__quick-buy-wrapper-visible {
@@ -84,6 +98,21 @@
     color: var(--text-primary);
     padding: 10px 12px;
     box-shadow: 0 6px 14px var(--shadow-soft);
+  }
+
+  &__cart-action {
+    position: relative;
+    min-width: 100px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__quick-buy-quantity {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 4px 8px;
+    border: 1px solid var(--card-border);
   }
 
   &__empty-stock {
@@ -164,6 +193,10 @@
     &--hover {
       color: var(--glow-cyan);
     }
+  }
+
+  &:hover &__title {
+    color: var(--glow-cyan);
   }
 
   &__brand {

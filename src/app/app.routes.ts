@@ -14,7 +14,7 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
-    loadComponent: () => import('./features/cart/nxs-cart').then((m) => m.CartComponent),
+    loadComponent: () => import('./features/cart/cart').then((m) => m.CartComponent),
   },
   {
     path: '',

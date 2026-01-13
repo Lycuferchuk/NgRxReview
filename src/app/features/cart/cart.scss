@@ -39,6 +39,10 @@
     flex: 2;
   }
 
+  .cart-item-leave {
+    animation: cart-item-leave 300ms ease-out;
+  }
+
   &__product {
     display: flex;
     flex-direction: row;
@@ -96,16 +100,6 @@
     gap: 24px;
     flex-shrink: 0;
     padding: 16px;
-  }
-
-  &__quantity-input {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    .nexus-counter-input {
-      width: 60px;
-    }
   }
 
   &__price-block {

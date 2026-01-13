@@ -1,25 +1,15 @@
 <div class="product-list">
   @if (isMobile) {
-    <div class="flex">
-      <button
-        mat-raised-button
-        class="nexus-button product-list__filter-toggle mr-8"
-        (click)="toggleFilters()">
-        <mat-icon>filter_list</mat-icon>
-        Фільтри
-      </button>
-
-      <button
-        [disabled]="!filtersCounter()"
-        mat-raised-button
-        class="nexus-secondary-button product-list__filter-toggle ml-8"
-        (click)="resetFilters()">
-        <span>Скинути</span>
-        @if (filtersCounter()) {
-          <span class="badge ml-4">{{ filtersCounter() }}</span>
-        }
-      </button>
-    </div>
+    <button
+      mat-raised-button
+      class="nexus-button product-list__filter-toggle"
+      (click)="toggleFilters()">
+      <mat-icon>filter_list</mat-icon>
+      Фільтри
+      @if (filtersCounter()) {
+        <span class="badge ml-4">{{ filtersCounter() }}</span>
+      }
+    </button>
     <mat-divider class=""></mat-divider>
   }
 
@@ -29,25 +19,36 @@
       [mode]="isMobile ? 'over' : 'side'"
       [opened]="!isMobile"
       class="product-list__sidenav">
-      <app-filter></app-filter>
+      <nxs-filter></nxs-filter>
     </mat-sidenav>
 
     <mat-sidenav-content>
       <div class="flex product-list__list gap-16">
         @if (loading()) {
           @for (item of skeletonItems; track item) {
-            <app-nxs-skeleton-card></app-nxs-skeleton-card>
+            <nxs-skeleton-card></nxs-skeleton-card>
           }
         } @else if (products().length === 0) {
           <div class="w-100 flex items-center">
-            <app-nxs-no-data [type]="emptyStateType.NO_RESULTS"></app-nxs-no-data>
+            <nxs-no-data [type]="emptyStateType.NO_RESULTS"></nxs-no-data>
           </div>
         } @else {
           @for (product of products(); track product.id) {
-            <app-nxs-product-card [product]="product"></app-nxs-product-card>
+            <nxs-product-card [product]="product"></nxs-product-card>
           }
         }
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+  @if (isMobile && filtersCounter()) {
+    <button
+      mat-fab
+      color="warn"
+      class="product-list__reset-fab"
+      (click)="resetFilters()">
+      <mat-icon>filter_alt_off</mat-icon>
+      <span class="product-list__reset-fab-badge">{{ filtersCounter() }}</span>
+    </button>
+  }
 </div>

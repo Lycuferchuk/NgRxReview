@@ -1,6 +1,6 @@
 .product-list {
   &__filter-toggle {
-    width: 100%;
+    width: calc(100% - 24px);
     margin: 12px;
   }
 
@@ -31,5 +31,29 @@
       justify-content: center;
       padding: 8px;
     }
+  }
+
+  &__reset-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+  }
+
+  &__reset-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--glow-pink), var(--glow-purple));
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

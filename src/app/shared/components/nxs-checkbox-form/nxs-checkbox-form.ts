@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
@@ -10,7 +10,7 @@ import { FilterUIConfig } from '../../../core/models/filter.model';
 type FilterValue = string | number | boolean | null;
 
 @Component({
-  selector: 'app-nxs-checkbox-form',
+  selector: 'nxs-checkbox-form',
   imports: [CommonModule, MatCheckboxModule, MatRadioModule, MatExpansionModule, MatDividerModule],
   providers: [
     {
@@ -23,34 +23,32 @@ type FilterValue = string | number | boolean | null;
   styleUrls: ['./nxs-checkbox-form.scss'],
 })
 export class NxsCheckboxForm implements ControlValueAccessor {
-  @Input() public config!: FilterUIConfig;
-  @Input() public useFormArray = false;
-  @Input() public formArray?: FormArray<FormControl<boolean>>;
+  public readonly config = input.required<FilterUIConfig>();
+  public readonly useFormArray = input(false);
+  public readonly formArray = input<FormArray<FormControl<boolean>>>();
 
-  public value: FilterValue = null;
-  public selectedValues: FilterValue[] = [];
+  public readonly value = signal<FilterValue>(null);
+  public readonly selectedValues = signal<FilterValue[]>([]);
 
   private onChange: (value: unknown) => void = () => {};
   private onTouched: () => void = () => {};
 
   public onBooleanChange(checked: boolean): void {
-    this.value = checked;
+    this.value.set(checked);
     this.onChange(checked);
     this.onTouched();
   }
 
-  public onCheckboxChange(checked: boolean, value: FilterValue): void {
-    if (checked) {
-      this.selectedValues = [...this.selectedValues, value];
-    } else {
-      this.selectedValues = this.selectedValues.filter((v) => v !== value);
-    }
-    this.onChange(this.selectedValues);
+  public onCheckboxChange(checked: boolean, optionValue: FilterValue): void {
+    this.selectedValues.update((values) =>
+      checked ? [...values, optionValue] : values.filter((v) => v !== optionValue),
+    );
+    this.onChange(this.selectedValues());
     this.onTouched();
   }
 
   public onFormArrayCheckboxChange(index: number, checked: boolean): void {
-    const array = this.formArray;
+    const array = this.formArray();
     if (array) {
       array.at(index).setValue(checked);
       this.onTouched();
@@ -58,27 +56,25 @@ export class NxsCheckboxForm implements ControlValueAccessor {
   }
 
   public onRadioChange(value: FilterValue): void {
-    this.value = value;
+    this.value.set(value);
     this.onChange(value);
     this.onTouched();
   }
 
   public isChecked(value: FilterValue): boolean {
-    return this.selectedValues.includes(value);
+    return this.selectedValues().includes(value);
   }
 
   public isFormArrayChecked(index: number): boolean {
-    const array = this.formArray;
+    const array = this.formArray();
     return array ? array.at(index).value : false;
   }
 
   public writeValue(value: unknown): void {
-    const type = this.config.type;
-
-    if (type === 'checkbox') {
-      this.selectedValues = Array.isArray(value) ? value : [];
+    if (this.config().type === 'checkbox') {
+      this.selectedValues.set(Array.isArray(value) ? value : []);
     } else {
-      this.value = value as FilterValue;
+      this.value.set(value as FilterValue);
     }
   }
 

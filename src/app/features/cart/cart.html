@@ -14,7 +14,7 @@
       <div class="cart-page__content">
         <div class="cart-page__cart-list">
           @for (item of items(); track item.product.id) {
-            <mat-card class="nexus-card cart-page__product">
+            <mat-card animate.leave="cart-item-leave"  class="nexus-card cart-page__product">
               <div class="card-glow"></div>
 
               <div class="cart-page__image-wrap">
@@ -31,34 +31,13 @@
               </div>
 
               <div class="cart-page__action-block">
-                <div class="cart-page__quantity-input">
-                  <button
-                    class="nexus-icon-button"
-                    mat-icon-button
-                    color="primary"
-                    (click)="decreaseQuantity(item.product.id)"
-                    [disabled]="item.quantity <= 1">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-
-                  <mat-form-field appearance="fill" class="nexus-counter-input">
-                    <input
-                      matInput
-                      type="number"
-                      [value]="item.quantity"
-                      (change)="updateQuantity(item.product.id, $event)"
-                      min="1"
-                    />
-                  </mat-form-field>
-
-                  <button
-                    class="nexus-icon-button"
-                    mat-icon-button
-                    color="primary"
-                    (click)="increaseQuantity(item.product.id)">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </div>
+                <nxs-quantity-input
+                  [quantity]="item.quantity"
+                  (increase)="increaseQuantity(item.product.id)"
+                  (decrease)="decreaseQuantity(item.product.id)"
+                  (remove)="removeFromCart(item.product.id)"
+                  (change)="updateQuantity(item.product.id, $event)"
+                />
 
                 <div class="cart-page__price-block">
                   <span class="cart-page__price">
@@ -95,6 +74,6 @@
       </div>
     </div>
   } @else {
-    <app-nxs-no-data [type]="emptyStateType.EMPTY_CART"></app-nxs-no-data>
+    <nxs-no-data [type]="emptyStateType.EMPTY_CART"></nxs-no-data>
   }
 </div>

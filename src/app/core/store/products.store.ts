@@ -3,67 +3,70 @@ import { computed, inject } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { FiltersStore } from './filters.store';
 import { Product } from '../models/product.model';
-import { FilterHelper } from '../helper/filter.helper';
 
 export interface ProductState {
   products: Product[];
+  selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductState = {
   products: [],
+  selectedProduct: null,
   loading: false,
   error: null,
 };
-
 export const ProductStore = signalStore(
   { providedIn: 'root' },
 
   withState(initialState),
 
-  withComputed((store) => {
-    const filtersStore = inject(FiltersStore);
-
-    const filteredProducts = computed(() =>
-      FilterHelper.filterProducts(store.products(), filtersStore.basic(), filtersStore.dynamic()),
-    );
-
-    return {
-      filteredProducts,
-      productsCount: computed(() => store.products().length),
-      filteredProductsCount: computed(() => filteredProducts().length),
-      isLoading: computed(() => store.loading()),
-      hasError: computed(() => store.error() !== null),
-    };
-  }),
+  withComputed(({ products, selectedProduct, loading, error }) => ({
+    productsCount: computed(() => products().length),
+    selectedProduct,
+    loading,
+    hasError: computed(() => error() !== null),
+  })),
 
   withMethods((store) => {
     const productService = inject(ProductService);
+    const filtersStore = inject(FiltersStore);
 
     return {
       loadProducts(): void {
         patchState(store, { loading: true, error: null });
 
-        productService.getProductsList().subscribe({
-          next: (products) => {
-            patchState(store, {
-              products,
-              loading: false,
-              error: null,
-            });
-          },
-          error: (error) => {
-            patchState(store, {
-              loading: false,
-              error: error.message || 'Помилка завантаження продуктів',
-            });
-          },
+        const filters = {
+          basic: filtersStore.basic(),
+          dynamic: filtersStore.dynamic(),
+        };
+
+        productService.getProductsList(filters).subscribe({
+          next: (products) => patchState(store, { products, loading: false }),
+          error: (err) => patchState(store, { loading: false, error: err.message }),
         });
       },
 
-      clearError(): void {
-        patchState(store, { error: null });
+      loadProductById(id: string): void {
+        patchState(store, { loading: true, error: null, selectedProduct: null });
+
+        productService.getProductById(id).subscribe({
+          next: (product) =>
+            patchState(store, {
+              selectedProduct: product ?? null,
+              loading: false,
+            }),
+          error: (err) =>
+            patchState(store, {
+              loading: false,
+              error: err.message,
+            }),
+        });
+      },
+
+      clearSelectedProduct(): void {
+        patchState(store, { selectedProduct: null });
       },
     };
   }),

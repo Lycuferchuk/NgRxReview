@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,9 +7,11 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { CartStore } from '../../../core/store/cart.store';
 import { FiltersStore } from '../../../core/store/filters.store';
+import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-nxs-header',
+  selector: 'nxs-header',
   imports: [
     MatIconModule,
     FormsModule,
@@ -22,24 +24,36 @@ import { FiltersStore } from '../../../core/store/filters.store';
   templateUrl: './nxs-header.component.html',
   styleUrl: './nxs-header.component.scss',
 })
-export class NxsHeader {
+export class NxsHeader implements OnInit {
+  private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
   private readonly filtersStore = inject(FiltersStore);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   public readonly cartCount = this.cartStore.cartCount;
-  public searchQuery = '';
 
-  constructor(private readonly _router: Router) {}
+  public ngOnInit(): void {
+    this.setupSearchListener();
+  }
 
   public toCart(): void {
-    this._router.navigate(['cart']);
+    this.router.navigate(['cart']);
   }
 
   public toHome(): void {
-    this._router.navigate(['products']);
+    this.router.navigate(['products']);
   }
 
-  public onSearchChange(query: string): void {
-    this.filtersStore.setSearchQuery(query);
+  private setupSearchListener(): void {
+    fromEvent(this.searchInput().nativeElement, 'input')
+      .pipe(
+        map((event) => (event.target as HTMLInputElement).value),
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((query) => this.filtersStore.setSearchQuery(query));
   }
 }

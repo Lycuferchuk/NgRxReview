@@ -6,6 +6,8 @@ export interface BasicFilters {
   brands: string[];
   inStock: boolean;
   rating: number | null;
+  priceMin: number | null;
+  priceMax: number | null;
 }
 
 export type FilterPrimitive = string | number | boolean;
@@ -23,6 +25,7 @@ export interface FiltersState {
   basic: BasicFilters;
   dynamic: DynamicFilters;
   loading: boolean;
+  isDirty: boolean;
 }
 
 export type FilterControlType = 'checkbox' | 'radio' | 'toggle';
@@ -54,5 +57,11 @@ export interface FilterUIConfig {
 export interface AvailableFilterOptions {
   categories: Category[];
   brands: string[];
+  priceRange: { min: number; max: number };
   attributeOptions: Record<Category, Record<string, FilterPrimitive[]>>;
+}
+
+export interface PriceRange {
+  min: number;
+  max: number;
 }

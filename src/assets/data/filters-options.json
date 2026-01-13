@@ -1,0 +1,88 @@
+{
+  "categories": ["phone", "laptop", "headphones", "tablet", "mouse"],
+  "brands": [
+    "Apple",
+    "Asus",
+    "Bose",
+    "Corsair",
+    "Dell",
+    "Google",
+    "HP",
+    "JBL",
+    "Lenovo",
+    "Logitech",
+    "Microsoft",
+    "OnePlus",
+    "Razer",
+    "Samsung",
+    "Sennheiser",
+    "Sony",
+    "SteelSeries",
+    "Xiaomi"
+  ],
+  "priceRange": {
+    "min": 2999,
+    "max": 59999
+  },
+  "attributeOptions": {
+    "phone": {
+      "screenSize": ["6.7", "6.73", "6.8", "6.82"],
+      "screenType": ["AMOLED", "OLED"],
+      "storage": ["128GB", "256GB", "512GB"],
+      "camera": ["48MP", "50MP", "200MP"],
+      "batteryCapacity": ["4000-5000 mAh", "5000+ mAh"],
+      "processor": ["A17 Pro", "Google Tensor G3", "Snapdragon 8 Gen 3"],
+      "ram": ["8GB", "12GB", "16GB"],
+      "has5G": [true],
+      "refreshRate": ["120Hz"]
+    },
+    "laptop": {
+      "processor": [
+        "AMD Ryzen 9 7940HS",
+        "Apple M3 Max",
+        "Intel Core i7-13700H",
+        "Intel Core i7-1355U",
+        "Intel Core i7-1365U"
+      ],
+      "ram": ["16GB", "32GB"],
+      "storage": ["512GB SSD", "1TB SSD"],
+      "screenSize": ["13", "14", "15", "16"],
+      "screenType": ["IPS", "Liquid Retina", "OLED"],
+      "gpu": ["Integrated", "NVIDIA RTX 4050", "NVIDIA RTX 4060"],
+      "weight": ["1.2kg", "1.4kg", "1.7kg", "2kg", "2.2kg"],
+      "batteryLife": ["8 hours", "10 hours", "12 hours", "15+ hours"],
+      "refreshRate": ["60Hz", "120Hz", "165Hz"]
+    },
+    "headphones": {
+      "type": ["over-ear"],
+      "wireless": [true],
+      "noiseCancelling": [true],
+      "batteryLife": ["20 hours", "24 hours", "30 hours", "39 hours", "60 hours"],
+      "microphone": [true],
+      "driverSize": ["30mm", "40mm", "42mm", "50mm"]
+    },
+    "tablet": {
+      "screenSize": ["11", "12.7", "12.9", "13", "14.6"],
+      "screenType": ["AMOLED", "IPS", "LCD", "Liquid Retina"],
+      "storage": ["128GB", "256GB", "512GB"],
+      "processor": ["Apple M2", "Dimensity 7050", "Intel Core i7", "Snapdragon 8 Gen 2"],
+      "ram": ["8GB", "12GB", "16GB"],
+      "cellularSupport": [true, false],
+      "pencilSupport": [true],
+      "keyboardSupport": [true],
+      "batteryLife": ["10 hours", "12 hours", "15+ hours"],
+      "refreshRate": ["60Hz", "120Hz"]
+    },
+    "mouse": {
+      "type": ["Gaming", "Office"],
+      "wireless": [true],
+      "dpi": ["100-18000", "100-30000", "100-32000", "200-8000"],
+      "buttons": ["5", "6", "7", "8", "18"],
+      "sensor": ["Optical"],
+      "batteryLife": ["50 hours", "70 hours", "80 hours", "90 hours", "95 hours"],
+      "weight": ["54g", "60g", "89g", "141g", "142g"],
+      "rgb": [true, false],
+      "programmableButtons": [true]
+    }
+  }
+}

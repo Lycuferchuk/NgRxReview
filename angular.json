@@ -34,7 +34,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "nxs",
       "architect": {
         "build": {
           "builder": "@angular/build:application",

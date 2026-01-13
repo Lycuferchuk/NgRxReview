@@ -4,6 +4,7 @@ import { computed, inject } from '@angular/core';
 import { Product } from '../models/product.model';
 import { DataService } from '../services/data.service';
 import { CART_STORAGE_KEY } from '../constants/storage-key.constants';
+import { SnackbarService } from '../services/snackbar.service';
 
 const INITIAL_CART_STATE: CartState = {
   items: [],
@@ -18,10 +19,18 @@ export const CartStore = signalStore(
     cartCount: computed(() => items().reduce((acc, item) => acc + item.quantity, 0)),
     totalPrice: computed(() => items().reduce((acc, item) => acc + item.totalPrice, 0)),
     isEmpty: computed(() => items().length === 0),
+    isInCart: computed(
+      () => (productId: string) => items().some((item) => item.product.id === productId),
+    ),
+    getQuantity: computed(
+      () => (productId: string) =>
+        items().find((item) => item.product.id === productId)?.quantity ?? 0,
+    ),
   })),
 
   withMethods((store) => {
     const dataService = inject(DataService);
+    const snackbarService = inject(SnackbarService);
 
     const persist = (): void => {
       dataService.saveLocalStorage<CartItem[]>(CART_STORAGE_KEY, store.items());
@@ -39,47 +48,35 @@ export const CartStore = signalStore(
         }
       },
 
-      addToCart(product: Product, quantity = 1): void {
-        patchState(store, (state) => {
-          const existingIndex = state.items.findIndex((item) => item.product.id === product.id);
+      addToCart(product: Product): void {
+        const existing = store.items().find((item) => item.product.id === product.id);
 
-          if (existingIndex !== -1) {
-            // Оновлюємо існуючий елемент
-            const existing = state.items[existingIndex];
-            const newQuantity = existing.quantity + quantity;
-            const updatedItems = [...state.items];
-            updatedItems[existingIndex] = {
-              ...existing,
-              quantity: newQuantity,
-              totalPrice: calculateTotalPrice(product.price, newQuantity),
-            };
-            return { items: updatedItems };
-          }
+        if (existing) {
+          this.incrementQuantity(product.id);
+          snackbarService.success(`${product.name} додано в кошик`);
+          return;
+        }
 
-          // Додаємо новий елемент
-          const newItem: CartItem = {
-            product,
-            quantity,
-            totalPrice: calculateTotalPrice(product.price, quantity),
-          };
-          return { items: [...state.items, newItem] };
-        });
-
+        patchState(store, (state) => ({
+          items: [...state.items, { product, quantity: 1, totalPrice: product.price }],
+        }));
         persist();
+        snackbarService.success(`${product.name} додано в кошик`);
       },
 
       removeFromCart(productId: string): void {
+        const item = store.items().find((i) => i.product.id === productId);
         patchState(store, (state) => ({
-          items: state.items.filter((item) => item.product.id !== productId),
+          items: state.items.filter((i) => i.product.id !== productId),
         }));
         persist();
+        if (item) {
+          snackbarService.info(`${item.product.name} видалено з кошика`);
+        }
       },
 
       updateQuantity(productId: string, quantity: number): void {
-        if (quantity <= 0) {
-          this.removeFromCart(productId);
-          return;
-        }
+        if (quantity <= 0) return;
 
         patchState(store, (state) => ({
           items: state.items.map((item) =>
@@ -117,6 +114,7 @@ export const CartStore = signalStore(
       checkout(): void {
         if (store.items().length === 0) return;
         this.clearCart();
+        snackbarService.success('Замовлення оформлено!');
       },
     };
   }),

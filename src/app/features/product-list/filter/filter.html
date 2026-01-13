@@ -21,32 +21,56 @@
       </button>
     </div>
 
+    <div class="filter-panel__apply">
+      <button
+        mat-flat-button
+        color="primary"
+        class="filter-panel__apply-btn"
+        [class.filter-panel__apply-btn--dirty]="isDirty()"
+        [disabled]="loading || !isDirty()"
+        (click)="applyFilters()">
+        @if (loading) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          <mat-icon>search</mat-icon>
+          Застосувати
+        }
+      </button>
+    </div>
+
     <div class="results-info">
       Знайдено: {{ filteredCount() }} з {{ totalCount() }}
     </div>
 
     <form [formGroup]="form">
-      <app-nxs-checkbox-form formControlName="category" [config]="categoryConfig" />
-      <app-nxs-checkbox-form formControlName="inStock" [config]="inStockConfig" />
-      <app-nxs-checkbox-form formControlName="rating" [config]="ratingConfig" />
+      <nxs-checkbox-form formControlName="category" [config]="categoryConfig" />
+      <nxs-checkbox-form formControlName="inStock" [config]="inStockConfig" />
+      <nxs-price-range
+        [min]="priceRange.min"
+        [max]="priceRange.max"
+        [currentMin]="filtersStore.basic().priceMin"
+        [currentMax]="filtersStore.basic().priceMax"
+        (rangeChange)="onPriceRangeChange($event)"
+      />
+      <nxs-checkbox-form formControlName="rating" [config]="ratingConfig" />
 
       @if (selectedCategory !== 'all' && dynamicFilters.length > 0) {
         <div formGroupName="attributes" class="dynamic-filters">
           @for (filter of dynamicFilters; track filter.key; let i = $index) {
             @switch (filter.type) {
               @case ('checkbox') {
-                <app-nxs-checkbox-form
+                <nxs-checkbox-form
                   [config]="dynamicFilterConfigs[i]"
                   [useFormArray]="true"
                   [formArray]="getAttributeArray(filter.key)" />
               }
               @case ('toggle') {
-                <app-nxs-checkbox-form
+                <nxs-checkbox-form
                   [formControlName]="filter.key"
                   [config]="{ label: filter.label, type: 'boolean' }" />
               }
               @case ('radio') {
-                <app-nxs-checkbox-form
+                <nxs-checkbox-form
                   [formControlName]="filter.key"
                   [config]="dynamicFilterConfigs[i]" />
               }

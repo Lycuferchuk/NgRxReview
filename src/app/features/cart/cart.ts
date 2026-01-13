@@ -3,29 +3,27 @@ import { CurrencyPipe } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { NxsNoData } from '../../shared/components/nxs-no-data/nxs-no-data';
 import { EmptyStateType } from '../../core/enums/empry-state.enum';
 import { CartStore } from '../../core/store/cart.store';
 import { Router } from '@angular/router';
+import { NxsQuantityInput } from '../../shared/components/nxs-quantity-input/nxs-quantity-input';
 
 @Component({
-  selector: 'app-nxs-cart',
+  selector: 'nxs-cart',
   imports: [
     CurrencyPipe,
     MatCard,
     MatButton,
     MatIcon,
-    MatFormField,
     MatIconButton,
-    MatInput,
     FormsModule,
     NxsNoData,
+    NxsQuantityInput,
   ],
-  templateUrl: './nxs-cart.html',
-  styleUrl: './nxs-cart.scss',
+  templateUrl: './cart.html',
+  styleUrl: './cart.scss',
 })
 export class CartComponent implements OnInit {
   private readonly cartStore = inject(CartStore);
@@ -55,9 +53,7 @@ export class CartComponent implements OnInit {
     this.cartStore.decrementQuantity(productId);
   }
 
-  public updateQuantity(productId: string, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const quantity = Math.max(1, parseInt(input.value, 10) || 1);
+  public updateQuantity(productId: string, quantity: number): void {
     this.cartStore.updateQuantity(productId, quantity);
   }
 

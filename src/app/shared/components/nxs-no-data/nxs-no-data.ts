@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { EmptyStateType } from '../../../core/enums/empry-state.enum';
 import { EmptyStateConfig } from '../../../core/models/empty-state-config.model';
 import { EMPTY_STATE_MAP } from '../../../core/constants/empty-state.constants';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
-  selector: 'app-nxs-no-data',
-  imports: [],
+  selector: 'nxs-no-data',
+  imports: [NgOptimizedImage],
   templateUrl: './nxs-no-data.html',
   styleUrl: './nxs-no-data.scss',
 })
