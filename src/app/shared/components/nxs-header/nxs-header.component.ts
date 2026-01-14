@@ -9,6 +9,7 @@ import { CartStore } from '../../../core/store/cart.store';
 import { FiltersStore } from '../../../core/store/filters.store';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductStore } from '../../../core/store/products.store';
 
 @Component({
   selector: 'nxs-header',
@@ -27,6 +28,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class NxsHeader implements OnInit {
   private readonly router = inject(Router);
   private readonly cartStore = inject(CartStore);
+  private readonly productStore = inject(ProductStore);
   private readonly filtersStore = inject(FiltersStore);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -54,6 +56,9 @@ export class NxsHeader implements OnInit {
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((query) => this.filtersStore.setSearchQuery(query));
+      .subscribe((query) => {
+        this.filtersStore.setSearchQuery(query || '');
+        this.productStore.loadProducts();
+      });
   }
 }

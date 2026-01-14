@@ -6,9 +6,7 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 
-  @if (loading()) {
-    <nxs-skeleton-details></nxs-skeleton-details>
-  } @else if (noData()) {
+  @if (noData()) {
     <nxs-no-data [type]="emptyStateType.NO_DATA"></nxs-no-data>
   } @else if (product(); as product) {
     <mat-card class="nexus-card product-details__card">
@@ -17,8 +15,7 @@
           [src]="product.imageUrl"
           [alt]="product.name"
           class="product-details__image"
-          nxsViewTransition="product-image"
-          [nxsViewTransitionId]="product.id"
+          [style.view-transition-name]="'product-image-' + product.id"
         />
 
         <div class="product-details__info">

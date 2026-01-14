@@ -1,5 +1,5 @@
 {
-  "categories": ["phone", "laptop", "headphones", "tablet", "mouse"],
+  "categories": ["smartphone", "laptop", "headphones", "tablet", "mouse"],
   "brands": [
     "Apple",
     "Asus",
@@ -25,7 +25,7 @@
     "max": 59999
   },
   "attributeOptions": {
-    "phone": {
+    "smartphone": {
       "screenSize": ["6.7", "6.73", "6.8", "6.82"],
       "screenType": ["AMOLED", "OLED"],
       "storage": ["128GB", "256GB", "512GB"],

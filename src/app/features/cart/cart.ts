@@ -27,18 +27,18 @@ import { NxsQuantityInput } from '../../shared/components/nxs-quantity-input/nxs
 })
 export class CartComponent implements OnInit {
   private readonly cartStore = inject(CartStore);
+  private readonly router = inject(Router);
 
   public readonly items = this.cartStore.items;
   public readonly totalPrice = this.cartStore.totalPrice;
   public readonly emptyStateType = EmptyStateType;
 
-  constructor(private readonly _router: Router) {}
   public ngOnInit(): void {
     this.cartStore.loadCart();
   }
 
   public goBack(): void {
-    this._router.navigate(['products']);
+    this.router.navigate(['products']);
   }
 
   public removeFromCart(productId: string): void {

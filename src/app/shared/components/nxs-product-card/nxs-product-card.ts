@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -7,7 +7,7 @@ import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartStore } from '../../../core/store/cart.store';
 import { NxsQuantityInput } from '../nxs-quantity-input/nxs-quantity-input';
-import { ViewTransitionDirective } from '../../../core/directives/view-transition.directive';
+import { ProductStore } from '../../../core/store/products.store';
 
 @Component({
   selector: 'nxs-product-card',
@@ -21,14 +21,14 @@ import { ViewTransitionDirective } from '../../../core/directives/view-transitio
     CurrencyPipe,
     NgOptimizedImage,
     NxsQuantityInput,
-    ViewTransitionDirective,
   ],
   templateUrl: './nxs-product-card.html',
   styleUrl: './nxs-product-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NxsProductCard {
   public readonly product = input.required<Product>();
-
+  private readonly productStore = inject(ProductStore);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cartStore = inject(CartStore);
@@ -59,6 +59,9 @@ export class NxsProductCard {
   }
 
   public navigateToDetails(): void {
-    this.router.navigate([this.product().id, 'details'], { relativeTo: this.route });
+    const productId = this.product().id;
+    this.productStore.setSelectedProduct(this.product());
+
+    this.router.navigate([productId, 'details'], { relativeTo: this.route });
   }
 }

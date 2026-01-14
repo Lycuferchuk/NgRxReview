@@ -4,11 +4,12 @@ import { ProductService } from '../services/product.service';
 import { FiltersStore } from './filters.store';
 import { Product } from '../models/product.model';
 
-export interface ProductState {
+interface ProductState {
   products: Product[];
   selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
+  isLoaded: boolean;
 }
 
 const initialState: ProductState = {
@@ -16,6 +17,7 @@ const initialState: ProductState = {
   selectedProduct: null,
   loading: false,
   error: null,
+  isLoaded: false,
 };
 export const ProductStore = signalStore(
   { providedIn: 'root' },
@@ -43,12 +45,20 @@ export const ProductStore = signalStore(
         };
 
         productService.getProductsList(filters).subscribe({
-          next: (products) => patchState(store, { products, loading: false }),
+          next: (products) => patchState(store, { products, loading: false, isLoaded: true }),
           error: (err) => patchState(store, { loading: false, error: err.message }),
         });
       },
 
+      setSelectedProduct(product: Product): void {
+        patchState(store, { selectedProduct: product, loading: false });
+      },
+
       loadProductById(id: string): void {
+        if (store.selectedProduct()?.id === id) {
+          return;
+        }
+
         patchState(store, { loading: true, error: null, selectedProduct: null });
 
         productService.getProductById(id).subscribe({

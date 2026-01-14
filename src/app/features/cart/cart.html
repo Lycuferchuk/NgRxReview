@@ -22,6 +22,7 @@
                   class="cart-page__image"
                   [src]="item.product.imageUrl"
                   [alt]="item.product.name"
+                  [style.view-transition-name]="'product-image-' + item.product.id"
                 />
                 <div class="cart-page__product-name">
                   <h2>{{ item.product.name }}</h2>
@@ -37,6 +38,7 @@
                   (decrease)="decreaseQuantity(item.product.id)"
                   (remove)="removeFromCart(item.product.id)"
                   (change)="updateQuantity(item.product.id, $event)"
+                  [showDeleteLastItem]="false"
                 />
 
                 <div class="cart-page__price-block">

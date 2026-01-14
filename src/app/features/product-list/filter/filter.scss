@@ -28,19 +28,21 @@
 
   &__apply-btn {
     width: 100%;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
     transition: all 0.3s ease;
+    color: var(--text-primary);
+    border-radius: 10px;
+    padding: 10px 12px;
 
     &--dirty {
-      background: linear-gradient(120deg, var(--glow-cyan), var(--glow-purple));
-      animation: pulse-glow 1.5s infinite;
-    }
-
-    mat-spinner {
-      display: inline-block;
+      background:
+        linear-gradient(120deg,
+          var(--btn-primary),
+          var(--glow-purple));
+      animation: pulse-glow 5s infinite;
     }
   }
 
@@ -56,9 +58,9 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 8px var(--glow-cyan);
+    box-shadow: 0 0 8px var(--glow-cyan-middle);
   }
   50% {
-    box-shadow: 0 0 16px var(--glow-purple);
+    box-shadow: 0 0 16px var(--glow-purple-middle);
   }
 }

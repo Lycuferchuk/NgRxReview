@@ -97,7 +97,7 @@
     border-radius: 10px;
     color: var(--text-primary);
     padding: 10px 12px;
-    box-shadow: 0 6px 14px var(--shadow-soft);
+    animation: pulse-glow 3s infinite;
   }
 
   &__cart-action {

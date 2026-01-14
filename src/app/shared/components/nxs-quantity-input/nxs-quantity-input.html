@@ -3,8 +3,9 @@
     class="nexus-icon-button"
     mat-icon-button
     color="primary"
-    (click)="onDecrease()">
-    <mat-icon>{{ quantity() <= min() ? 'delete' : 'remove' }}</mat-icon>
+    (click)="onDecrease()"
+    [disabled]="isDecreaseDisabled">
+    <mat-icon>{{ decreaseIcon }}</mat-icon>
   </button>
 
   @if (!compact()) {
@@ -12,9 +13,11 @@
       <input
         matInput
         type="number"
-        [value]="quantity()"
-        (change)="onInputChange($event)"
+        [value]="inputValue()"
+        (input)="onInputChange($event)"
+        (keydown)="onKeyDown($event)"
         [min]="min()"
+        min="1"
       />
     </mat-form-field>
   } @else {

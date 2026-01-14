@@ -10,7 +10,6 @@ import {
 import { FiltersStore } from '../../../core/store/filters.store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { NxsCheckboxForm } from '../../../shared/components/nxs-checkbox-form/nxs-checkbox-form';
 import { ProductStore } from '../../../core/store/products.store';
 import { FiltersService } from '../../../core/services/filter.service';
@@ -40,6 +39,13 @@ interface DynamicFilter extends FilterConfig {
   options: FilterPrimitive[];
 }
 
+interface FilterForm {
+  category: string;
+  inStock: boolean;
+  rating: number | null;
+  attributes: Record<string, DynamicControlValue>;
+}
+
 @Component({
   selector: 'nxs-filter',
   imports: [
@@ -57,6 +63,8 @@ interface DynamicFilter extends FilterConfig {
 export class FilterPanelComponent implements OnInit {
   public readonly filtersStore = inject(FiltersStore);
   private readonly productStore = inject(ProductStore);
+  private readonly fb = inject(FormBuilder);
+  private readonly filtersService = inject(FiltersService);
   private readonly destroyRef = inject(DestroyRef);
 
   public readonly hasActiveFilters = this.filtersStore.hasActiveFilters;
@@ -88,11 +96,6 @@ export class FilterPanelComponent implements OnInit {
     return this.form.controls.attributes as FormGroup;
   }
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly filtersService: FiltersService,
-  ) {}
-
   public ngOnInit(): void {
     this.loadFiltersData();
   }
@@ -118,8 +121,16 @@ export class FilterPanelComponent implements OnInit {
   }
 
   public applyFilters(): void {
-    this.productStore.loadProducts();
-    this.filtersStore.markAsApplied();
+    const formValue = this.form.getRawValue();
+    const categoryChanged = this.handleCategoryChange(formValue.category);
+
+    this.applyBasicFilters(formValue);
+
+    if (!categoryChanged) {
+      this.applyDynamicFilters(formValue.attributes);
+    }
+
+    this.loadFilteredProducts();
   }
 
   private loadFiltersData(): void {
@@ -130,7 +141,7 @@ export class FilterPanelComponent implements OnInit {
         next: ({ config, availableOptions }) => {
           this.filtersConfig = config;
           this.attributeOptions = availableOptions.attributeOptions;
-          this.priceRange = availableOptions.priceRange; // додати
+          this.priceRange = availableOptions.priceRange;
           this.setupFormListeners();
           this.loading = false;
         },
@@ -142,34 +153,51 @@ export class FilterPanelComponent implements OnInit {
   }
 
   private setupFormListeners(): void {
-    this.listenCategoryChanges();
-    this.listenFormChanges();
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.filtersStore.markAsDirty();
+    });
   }
 
-  private listenCategoryChanges(): void {
-    this.form.controls.category.valueChanges
-      .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-      .subscribe((category) => {
-        this.selectedCategory = category;
-        this.clearDynamicFilters();
-        this.buildDynamicFilters(category);
-        this.filtersStore.setCategory(category === 'all' ? null : (category as Category));
-      });
+  private handleCategoryChange(newCategory: string): boolean {
+    const categoryChanged = this.selectedCategory !== newCategory;
+
+    if (!categoryChanged) {
+      return false;
+    }
+
+    this.selectedCategory = newCategory;
+    this.clearDynamicFilters();
+
+    if (newCategory !== 'all') {
+      this.buildDynamicFilters(newCategory);
+    }
+    return true;
   }
 
-  private listenFormChanges(): void {
-    this.form.valueChanges
-      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        const form = this.form.getRawValue();
+  private applyBasicFilters(formValue: FilterForm): void {
+    this.filtersStore.setCategory(
+      formValue.category === 'all' ? null : (formValue.category as Category),
+    );
+    this.filtersStore.setInStock(formValue.inStock);
+    this.filtersStore.setRating(formValue.rating);
+  }
 
-        this.filtersStore.setInStock(form.inStock);
-        this.filtersStore.setRating(form.rating);
+  private applyDynamicFilters(attributes: Record<string, DynamicControlValue>): void {
+    if (this.selectedCategory === 'all') {
+      this.filtersStore.resetDynamic();
+      return;
+    }
 
-        if (this.selectedCategory !== 'all') {
-          this.syncDynamicFilters(form.attributes as Record<string, DynamicControlValue>);
-        }
-      });
+    if (this.dynamicFilters.length === 0) {
+      return;
+    }
+
+    this.syncDynamicFilters(attributes);
+  }
+
+  private loadFilteredProducts(): void {
+    this.productStore.loadProducts();
+    this.filtersStore.markAsApplied();
   }
 
   private clearDynamicFilters(): void {

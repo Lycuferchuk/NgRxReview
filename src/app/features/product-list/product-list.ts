@@ -35,6 +35,7 @@ export class ProductList implements OnInit {
   @ViewChild(FilterPanelComponent) public filterPanel!: FilterPanelComponent;
   private readonly productStore = inject(ProductStore);
   private readonly filtersStore = inject(FiltersStore);
+  private readonly breakpointObserver = inject(BreakpointObserver);
 
   public readonly products = this.productStore.products;
   public readonly loading = this.productStore.loading;
@@ -44,12 +45,13 @@ export class ProductList implements OnInit {
 
   public readonly skeletonItems = Array.from({ length: 10 }, (_, i) => i);
 
-  constructor(private readonly _breakpointObserver: BreakpointObserver) {}
-
   public ngOnInit(): void {
     this.observeBreakpoint();
-    this.productStore.loadProducts();
-    this.filtersStore.markAsApplied();
+
+    if (!this.productStore.isLoaded()) {
+      this.productStore.loadProducts();
+      this.filtersStore.markAsApplied();
+    }
   }
 
   public toggleFilters(): void {
@@ -65,7 +67,7 @@ export class ProductList implements OnInit {
   }
 
   private observeBreakpoint(): void {
-    this._breakpointObserver.observe(['(max-width: 768px)']).subscribe((result) => {
+    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe((result) => {
       this.isMobile = result.matches;
     });
   }

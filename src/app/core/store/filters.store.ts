@@ -17,6 +17,7 @@ const INITIAL_FILTERS_STATE: FiltersState = {
   loading: false,
   isDirty: false,
 };
+
 export const FiltersStore = signalStore(
   { providedIn: 'root' },
 
@@ -26,7 +27,6 @@ export const FiltersStore = signalStore(
     setSearchQuery(query: string): void {
       patchState(store, (state) => ({
         basic: { ...state.basic, searchQuery: query },
-        isDirty: true,
       }));
     },
 
@@ -80,6 +80,10 @@ export const FiltersStore = signalStore(
       });
     },
 
+    markAsDirty(): void {
+      patchState(store, { isDirty: true });
+    },
+
     markAsApplied(): void {
       patchState(store, { isDirty: false });
     },
@@ -98,8 +102,6 @@ export const FiltersStore = signalStore(
   })),
 
   withComputed((state) => ({
-    isDirty: state.isDirty,
-
     allFilters: computed(() => ({
       ...state.basic(),
       ...state.dynamic(),

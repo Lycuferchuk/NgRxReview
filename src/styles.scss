@@ -13,29 +13,6 @@
 @use "styles/themes/pallete";
 @use "styles/components/snackbar";
 
-
-/* Базова анімація crossfade */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 300ms;
-}
-
-/* Анімація для зображення продукту */
-::view-transition-old(product-image),
-::view-transition-new(product-image) {
-  animation-duration: 400ms;
-  animation-timing-function: ease-in-out;
-}
-
-/* Вимкнути анімацію для тих хто її не любить */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
 html {
   @include mat.theme((
     color: (

@@ -26,6 +26,7 @@
     display: flex;
     gap: 32px;
     align-items: flex-start;
+    view-transition-name: card-image;
   }
 
   &__image {

@@ -9,17 +9,8 @@ export class SnackbarService {
 
   public success(message: string): void {
     this.snackBar.open(message, '', {
-      duration: 3000,
+      duration: 2000,
       panelClass: 'snackbar--success',
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-    });
-  }
-
-  public error(message: string): void {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      panelClass: 'snackbar--error',
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
     });
@@ -27,7 +18,7 @@ export class SnackbarService {
 
   public info(message: string): void {
     this.snackBar.open(message, '', {
-      duration: 3000,
+      duration: 2000,
       panelClass: 'snackbar--info',
       horizontalPosition: 'center',
       verticalPosition: 'bottom',

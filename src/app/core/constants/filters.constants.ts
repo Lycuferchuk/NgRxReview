@@ -5,7 +5,7 @@ export const CATEGORY_CONFIG: FilterUIConfig = {
   type: 'radio',
   options: [
     { value: 'all', label: 'Всі товари' },
-    { value: 'phone', label: 'Телефони' },
+    { value: 'smartphone', label: 'Телефони' },
     { value: 'laptop', label: 'Ноутбуки' },
     { value: 'headphones', label: 'Навушники' },
     { value: 'tablet', label: 'Планшети' },

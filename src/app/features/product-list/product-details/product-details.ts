@@ -8,11 +8,9 @@ import { NxsNoData } from '../../../shared/components/nxs-no-data/nxs-no-data';
 import { EmptyStateType } from '../../../core/enums/empry-state.enum';
 import { MatIcon } from '@angular/material/icon';
 import { CartStore } from '../../../core/store/cart.store';
-import { NxsSkeletonDetails } from '../../../shared/components/nxs-skeleton-details/nxs-skeleton-details';
 import { ATTRIBUTE_LABELS } from '../../../core/constants/products.constants';
 import { FilterPrimitive } from '../../../core/models/filter.model';
 import { ProductStore } from '../../../core/store/products.store';
-import { ViewTransitionDirective } from '../../../core/directives/view-transition.directive';
 
 interface SpecItem {
   key: string;
@@ -22,18 +20,7 @@ interface SpecItem {
 
 @Component({
   selector: 'nxs-product-details',
-  imports: [
-    MatCard,
-    CurrencyPipe,
-    MatDivider,
-    MatButton,
-    NxsNoData,
-    MatIcon,
-    NxsSkeletonDetails,
-    MatIconButton,
-    NxsSkeletonDetails,
-    ViewTransitionDirective,
-  ],
+  imports: [MatCard, CurrencyPipe, MatDivider, MatButton, NxsNoData, MatIcon, MatIconButton],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })

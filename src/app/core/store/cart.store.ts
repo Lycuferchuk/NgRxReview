@@ -17,7 +17,7 @@ export const CartStore = signalStore(
 
   withComputed(({ items }) => ({
     cartCount: computed(() => items().reduce((acc, item) => acc + item.quantity, 0)),
-    totalPrice: computed(() => items().reduce((acc, item) => acc + item.totalPrice, 0)),
+    totalPrice: computed(() => items().reduce((acc, item) => acc + Number(item.totalPrice), 0)),
     isEmpty: computed(() => items().length === 0),
     isInCart: computed(
       () => (productId: string) => items().some((item) => item.product.id === productId),

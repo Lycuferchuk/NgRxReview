@@ -1,6 +1,6 @@
 import { BasicFilters, DynamicFilters } from './filter.model';
 
-export type Category = 'phone' | 'laptop' | 'headphones' | 'tablet' | 'mouse';
+export type Category = 'smartphone' | 'laptop' | 'headphones' | 'tablet' | 'mouse';
 
 export interface Product {
   id: string;

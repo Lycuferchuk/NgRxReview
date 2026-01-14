@@ -29,12 +29,8 @@
         [class.filter-panel__apply-btn--dirty]="isDirty()"
         [disabled]="loading || !isDirty()"
         (click)="applyFilters()">
-        @if (loading) {
-          <mat-spinner diameter="20"></mat-spinner>
-        } @else {
-          <mat-icon>search</mat-icon>
-          Застосувати
-        }
+        <mat-icon>search</mat-icon>
+        Застосувати
       </button>
     </div>
 

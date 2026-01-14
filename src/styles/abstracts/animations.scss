@@ -43,6 +43,15 @@
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--btn-primary);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--glow-purple-middle);
+  }
+}
+
 @keyframes cart-item-leave {
   from {
     opacity: 1;
